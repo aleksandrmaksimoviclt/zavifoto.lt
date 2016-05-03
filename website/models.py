@@ -45,8 +45,8 @@ class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
 
 	def __str__(self):
-		name = self.galleries_by_languages.all() or None
-		return name + ' ' + 'Created'
+		name = self.galleries_by_languages.all() or 'Untitled '
+		return name + 'gallery'
 
 
 class GalleryByLanguage(models.Model):
@@ -64,10 +64,10 @@ class GalleryByLanguage(models.Model):
 
 
 class Category(models.Model):
-	gallery = models.ForeignKey(Galery)
+	gallery = models.ForeignKey(Gallery)
 
 	def __str__(self):
-		return self.gallery
+		return self.gallery.__unicode__() + 'page settings for categories'
 
 
 class CategoryByLanguage(models.Model):
@@ -99,19 +99,6 @@ class Photo(models.Model):
 	def __str__(self):
 		return self.name
 
-	# def save(self, *args, **kwargs):
-
-	# 	return 
-
-# class LandingPage(models.Model):
-# 	modified = mdoels.DateTimeField(default=timezone.now)
-
-# 	def __str__(self):
-# 		return 'Landing page'
-
-
-# class LandingPageByLanguage()
-
 
 class ContactsPage(models.Model):
 	address = models.CharField(max_length=100)
@@ -123,16 +110,47 @@ class ContactsPage(models.Model):
 class PricePage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
 
+	def __str__(self):
+		return 'Prices page settings'
+
 
 class PricePageByLanguage(models.Model):
-	text = models.CharField()
 	#  pagalvot
 	language = models.ForeignKey(Language)
+	top_text = models.TextField(blank=True, null=True)
+	main_text = models.TextField(blank=True, null=True)
+	bottom_text = models.TextField(blank=True, null=True)
+
+	def __str__(self):
+		return self.language.language_code or None
 
 
 class Message(models.Model):
 	date = models.DateTimeField(default=timezone.now)
 	message = models.CharField(max_length=1000)
-	contacts = models.CharField(max_length=100)
+	sender = models.CharField(max_length=100)
+	read = models.BooleanField(default=False)
+
+	def save(self, *args, **kwargs):
+
+		super(Message, self).save(*args, **kwargs)
+
+	def __str__(self):
+		status = ''
+		if not self.read:
+			status = '(Unread)'
+		return '{0} message{1}'.format(self.sender, status)
 
 	
+class AboutPage(models.Model):
+	modified = models.DateTimeField(default=timezone.now)
+
+class AboutPageByLanguage(models.Model):
+	top_text = models.TextField(blank=True, null=True)
+	main_text = models.TextField(blank=True, null=True)
+	bottom_text = models.TextField(blank=True, null=True)
+	language = models.ForeignKey(Language)
+	
+	def __str__(self):
+		return self.language.language_code + 'about page' or None
+
