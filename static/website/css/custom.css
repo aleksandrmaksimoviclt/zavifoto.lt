@@ -1,3 +1,13 @@
 body{
 	text-align: center;
+	font-family: 'Roboto', sans-serif;
+	line-height: 1;
+	color:#999999;
+	background-color: #eeeeee;
+}
+
+/*SIDEBAR*/
+.main-category{
+    font-size: 18px;
+    text-transform: uppercase;
 }
