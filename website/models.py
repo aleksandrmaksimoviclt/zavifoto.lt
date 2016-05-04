@@ -36,9 +36,13 @@ class Language(models.Model):
 
 
 class PageSettings(models.Model):
-	style = models.IntegerField(default=0)
+	style = models.IntegerField(choices=STYLES, default=WHITE)
 	language = models.ForeignKey(Language)
-	layout = models.IntegerField(default=0)
+	layout = models.IntegerField(choices=LAYOUTS, default=GRID)
+
+	class Meta:
+		verbose_name_plural = 'Page Default Settings'
+		verbose_name = verbose_name_plural
 
 
 class Gallery(models.Model):
@@ -48,6 +52,9 @@ class Gallery(models.Model):
 		name = self.galleries_by_languages.all() or 'Untitled '
 		return name + 'gallery'
 
+
+	class Meta:
+		verbose_name_plural = 'Galleries'
 
 class GalleryByLanguage(models.Model):
 	gallery = models.ForeignKey(Gallery)
@@ -69,6 +76,8 @@ class Category(models.Model):
 	def __str__(self):
 		return self.gallery.__unicode__() + 'page settings for categories'
 
+	class Meta:
+		verbose_name_plural = 'Categories'
 
 class CategoryByLanguage(models.Model):
 	category = models.ForeignKey(Category)
@@ -101,11 +110,13 @@ class Photo(models.Model):
 
 
 class ContactsPage(models.Model):
-	address = models.CharField(max_length=100)
-	phone = models.CharField(max_length=50)
-	email = models.EmailField(max_length=50)
+	address = models.CharField(max_length=100, null=True, blank=True)
+	phone = models.CharField(max_length=50, null=True, blank=True)
+	email = models.EmailField(max_length=50, null=True, blank=True)
 	# dar prigalvot
 
+	class Meta:
+		verbose_name_plural = 'Contacts Page'
 
 class PricePage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
@@ -113,9 +124,13 @@ class PricePage(models.Model):
 	def __str__(self):
 		return 'Prices page settings'
 
+	class Meta:
+		verbose_name_plural = 'Price Page'
+
 
 class PricePageByLanguage(models.Model):
 	#  pagalvot
+	pricepage = models.ForeignKey(PricePage)
 	language = models.ForeignKey(Language)
 	top_text = models.TextField(blank=True, null=True)
 	main_text = models.TextField(blank=True, null=True)
@@ -145,11 +160,16 @@ class Message(models.Model):
 class AboutPage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
 
+	class Meta:
+		verbose_name_plural = 'About Page'
+
+
 class AboutPageByLanguage(models.Model):
 	top_text = models.TextField(blank=True, null=True)
 	main_text = models.TextField(blank=True, null=True)
 	bottom_text = models.TextField(blank=True, null=True)
 	language = models.ForeignKey(Language)
+	about_page = models.ForeignKey(AboutPage)
 	
 	def __str__(self):
 		return self.language.language_code + 'about page' or None
