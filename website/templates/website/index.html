@@ -48,116 +48,134 @@
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
+                <div id="hambrger" class="hamburger hamburger--collapse is-active menu-close" type="button">
+                  <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                  </span>
+                </div>
                 <li class="sidebar-brand">
-                    <div id="hambrger" class="hamburger hamburger--collapse is-active menu-close" type="button">
-                      <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
-                      </span>
-                    </div>
                     <a class="logo-wrapper" href="/">
                         <span class="logo">VILMANTAS ŽILINSKAS</span><br>
                         <span class="logo sub">Photography</span>
                     </a>
                 </li>
-                <li>
-                    <a class="main-category" data-toggle="collapse" data-target="#weddings" href="#">Vestuvės</a>
-                </li>
-                    <ul id="weddings" class="collapse">
-                        <li>
-                            Black and White
-                        </li>
-                        <li>
-                            Selected color
-                        </li>
-                        <li>
-                            Details
-                        </li>
-                        <li>
-                            Submeniu
-                        </li>
-                    </ul>
-                <li>
-                    <a class="main-category" data-toggle="collapse" data-target="#people" href="#">Žmonės</a>
-                </li>
-                    <ul id="people" class="collapse">
-                        <li>
-                            Black and White
-                        </li>
-                        <li>
-                            Selected color
-                        </li>
-                        <li>
-                            Details
-                        </li>
-                        <li>
-                            Submeniu
-                        </li>
-                    </ul>
-                <li>
-                    <a class="main-category" data-toggle="collapse" data-target="#boudoir" href="#">Boudoir</a>
-                </li>
-                    <ul id="boudoir" class="collapse">
-                        <li>
-                            Black and White
-                        </li>
-                        <li>
-                            Selected color
-                        </li>
-                        <li>
-                            Details
-                        </li>
-                        <li>
-                            Submeniu
-                        </li>
-                    </ul>
-                <li>
-                    <a class="main-category" data-toggle="collapse" data-target="#magazines" href="#">Žurnalai</a>
-                </li>
-                    <ul id="magazines" class="collapse">
-                        <li>
-                            Black and White
-                        </li>
-                        <li>
-                            Selected color
-                        </li>
-                        <li>
-                            Details
-                        </li>
-                        <li>
-                            Submeniu
-                        </li>
-                    </ul>
-                <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-secondary">LT</button>
-                  <button type="button" class="btn btn-secondary">EN</button>
-                  <button type="button" class="btn btn-secondary">RU</button>
+                <div class="primary-menu">
+                <div style="overflow-y: scroll; max-height: 100%;">
+                    <li>
+                        <a class="main-category" data-toggle="collapse" data-target="#weddings" href="#">Vestuvės</a>
+                    </li>
+                        <div id="weddings" class="collapse">
+                            <ul class="sub-category">
+                                <li>
+                                    Black and White
+                                </li>
+                                <li>
+                                    Selected color
+                                </li>
+                                <li>
+                                    Details
+                                </li>
+                                <li>
+                                    Submeniu
+                                </li>
+                            </ul>
+                        </div>
+                    <li>
+                        <a class="main-category" data-toggle="collapse" data-target="#people" href="#">Žmonės</a>
+                    </li>
+                        <div id="people" class="collapse">
+                            <ul class="sub-category">
+                                <li>
+                                    Black and White
+                                </li>
+                                <li>
+                                    Selected color
+                                </li>
+                                <li>
+                                    Details
+                                </li>
+                                <li>
+                                    Submeniu
+                                </li>
+                            </ul>
+                        </div>
+                    <li>
+                        <a class="main-category" data-toggle="collapse" data-target="#boudoir" href="#">Boudoir</a>
+                    </li>
+                        <div id="boudoir" class="collapse">
+                            <ul class="sub-category">
+                                <li>
+                                    Black and White
+                                </li>
+                                <li>
+                                    Selected color
+                                </li>
+                                <li>
+                                    Details
+                                </li>
+                                <li>
+                                    Submeniu
+                                </li>
+                            </ul>    
+                        </div>
+                        
+                    <li>
+                        <a class="main-category" data-toggle="collapse" data-target="#magazines" href="#">Žurnalai</a>
+                    </li>
+                        <div id="magazines" class="collapse">
+                            <ul class="sub-category">
+                                <li>
+                                    Black and White
+                                </li>
+                                <li>
+                                    Selected color
+                                </li>
+                                <li>
+                                    Details
+                                </li>
+                                <li>
+                                    Submeniu
+                                </li>
+                            </ul>
+                        </div>
                 </div>
-                <hr>             
-                <li>
-                    <a href="#">Kontaktai</a>
-                </li>
-                <li>
-                    <a href="#">Kainos</a>
-                </li>
-                <li>
-                    <a href="#">Apie mus</a>
-                </li>
-                <li>
-                    <a href="#">Atsiliepimai</a>
-                </li>
-                <li>
-                    <a href="#">DUK</a>
-                </li>
-                <div class="btn-group" role="group" aria-label="...">
-                    <button type="button" class="btn btn-default">FB</button>
-                    <button type="button" class="btn btn-default">PIN</button>
-                    <button type="button" class="btn btn-default">INST</button>
-                    <button type="button" class="btn btn-default">YT</button>
                 </div>
-                <div class="copyright wrapper">
-                    2016 &copy; Vilmantas Žilinskas. <br>
-                    Made with <i class="material-icons">&#xE87D;</i> by litebits
+                <div class="sidebar-bottom-group">
+                    <div class="btn-group flat" role="group">
+                      <button type="button" class="btn btn-default">LT</button>
+                      <button type="button" class="btn btn-default">EN</button>
+                      <button type="button" class="btn btn-default">RU</button>
+                    </div>
+                    <hr style="width:40%;">
+                    <div class="secondary-menu sub-category">                 
+                        <li>
+                            <a href="#">Kontaktai</a>
+                        </li>
+                        <li>
+                            <a href="#">Kainos</a>
+                        </li>
+                        <li>
+                            <a href="#">Apie mus</a>
+                        </li>
+                        <li>
+                            <a href="#">Atsiliepimai</a>
+                        </li>
+                        <li>
+                            <a href="#">DUK</a>
+                        </li>
+                    </div>
+                    <div class="btn-group flat" role="group">
+                        <button type="button" class="btn btn-default">FB</button>
+                        <button type="button" class="btn btn-default">PIN</button>
+                        <button type="button" class="btn btn-default">INST</button>
+                        <button type="button" class="btn btn-default">YT</button>
+                    </div>
+                    <div class="copyright wrapper">
+                        2016 &copy; Vilmantas Žilinskas. <br>
+                        Made with <i class="material-icons">&#xE87D;</i> by litebits
+                    </div>
                 </div>
+                
             </ul>
         </div>
         <!-- /#sidebar-wrapper -->
