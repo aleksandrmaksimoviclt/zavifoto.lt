@@ -1,4 +1,5 @@
-$( document ).ready(function() {
+$(document).ready(function() {
+
 	var ww = window.innerWidth;
 
 	if (ww > 768) {
@@ -6,22 +7,73 @@ $( document ).ready(function() {
 	} else {
 	    console.log('false');
 	    $('#wrapper').toggleClass("toggled");
-	    $('#hambrger').removeClass("is-active");
-
-	    
+	    $('#hambrger').removeClass("is-active");  
 	}
 
 	var $hamburger = $(".hamburger");
   	$hamburger.on("click", function(e) {
-    	$hamburger.toggleClass("is-active");
+  		$hamburger.toggleClass("is-active");
     	e.preventDefault();
         $("#wrapper").toggleClass("toggled");
-  });
-});
+        // slider1.resize();
+        // slider2.resize();
+  	});
 
-// 		$('#sidebar-wrapper').css("margin-left", "-100%");
-// 	    $('#sidebar-wrapper').css("left", "100%");
-// 	    $('#sidebar-wrapper').css("width", "100%");
-//    .sidebar-nav {
-//     width: 100%;
-// }
+    $('#carousel').flexslider({
+    animation: "slide",
+    controlNav: false,
+    animationLoop: false,
+    slideshow: false,
+    itemWidth: 210,
+    itemMargin: 5,
+    asNavFor: '#slider'
+  });
+ 
+  $('#slider').flexslider({
+    animation: "slide",
+    controlNav: false,
+    animationLoop: false,
+    slideshow: false,
+    sync: "#carousel"
+  });
+
+  var slider1 = $('#carousel').data('flexslider');
+  var slider2 = $('#slider').data('flexslider');
+
+  // Div resize tracking
+
+  $.event.special.widthChanged = {
+        remove: function() {
+            $(this).children('iframe.width-changed').remove();
+        },
+        add: function () {
+            var elm = $(this);
+            var iframe = elm.children('iframe.width-changed');
+            if (!iframe.length) {
+                iframe = $('<iframe/>').addClass('width-changed').prependTo(this);
+            }
+            var oldWidth = elm.width();
+            function elmResized() {
+                var width = elm.width();
+                if (oldWidth != width) {
+                    elm.trigger('widthChanged', [width, oldWidth]);
+                    oldWidth = width;
+                }
+            }
+
+            var timer = 0;
+            var ielm = iframe[0];
+            (ielm.contentWindow || ielm).onresize = function() {
+                clearTimeout(timer);
+                timer = setTimeout(elmResized, 5);
+            };
+        }
+    }
+
+    // end
+
+    $('.slider-wrapper').on('widthChanged',function(){
+        slider1.resize();
+        slider2.resize();
+    });
+});

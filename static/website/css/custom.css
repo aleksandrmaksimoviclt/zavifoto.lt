@@ -32,19 +32,17 @@ hr {
     border-color: transparent;
 }
 
-
-
 /*SIDEBAR*/
 
-.primary-menu{
-	margin-top: 90px;
-    height: calc(100% - 480px);
-    margin-bottom: 470px;
+.primary-menu {
+    margin-top: 90px;
+    height: calc(100% - 430px);
+    margin-bottom: 420px;
 }
 
 .secondary-menu{
-	padding-bottom: 50px !important;
-	padding-top: 50px !important;
+	padding-bottom: 25px !important;
+	padding-top: 25px !important;
 }
 
 .main-category{
@@ -72,4 +70,20 @@ ul{
     width: 200px;
     background: white;
     z-index: 3;
+}
+
+
+iframe.width-changed {
+    width: 100%;
+    display: block;
+    border: 0;
+    height: 0;
+    margin: 0;
+}
+
+.slider-wrapper{
+	#inner {
+    	width: 50%;
+    	margin: 0 auto; 
+	}
 }

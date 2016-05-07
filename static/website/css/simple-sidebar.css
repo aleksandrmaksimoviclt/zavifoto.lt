@@ -40,7 +40,6 @@
 #page-content-wrapper {
     width: 100%;
     position: absolute;
-    padding: 15px;
 }
 
 #wrapper.toggled #page-content-wrapper {
@@ -85,7 +84,7 @@
 .sidebar-nav > .sidebar-brand {
     text-transform: uppercase;
     padding-bottom: 50px;
-    position: fixed;
+    position: absolute;
     width: 200px;
     background: white;
 }
@@ -144,7 +143,6 @@
     }
 
     #page-content-wrapper {
-        padding: 20px;
         position: relative;
     }
 
@@ -152,3 +150,92 @@
         position: relative;
         margin-right: 0;
     }
+@media only screen and (max-width : 425px) {
+    /* #sidebar-wrapper {
+        width: 100%;
+    }*/
+
+    .sidebar-nav {
+        position: relative;
+        padding: 60px 80px;
+    }
+
+    .sidebar-bottom-group{
+        bottom: 60px;
+    }
+
+    .secondary-menu {
+        padding-bottom: 5px !important;
+        padding-top: 5px !important;
+    }
+
+    hr {
+        margin-top: 2.5px;
+        margin-bottom: 2.5px;
+    }
+
+    .hamburger {
+        top: 18px;
+        left: 18px;
+    }
+
+    .primary-menu {
+        margin-bottom: 345px;
+        margin-top: 65px;
+        height: calc(100% - 350px);
+    }
+
+    .sidebar-nav > .sidebar-brand {
+        padding-bottom: 25px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 60px;
+    }
+
+}
+
+@media only screen and (max-width : 375px) {
+    /* #sidebar-wrapper {
+        width: 100%;
+    }*/
+
+    .sidebar-nav {
+        position: relative;
+        padding: 60px 80px;
+    }
+
+    .sidebar-bottom-group{
+        bottom: 60px;
+    }
+
+    .secondary-menu {
+        padding-bottom: 5px !important;
+        padding-top: 5px !important;
+    }
+
+    hr {
+        margin-top: 2.5px;
+        margin-bottom: 2.5px;
+    }
+
+    .hamburger {
+        top: 18px;
+        left: 18px;
+    }
+
+    .primary-menu {
+        margin-bottom: 345px;
+        margin-top: 65px;
+        height: calc(100% - 350px);
+    }
+
+    .sidebar-nav > .sidebar-brand {
+        padding-bottom: 25px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 60px;
+    }
+
+}

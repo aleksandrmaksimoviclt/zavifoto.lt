@@ -30,11 +30,12 @@
     <link href="{% static "website/css/simple-sidebar.css" %}" rel="stylesheet">
 
     <!-- Hamburger -->
-    <link rel="stylesheet" type="text/css" href="{% static "website/css/hamburgers.css" %}">        
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/hamburgers.css" %}">
 
-    <link rel="stylesheet" type="text/css" href="{% static "website/css/flexslider.css" %}">
-
-
+    <!-- jQuery Slider -->
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/lightslider.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% static "website/css/lightgallery.css" %} " />                  
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -189,42 +190,11 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-            <div class="slider-wrapper">
-                <div id="slider" class="flexslider">
-              <ul class="slides">
-                <li>
-                  <img src="{% static "website/img/1.jpg" %}"/>
-                </li>
-                <li>
-                  <img src="{% static "website/img/2.jpg" %}"/>
-                </li>
-                <li>
-                  <img src="{% static "website/img/3.jpg" %}"/>
-                </li>
-                <li>
-                  <img src="{% static "website/img/4.jpg" %}"/>
-                </li>
-                <!-- items mirrored twice, total of 12 -->
-              </ul>
+            <div style="background-color: red;">
+                <div id="myContainer">
+                    <img src="{% static "website/img/1.jpg" %}">
+                </div>
             </div>
-            <div id="carousel" class="flexslider">
-              <ul class="slides">
-                <li>
-                  <img src="{% static "website/img/1.jpg" %}"/>
-                </li>
-                <li>
-                  <img src="{% static "website/img/2.jpg" %}"/>
-                </li>
-                <li>
-                  <img src="{% static "website/img/3.jpg" %}"/>
-                </li>
-                <li>
-                  <img src="{% static "website/img/4.jpg" %}"/>
-                </li>
-                <!-- items mirrored twice, total of 12 -->
-              </ul>
-            </div>
-            </div>           
         </div>
         <!-- /#page-content-wrapper -->
 
@@ -236,11 +206,11 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
-    <!-- SlickJS -->
-
-    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
-
-    <script src="{% static "website/js/jquery.flexslider.js" %}" type="text/javascript"></script>
+    <!-- jQuery Slider -->
+    <script src="{% static "website/js/lightslider.js" %}" type="text/javascript"></script>
+    
+    <!-- jQuery Gallery -->
+    <script src="{% static "website/js/lightgallery.js" %}"></script>
     <!-- Custom JS -->
     <script src="{% static "website/js/custom.js" %}" type="text/javascript"></script>
 </body>
