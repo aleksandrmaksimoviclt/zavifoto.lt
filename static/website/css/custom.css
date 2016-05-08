@@ -73,6 +73,19 @@ ul{
     z-index: 3;
 }
 
+span.client {
+    font-size: 12.5px;
+/*    letter-spacing: -0.01em;
+*/    line-height: 25px;
+}
+
+span.author {
+	font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 25px;
+}
+
 /* SIDEBAR END */
 
 iframe.width-changed {
@@ -117,6 +130,7 @@ iframe.width-changed {
 	    height: 100% !important;
 	    width: 100% !important;
 	    object-fit: cover;
+    	overflow: hidden;
 	}
 /*
 	.flex-direction-nav a {
@@ -137,11 +151,13 @@ iframe.width-changed {
 	#carousel .flex-active-slide img {
 	    opacity: 1;
 	    cursor: default;
+	    overflow: hidden;
 	}
 	#carousel img {
 	    display: block;
 	    opacity: .5;
 	    cursor: pointer;
+	    overflow: hidden;
 	}
 
 	.flex-direction-nav .flex-next {
