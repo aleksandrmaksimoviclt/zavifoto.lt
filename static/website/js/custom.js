@@ -19,13 +19,17 @@ $(document).ready(function() {
         // slider2.resize();
   	});
 
+
+
+
     $('#carousel').flexslider({
     animation: "slide",
     controlNav: false,
     animationLoop: false,
     slideshow: false,
     itemWidth: 210,
-    itemMargin: 5,
+    minItems: 6,
+    maxItems: 6,
     asNavFor: '#slider'
   });
  
@@ -65,14 +69,14 @@ $(document).ready(function() {
             var ielm = iframe[0];
             (ielm.contentWindow || ielm).onresize = function() {
                 clearTimeout(timer);
-                timer = setTimeout(elmResized, 5);
+                timer = setTimeout(elmResized, 1);
             };
         }
     }
 
     // end
 
-    $('.slider-wrapper').on('widthChanged',function(){
+    $('#page-content-wrapper').on('widthChanged',function(){
         slider1.resize();
         slider2.resize();
     });
