@@ -24,7 +24,11 @@ $(document).ready(function() {
 
     $('#carousel').flexslider({
     animation: "slide",
+    touch: true,
+    keyboard: true,
+    multipleKeyboard: true,
     controlNav: false,
+    directionNav: true,
     animationLoop: false,
     slideshow: false,
     itemWidth: 210,
@@ -35,7 +39,11 @@ $(document).ready(function() {
  
   $('#slider').flexslider({
     animation: "slide",
+    touch: true,
+    keyboard: true,
+    multipleKeyboard: true,
     controlNav: false,
+    directionNav: true,
     animationLoop: false,
     slideshow: false,
     sync: "#carousel"

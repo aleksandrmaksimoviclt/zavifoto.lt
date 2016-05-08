@@ -118,6 +118,12 @@ iframe.width-changed {
 	    width: 100% !important;
 	    object-fit: cover;
 	}
+/*
+	.flex-direction-nav a {
+	    margin: 0px 30px;
+	    position: absolute;
+	    bottom: 0;
+	}*/
 
 	/* Slider styling END */
 
@@ -128,6 +134,19 @@ iframe.width-changed {
 	    height: 15vh;
 	}
 
+	#carousel .flex-active-slide img {
+	    opacity: 1;
+	    cursor: default;
+	}
+	#carousel img {
+	    display: block;
+	    opacity: .5;
+	    cursor: pointer;
+	}
+
+	.flex-direction-nav .flex-next {
+	    text-align: center;
+	}
 
 	/* Thumbnail styling END */
 
