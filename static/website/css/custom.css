@@ -5,7 +5,7 @@ body{
 	color:#999999;
 	background-color: #eeeeee;
 	transition: 250ms color;
-	/*position: fixed;*/
+	position: fixed;
 }
 
 #element::-webkit-scrollbar { 
@@ -167,3 +167,22 @@ iframe.width-changed {
 	/* Thumbnail styling END */
 
 /* SLIDER END */
+
+/* Gallery Begin */
+
+.lg-outer, .lg-item{
+    left: 0;
+}
+.lg-on{
+	position: fixed;
+}
+
+.lg-outer.lg-pull-caption-up.lg-thumb-open .lg-sub-html {
+    bottom: 100px;
+}
+
+/*.lg-outer .lg-thumb-outer {
+    bottom: 12px;
+}
+*/
+/* Galery End */
