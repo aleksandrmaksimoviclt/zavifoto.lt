@@ -1,0 +1,374 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional photography services">
+    <meta name="author" content="">
+
+    <title>Zavifoto.lt | Vilmantas Zilinskas Photography</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <!-- Cuprum Regular font -->  
+    <link href='https://fonts.googleapis.com/css?family=Cuprum&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!-- Roboto Regular font -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <!-- Social Icons Font -->
+    <link href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css" rel="stylesheet">
+    <!-- Fontawesome Icon Font -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <!-- Hamburger -->
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/hamburgers.css" %}">        
+
+    <!-- Flex Slider for Index-slider.html -->
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/flexslider.css" %}">
+
+    <!-- LightGallery for Index-grid.html -->
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/lightgallery.css" %}">
+    <!-- Custom CSS -->
+    <link href="{% static "website/css/custom.css" %}" rel="stylesheet">
+
+
+    <!-- Custom Sidebar-CSS -->
+    <link href="{% static "website/css/simple-sidebar.css" %}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+
+
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <div id="hambrger" class="hamburger hamburger--collapse is-active menu-close" type="button">
+                  <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                  </span>
+                </div>
+                <li class="sidebar-brand">
+                    <a class="logo-wrapper" href="/">
+                        <span class="logo">VILMANTAS ŽILINSKAS</span><br>
+                        <span class="logo sub">Photography</span>
+                    </a>
+                </li>
+                <div class="primary-menu">
+                    <div style="overflow-y: scroll; max-height: 100%;">
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#weddings" href="#">Vestuvės</a>
+                        </li>
+                            <div id="weddings" class="collapse">
+                                <ul class="sub-category">
+                                    <li>
+                                        Black and White
+                                    </li>
+                                    <li>
+                                        Selected color
+                                    </li>
+                                    <li>
+                                        Details
+                                    </li>
+                                    <li>
+                                        Submeniu
+                                    </li>
+                                </ul>
+                            </div>
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#people" href="#">Žmonės</a>
+                        </li>
+                            <div id="people" class="collapse">
+                                <ul class="sub-category">
+                                    <li>
+                                        Black and White
+                                    </li>
+                                    <li>
+                                        Selected color
+                                    </li>
+                                    <li>
+                                        Details
+                                    </li>
+                                    <li>
+                                        Submeniu
+                                    </li>
+                                </ul>
+                            </div>
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#boudoir" href="#">Boudoir</a>
+                        </li>
+                            <div id="boudoir" class="collapse">
+                                <ul class="sub-category">
+                                    <li>
+                                        Black and White
+                                    </li>
+                                    <li>
+                                        Selected color
+                                    </li>
+                                    <li>
+                                        Details
+                                    </li>
+                                    <li>
+                                        Submeniu
+                                    </li>
+                                </ul>    
+                            </div>
+                            
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#magazines" href="#">Žurnalai</a>
+                        </li>
+                            <div id="magazines" class="collapse">
+                                <ul class="sub-category">
+                                    <li>
+                                        Black and White
+                                    </li>
+                                    <li>
+                                        Selected color
+                                    </li>
+                                    <li>
+                                        Details
+                                    </li>
+                                    <li>
+                                        Submeniu
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+                </div>
+                <div class="sidebar-bottom-group">
+                    <div class="btn-group flat" role="group">
+                      <button type="button" class="btn btn-default">LT</button>
+                      <button type="button" class="btn btn-default">EN</button>
+                      <button type="button" class="btn btn-default">RU</button>
+                    </div>
+                    <hr style="width:40%;">
+                    <div class="secondary-menu sub-category">                 
+                        <li>
+                            <a href="#">Kontaktai</a>
+                        </li>
+                        <li>
+                            <a href="#">Kainos</a>
+                        </li>
+                        <li>
+                            <a href="#">Apie mus</a>
+                        </li>
+                        <li>
+                            <a href="#">Atsiliepimai</a>
+                        </li>
+                        <li>
+                            <a href="#">DUK</a>
+                        </li>
+                    </div>
+                    <div class="btn-group flat" role="group">
+                        <button type="button" class="btn btn-default socicon-facebook"></button>
+                        <button type="button" class="btn btn-default socicon-pinterest"></button>
+                        <button type="button" class="btn btn-default socicon-instagram"></button>
+                        <button type="button" class="btn btn-default socicon-youtube"></button>
+                    </div>
+                    <div class="copyright wrapper">
+                        <span class="client">2016 &copy; Vilmantas Žilinskas.</span><br>
+                        <span class="author">Made with <i style="font-size:9.5px; color:red;" class="material-icons">&#xE87D;</i> by litebits</span>
+                    </div>
+                </div>
+                
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="row nomargin" id="content">
+                <div class="col-md-9 nopadding" id="left">
+                    <div class="faq">
+                        <div class="heading-wrapper">
+                            <h1 style="font-size:24px; text-align:center;" class="nomargin">DUK</h1> 
+                            <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
+                        </div>
+                    
+                        <div class="faq-content-wrapper">
+                            <ul class="faq-list">
+                                <li class="faq-title">
+                                    <a class="faq-titlea collapsed" data-toggle="collapse" data-target="#title1" href="#">GAL GALI ATSIŲSTI MAN MANO NUOTRAUKĄ IŠ VAKARĖLIO KLUBE ANĄ VAKARĄ?</a>
+                                </li>
+                                    <div id="title1" class="collapse">
+                                        <span class="post">
+                                        <p class="faq-post">
+                                        Per vieną vakarą padarau nuo 200 iki 600 nuotraukų. Maždaug pusė jų yra nufotografuojama RAW formatu (žmonių kalba – formatas, kurį prieš parodant reikia redaguoti. O peržiūrėti jį reikia specialių programų). Iš visų nuotraukų į galutinį albumą patenka nuo 50 iki 100. Jeigu tarp pastarųjų nėra tavęs, tai: arba ta nuotrauka buvo neryški, nepakankamai graži publikavimui, arba tiesiog per mažai flirtavai su mano objektyvu :).
+                                        </p>
+                                        <p class="faq-post">
+                                        Tačiau, jeigu dar vis norite savo nuotraukos iš renginio arba tą patį vakarą atsiskaitote kokteiliu ar dar kažkaip, arba sumokate ~20 Lt. už vnt. Tik tokiu atveju aš dar kartą peržvelgsiu savo tūkstantinę nuotraukų galeriją, surasiu būtent Jūsų nuotrauką, ją retušuosiu ir nusiųsiu Jums. Atsiprašau, bet man nemoka už tai, kad eikvočiau savo likusį laisvalaikį šimtų nuotraukų siuntinėjimui el. paštu. Ačiū už supratimą.
+                                        </p>
+                                        </span>
+                                    </div>
+                                <li class="faq-title">
+                                    <a class="faq-titlea collapsed" data-toggle="collapse" data-target="#title2" href="#">Lorem ipsum dolor sit amet?</a>
+                                </li>
+                                    <div id="title2" class="collapse">
+                                        <span class="post">
+                                        <p class="faq-post">
+                                        Vivamus vel urna eu sem feugiat pellentesque. Maecenas dictum orci odio, eget condimentum tellus porttitor eget. Pellentesque eu convallis tellus, eget vulputate felis. Ut scelerisque a magna et fringilla. Nulla volutpat, felis vitae mattis lacinia, eros dolor egestas ante, vel vestibulum felis metus non odio. Aenean porttitor ante ut lorem dictum, sit amet consequat urna ultrices. Suspendisse potenti. Quisque iaculis condimentum risus eu placerat. Nulla facilisi. Aliquam at diam risus. Nulla convallis nec est quis tincidunt. Nunc justo turpis, fermentum in faucibus non, elementum ac tortor. Sed venenatis iaculis libero.
+                                        </p>
+                                        <p class="faq-post">
+                                        Nam ut tellus dapibus, lacinia nulla at, interdum risus. Donec sollicitudin porttitor risus, ut hendrerit lorem consequat nec. Donec eleifend felis vitae condimentum finibus. Morbi bibendum quis tellus et hendrerit. Vestibulum pulvinar elementum lorem at imperdiet. Praesent tellus mi, venenatis ac sodales a, aliquet eu tellus. Phasellus a ultrices lorem. Fusce ac eleifend erat. Etiam consequat et ante in sollicitudin. Sed lectus metus, ornare vel aliquet eget, rutrum volutpat dui.
+                                        </p>
+                                        </span>
+                                    </div>
+                                <li class="faq-title">
+                                    <a class="faq-titlea collapsed" data-toggle="collapse" data-target="#title3" href="#">Lorem ipsum dolor sit amet?</a>
+                                </li>
+                                    <div id="title3" class="collapse">
+                                        <span class="post">
+                                        <p class="faq-post">
+                                        Vivamus vel urna eu sem feugiat pellentesque. Maecenas dictum orci odio, eget condimentum tellus porttitor eget. Pellentesque eu convallis tellus, eget vulputate felis. Ut scelerisque a magna et fringilla. Nulla volutpat, felis vitae mattis lacinia, eros dolor egestas ante, vel vestibulum felis metus non odio. Aenean porttitor ante ut lorem dictum, sit amet consequat urna ultrices. Suspendisse potenti. Quisque iaculis condimentum risus eu placerat. Nulla facilisi. Aliquam at diam risus. Nulla convallis nec est quis tincidunt. Nunc justo turpis, fermentum in faucibus non, elementum ac tortor. Sed venenatis iaculis libero.
+                                        </p>
+                                        <p class="faq-post">
+                                        Nam ut tellus dapibus, lacinia nulla at, interdum risus. Donec sollicitudin porttitor risus, ut hendrerit lorem consequat nec. Donec eleifend felis vitae condimentum finibus. Morbi bibendum quis tellus et hendrerit. Vestibulum pulvinar elementum lorem at imperdiet. Praesent tellus mi, venenatis ac sodales a, aliquet eu tellus. Phasellus a ultrices lorem. Fusce ac eleifend erat. Etiam consequat et ante in sollicitudin. Sed lectus metus, ornare vel aliquet eget, rutrum volutpat dui.
+                                        </p>
+                                        </span>
+                                    </div>
+                                    <li class="faq-title">
+                                    <a class="faq-titlea collapsed" data-toggle="collapse" data-target="#title4" href="#">Lorem ipsum dolor sit amet?</a>
+                                </li>
+                                    <div id="title4" class="collapse">
+                                        <span class="post">
+                                        <p class="faq-post">
+                                        Vivamus vel urna eu sem feugiat pellentesque. Maecenas dictum orci odio, eget condimentum tellus porttitor eget. Pellentesque eu convallis tellus, eget vulputate felis. Ut scelerisque a magna et fringilla. Nulla volutpat, felis vitae mattis lacinia, eros dolor egestas ante, vel vestibulum felis metus non odio. Aenean porttitor ante ut lorem dictum, sit amet consequat urna ultrices. Suspendisse potenti. Quisque iaculis condimentum risus eu placerat. Nulla facilisi. Aliquam at diam risus. Nulla convallis nec est quis tincidunt. Nunc justo turpis, fermentum in faucibus non, elementum ac tortor. Sed venenatis iaculis libero.
+                                        </p>
+                                        <p class="faq-post">
+                                        Nam ut tellus dapibus, lacinia nulla at, interdum risus. Donec sollicitudin porttitor risus, ut hendrerit lorem consequat nec. Donec eleifend felis vitae condimentum finibus. Morbi bibendum quis tellus et hendrerit. Vestibulum pulvinar elementum lorem at imperdiet. Praesent tellus mi, venenatis ac sodales a, aliquet eu tellus. Phasellus a ultrices lorem. Fusce ac eleifend erat. Etiam consequat et ante in sollicitudin. Sed lectus metus, ornare vel aliquet eget, rutrum volutpat dui.
+                                        </p>
+                                        </span>
+                                    </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 nopadding" id="right">
+                    <div class="demo-gallery">
+                        <ul id="lightgallery" class="list-unstyled marginbottom0">
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+                            We are ready for 2017 and 2018 year bookings!</p>">
+                                <a href="">
+                                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>                    
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- SlickJS -->
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+
+    <script src="{% static "website/js/jquery.flexslider.js" %}" type="text/javascript"></script>
+    <!-- Custom JS -->
+    <script src="{% static "website/js/custom.js" %}" type="text/javascript"></script>
+    <!--Grid Gallery Init-->
+    <script src="{% static "website/js/gridGalleryInit.js" %}" type="text/javascript"></script>
+    <script src="{% static "website/js/lightgallery.js" %}"></script>
+    <script src="{% static "website/js/lg-fullscreen.js" %}"></script>
+    <script src="{% static "website/js/lg-thumbnail.js" %}"></script>
+    <script src="{% static "website/js/lg-video.js" %} "></script>
+    <script src="{% static "website/js/lg-autoplay.js" %} "></script>
+    <script src="{% static "website/js/lg-zoom.js" %} "></script>
+    <script src="{% static "website/js/lg-hash.js" %} "></script>
+    <script src="{% static "website/js/lg-pager.js" %} "></script>
+    <script src="{% static "website/js/jquery.mousewheel.min.js" %} "></script>
+</body>
+
+</html>

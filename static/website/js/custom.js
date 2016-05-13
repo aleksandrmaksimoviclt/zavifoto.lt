@@ -21,4 +21,14 @@ $(document).ready(function() {
         $("#wrapper").toggleClass("toggled");
   	});
 
+    $('.faq-titlea').on('click', function() {
+        if (  $( this ).hasClass("collapsed")){
+            $(this).removeClass("collapsed");
+            $(this).addClass("active");
+        } else {
+            $(this).addClass("collapsed");
+            $(this).removeClass("active");
+        }
+    }); 
+    
 });
