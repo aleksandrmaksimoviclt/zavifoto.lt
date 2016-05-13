@@ -12,6 +12,10 @@ body{
 	padding: 0px !important;
 }
 
+.nomargin{
+	margin:0 !important;
+}
+
 .marginbottom0{
 	margin-bottom: 0px;
 }
@@ -202,3 +206,21 @@ iframe.width-changed {
 }
 
 /* Grid End */
+
+/* FAQ BEGIN */
+
+#content {
+    height: 100vh;
+}
+#left {
+    float: left;
+    height: 100%;
+    overflow: scroll;
+}
+#right {
+    float: left;
+    height: 100%;
+    overflow: scroll;
+}
+
+/* FAQ END */
