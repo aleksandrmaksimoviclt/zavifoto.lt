@@ -21,6 +21,7 @@
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
+    top:0;
     left: 360px;
     width: 0;
     height: 100vh;
@@ -236,6 +237,11 @@
 
     #wrapper.toggled #sidebar-wrapper {
         width: 60px;
+    }
+
+
+    #wrapper.toggled {
+        padding-left: 60px;
     }
 
 }
