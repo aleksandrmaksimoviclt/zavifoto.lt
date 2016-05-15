@@ -5,6 +5,8 @@ body{
 	color:#999999;
 	background-color: #eeeeee;
 	transition: 250ms color;
+	font-size: 16px;
+	line-height: 24px;
 /*	position: fixed;*/
 }
 
@@ -293,3 +295,21 @@ p.faq-post:last-child {
 }
 
 /* FAQ END */
+
+/* ABOUT US BEGIN */
+
+span.client-review {
+    display: block;
+}
+
+span.reviewer {
+	display: block;
+	float: right;
+}
+
+.photographer-aboutself {
+    padding-top: 24px;
+    display: block;
+}
+
+/* ABOUT US END */
