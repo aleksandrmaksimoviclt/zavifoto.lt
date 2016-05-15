@@ -313,3 +313,29 @@ span.reviewer {
 }
 
 /* ABOUT US END */
+
+/* CONTACT BEGIN */
+
+.contact-aboutself {
+    display: block;
+}
+
+.vallign{
+    vertical-align: bottom;
+    margin-right: 16px;
+}
+
+.email{
+	color:#333;
+}
+
+.tel{
+	color:#333;
+}
+
+.heading-wrapper.contact {
+	padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+/* CONTACT END */
