@@ -49,7 +49,10 @@ class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
 
 	def __str__(self):
-		name = self.galleries_by_languages.all() or 'Untitled '
+		try:
+			name = self.galleries_by_languages.all()[0]
+		except Exception:
+			name = 'Untitled '
 		return name + 'gallery'
 
 
@@ -61,6 +64,9 @@ class GalleryByLanguage(models.Model):
 	name = models.CharField(max_length=100)
 	url = models.CharField(max_length=100, blank=True)
 	language = models.ForeignKey(Language)
+
+	class Meta:
+		unique_together = (('gallery', 'language'),)
 
 	def save(self, *args, **kwargs):
 		self.url = slugify(self.name)
@@ -100,7 +106,7 @@ class Photo(models.Model):
 	name = models.CharField(max_length=100)
 	image = models.ImageField(upload_to=image_path)
 	gallery = models.ForeignKey(Gallery)
-	category = models.ManyToManyField(Category)
+	category = models.ManyToManyField(Category, blank=True)
 
 	def src(self):
 		return self.image.url
@@ -117,6 +123,9 @@ class ContactsPage(models.Model):
 
 	class Meta:
 		verbose_name_plural = 'Contacts Page'
+
+	def __str__(self):
+		return 'Contacts Page'
 
 class PricePage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
@@ -162,6 +171,9 @@ class AboutPage(models.Model):
 
 	class Meta:
 		verbose_name_plural = 'About Page'
+
+	def __str__(self):
+		return 'About Page'
 
 
 class AboutPageByLanguage(models.Model):

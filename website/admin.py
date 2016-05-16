@@ -14,10 +14,23 @@ class GalleryInline(admin.StackedInline):
 	        pass #return extra - 
 	    return extra
 
+
+class GalleryByLanguageInline(admin.StackedInline):
+	model = GalleryByLanguage
+
+
+
 class GalleryAdmin(admin.ModelAdmin):
 	inlines = [
-		GalleryInline,
+		# GalleryByLanguageInline,
+		# GalleryInline,
 	]
+	def photos(self):
+		return 'test'#Photo.objects.all()
+	photos.allow_html = True
+
+	fields = [photos,]
+
 
 
 class CategoryInline(admin.StackedInline):
