@@ -1,0 +1,1 @@
+web: gunicorn zavifoto.wsgi --log-file -

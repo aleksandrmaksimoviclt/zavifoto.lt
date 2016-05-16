@@ -1,0 +1,247 @@
+/*!
+ * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 360px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    top:0;
+    left: 360px;
+    width: 0;
+    height: 100vh;
+    margin-left: -360px;
+    overflow-y: auto;
+    background: #fff;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 360px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -360px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: relative;
+    top: 0;
+    width: 360px;
+    margin: 0;
+    padding: 80px;
+    list-style: none;
+    height: 100%
+
+}
+
+.sidebar-nav li {
+    /*line-height: 40px;*/
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #333333;
+    transition: 250ms color;
+/*    background: rgba(255,255,255,0.2);*/}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    text-transform: uppercase;
+    padding-bottom: 50px;
+    position: absolute;
+    width: 200px;
+    background: white;
+}
+
+.hamburger {
+    padding: 0px !important;
+    position: absolute !important;
+    top: 28px;
+    left: 28px;
+    color:#999999;
+}
+
+.logo-wrapper{
+
+}
+
+.logo{
+    font-family: 'Cuprum', sans-serif;
+    font-size: 24px;
+}
+.logo.sub {
+    font-size: 16px;
+    letter-spacing: 0.7em;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #333333;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #333333;
+    background: none;
+    transition: 250ms color;
+}
+
+.main-category{
+    color:#333333 !important ;
+}
+
+
+    #wrapper {
+        padding-left: 360px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 80px;
+    }
+
+    #sidebar-wrapper {
+        width: 360px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 80px;
+        overflow: hidden;
+    }
+
+    #page-content-wrapper {
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+@media only screen and (max-width : 425px) {
+    /* #sidebar-wrapper {
+        width: 100%;
+    }*/
+
+    .sidebar-nav {
+        position: relative;
+        padding: 60px 80px;
+    }
+
+    .sidebar-bottom-group{
+        bottom: 60px;
+    }
+
+    .secondary-menu {
+        padding-bottom: 5px !important;
+        padding-top: 5px !important;
+    }
+
+    hr {
+        margin-top: 2.5px;
+        margin-bottom: 2.5px;
+    }
+
+    .hamburger {
+        top: 18px;
+        left: 18px;
+    }
+
+    .primary-menu {
+        margin-bottom: 345px;
+        margin-top: 65px;
+        height: calc(100% - 350px);
+    }
+
+    .sidebar-nav > .sidebar-brand {
+        padding-bottom: 25px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 60px;
+    }
+
+}
+
+@media only screen and (max-width : 375px) {
+    /* #sidebar-wrapper {
+        width: 100%;
+    }*/
+
+    .sidebar-nav {
+        position: relative;
+        padding: 60px 80px;
+    }
+
+    .sidebar-bottom-group{
+        bottom: 60px;
+    }
+
+    .secondary-menu {
+        padding-bottom: 5px !important;
+        padding-top: 5px !important;
+    }
+
+    hr {
+        margin-top: 2.5px;
+        margin-bottom: 2.5px;
+    }
+
+    .hamburger {
+        top: 18px;
+        left: 18px;
+    }
+
+    .primary-menu {
+        margin-bottom: 345px;
+        margin-top: 65px;
+        height: calc(100% - 350px);
+    }
+
+    .sidebar-nav > .sidebar-brand {
+        padding-bottom: 25px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 60px;
+    }
+
+
+    #wrapper.toggled {
+        padding-left: 60px;
+    }
+
+}
