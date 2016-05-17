@@ -26,6 +26,14 @@ LAYOUTS = (
 	(SLIDE, 'Full screen sliding'),
 )
 
+class Cms(models.Model):
+	top_text = models.TextField(blank=True, null=True)
+	main_text = models.TextField(blank=True, null=True)
+	bottom_text = models.TextField(blank=True, null=True)
+
+	class Meta:
+		abstract = True
+
 
 class Language(models.Model):
 	language_code = models.CharField(max_length=5)
@@ -176,10 +184,7 @@ class AboutPage(models.Model):
 		return 'About Page'
 
 
-class AboutPageByLanguage(models.Model):
-	top_text = models.TextField(blank=True, null=True)
-	main_text = models.TextField(blank=True, null=True)
-	bottom_text = models.TextField(blank=True, null=True)
+class AboutPageByLanguage(Cms):
 	language = models.ForeignKey(Language)
 	about_page = models.ForeignKey(AboutPage)
 	
