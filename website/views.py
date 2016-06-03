@@ -3,6 +3,13 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+def set_language(language):
+	try:
+		language = Language.objects.get(language_code=language).id
+	except Exception as e:
+		language = Language.objects.get(language_code='lt').id
+	return language
+
 def index(request):
 	response = render(
 		request,
@@ -10,6 +17,7 @@ def index(request):
 	return response
 
 def contact (request):
+	
 	response = render(
 		request,
 		'website/contact-us.html')

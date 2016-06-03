@@ -3,7 +3,7 @@
 
 from django.db import models
 from django.utils import timezone
-from django.utils.text import slugify
+from django.utils.text import slugify, mark_safe
 
 
 
@@ -104,6 +104,7 @@ class CategoryByLanguage(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.url = slugify(self.name)
+
 		super(CategoryByLanguage, self).save(*args, **kwargs)
 
 
@@ -115,14 +116,19 @@ class Photo(models.Model):
 	image = models.ImageField(upload_to=image_path)
 	gallery = models.ForeignKey(Gallery)
 	category = models.ManyToManyField(Category, blank=True)
-
+	
+	@property	
 	def src(self):
 		return self.image.url
 
+	def thumbnail(self):
+		#pazymi, kad sitas daiktas devi durex ir yra saugus
+	    return mark_safe('<img src="%s">' % self.image.url)
+		
 	def __str__(self):
 		return self.name
 
-
+	#SITAS LIEKA VIENAS VISIEM LANGUAGE
 class ContactsPage(models.Model):
 	address = models.CharField(max_length=100, null=True, blank=True)
 	phone = models.CharField(max_length=50, null=True, blank=True)
@@ -135,6 +141,12 @@ class ContactsPage(models.Model):
 	def __str__(self):
 		return 'Contacts Page'
 
+# class ContactsByLanguage(models.Model):
+# 	address = models.CharField(max_length=100, null=True, blank=True)
+# 	phone = models.CharField(max_length=50, null=True, blank=True)
+# 	email = models.EmailField(max_length=50, null=True, blank=True)
+
+	#SITAS NUSTATOMAS KIEKVINAM LANGUAGE ADMINKEI
 class PricePage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
 
