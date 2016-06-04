@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'website',
 
     # pypi packages
-    'photologue',
     'sortedm2m',
 ]
 SITE_ID = 1

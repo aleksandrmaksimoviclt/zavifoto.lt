@@ -1,0 +1,20 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Photos Upload page</title>
+</head>
+<body>
+<section>
+ 	<form target="invisible" action="/upload/" method="POST" enctype="multipart/form-data" id='upload'>{% csrf_token %}
+ 		<input type="file" name="files" multiple/>
+ 		<input type="submit" value="Submit"/>
+	</form>
+	<select name='gallery' form='upload'>
+ 		{% for gallery in galleries %}
+  		<option value={{gallery.id}}>{{gallery.name}}</option>
+ 		{% endfor %}
+	</select>
+</section>
+</body>
+</html>

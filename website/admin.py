@@ -5,8 +5,9 @@ from .models import *
 
 # Register your models here.
 
-class GalleryInline(admin.StackedInline):
+class GalleryInline(admin.TabularInline):
 	model = Photo
+
 
 	def get_extra(self, request, obj=None, **kwargs):
 	    extra = 2
@@ -23,13 +24,13 @@ class GalleryByLanguageInline(admin.StackedInline):
 class GalleryAdmin(admin.ModelAdmin):
 	inlines = [
 		# GalleryByLanguageInline,
-		# GalleryInline,
+		GalleryInline,
 	]
-	def photos(self):
-		return 'test'#Photo.objects.all()
-	photos.allow_html = True
+	# def photos(self):
+	# 	return 'test'#Photo.objects.all()
+	# photos.allow_html = True
 
-	fields = [photos,]
+	# fields = [photos,]
 
 
 

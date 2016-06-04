@@ -48,16 +48,22 @@ class PageSettings(models.Model):
 class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
 
-	def __str__(self):
-		try:
-			name = self.galleries_by_languages.all()[0]
-		except Exception:
-			name = 'Untitled '
-		return name + 'gallery'
-
-
+	
 	class Meta:
 		verbose_name_plural = 'Galleries'
+
+	def __str__(self):
+		return self.name
+	
+	@property	
+	def name(self):
+		try:
+			return self.gallerybylanguage_set.all()[0].name
+		except IndexError:
+			return 'Untitled gallery '
+		except Exception:
+			return 'Untitled gallery '
+
 
 class GalleryByLanguage(models.Model):
 	gallery = models.ForeignKey(Gallery)
@@ -69,7 +75,8 @@ class GalleryByLanguage(models.Model):
 		unique_together = (('gallery', 'language'),)
 
 	def save(self, *args, **kwargs):
-		self.url = slugify(self.name)
+		if not self.url:
+			self.url = slugify(self.name)
 		super(GalleryByLanguage, self).save(*args, **kwargs)
 
 	def __str__(self):
@@ -103,17 +110,22 @@ def image_path(instance, filename):
     return '/'.join([str(instance) + '_' + filename])
 
 class Photo(models.Model):
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=100, blank=True, null=True)
 	image = models.ImageField(upload_to=image_path)
 	gallery = models.ForeignKey(Gallery)
 	category = models.ManyToManyField(Category, blank=True)
+
 
 	def src(self):
 		return self.image.url
 
 	def __str__(self):
 		return self.name
-
+	
+	def save(self, *args, **kwargs):
+		if not self.name:
+			self.name = self.image.name
+		super(Photo, self).save(*args, **kwargs)
 
 class ContactsPage(models.Model):
 	address = models.CharField(max_length=100, null=True, blank=True)
