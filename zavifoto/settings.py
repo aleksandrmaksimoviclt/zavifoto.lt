@@ -130,6 +130,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+LOGIN_URL = '/admin/login/'
+
 try:
     from .local_settings import *
 except ImportError:

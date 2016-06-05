@@ -127,11 +127,19 @@ class Photo(models.Model):
 			self.name = self.image.name
 		super(Photo, self).save(*args, **kwargs)
 
-class ContactsPage(models.Model):
+
+class AbstractPage(models.Model):
+	top_text = models.TextField(blank=True, null=True)
+	main_text = models.TextField(blank=True, null=True)
+	bottom_text = models.TextField(blank=True, null=True)
+	
+	class Meta:
+		abstract = True
+
+class ContactsPage(AbstractPage):
 	address = models.CharField(max_length=100, null=True, blank=True)
 	phone = models.CharField(max_length=50, null=True, blank=True)
 	email = models.EmailField(max_length=50, null=True, blank=True)
-	# dar prigalvot
 
 	class Meta:
 		verbose_name_plural = 'Contacts Page'
@@ -149,13 +157,9 @@ class PricePage(models.Model):
 		verbose_name_plural = 'Price Page'
 
 
-class PricePageByLanguage(models.Model):
-	#  pagalvot
+class PricePageByLanguage(AbstractPage):
 	pricepage = models.ForeignKey(PricePage)
 	language = models.ForeignKey(Language)
-	top_text = models.TextField(blank=True, null=True)
-	main_text = models.TextField(blank=True, null=True)
-	bottom_text = models.TextField(blank=True, null=True)
 
 	def __str__(self):
 		return self.language.language_code or None
@@ -168,7 +172,6 @@ class Message(models.Model):
 	read = models.BooleanField(default=False)
 
 	def save(self, *args, **kwargs):
-
 		super(Message, self).save(*args, **kwargs)
 
 	def __str__(self):
@@ -188,10 +191,7 @@ class AboutPage(models.Model):
 		return 'About Page'
 
 
-class AboutPageByLanguage(models.Model):
-	top_text = models.TextField(blank=True, null=True)
-	main_text = models.TextField(blank=True, null=True)
-	bottom_text = models.TextField(blank=True, null=True)
+class AboutPageByLanguage(AbstractPage):
 	language = models.ForeignKey(Language)
 	about_page = models.ForeignKey(AboutPage)
 	
