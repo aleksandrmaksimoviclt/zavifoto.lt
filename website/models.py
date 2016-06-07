@@ -5,6 +5,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify, mark_safe
 
+from redactor.fields import RedactorField
+
 
 
 
@@ -203,3 +205,15 @@ class AboutPageByLanguage(Cms):
 	def __str__(self):
 		return self.language.language_code + 'about page' or None
 
+
+class Review(models.Model):
+	photo = models.ImageField(upload_to="reviews-photos/")
+	text_editor = RedactorField(verbose_name=u'Review')
+	author = models.CharField(max_length=200)
+
+	def text(self):
+		if self.text_editor:
+			return mark_safe(self.text_editor)
+
+	def __str__(self):
+		return self.author

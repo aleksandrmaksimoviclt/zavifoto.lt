@@ -1,4 +1,4 @@
-## TODO - 
+	## TODO - 
 ##		READ ABOUT INLINES
 ## 		TABULARINLINE <-
 ## 		DJANGO ADMIN
@@ -127,3 +127,4 @@ admin.site.register(ContactsPage, ContactsPageAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Language)
 admin.site.register(PageSettings, PageSettingsAdmin)
+admin.site.register(Review)

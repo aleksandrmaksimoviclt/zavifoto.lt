@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import *
 
 # Create your views here.
 
@@ -36,9 +37,10 @@ def about(request):
 	return response
 
 def reviews(request):
+	reviews = Review.objects.all()
 	response = render(
 		request,
-		'website/reviews.html')
+		'website/reviews.html', {'reviews' : reviews,})
 	return response
 
 def faq(request):

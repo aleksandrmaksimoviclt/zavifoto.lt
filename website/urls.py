@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include	
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from . import views
@@ -13,6 +13,10 @@ urlpatterns = [
 
 	
 	# # projects urls
+
+
+	# WYSIWYG REDACTOR
+	url(r'^redactor/', include('redactor.urls')),
 
 	# url(r'^projects/(?P<name>[-\w]+)/$', views.project),
 	# url(r'^(?P<language>[-\w]+)/$', views.change_language)
