@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from . import views
@@ -15,3 +15,4 @@ urlpatterns = [
 	# url(r'^projects/(?P<name>[-\w]+)/$', views.project),
 	# url(r'^(?P<language>[-\w]+)/$', views.change_language)
 ]
+urlpatterns.append(url(r'^plate/', include('django_spaghetti.urls')))

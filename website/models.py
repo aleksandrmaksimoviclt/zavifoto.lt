@@ -4,8 +4,8 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
-
-
+from django.contrib.postgres.fields import JSONField
+import uuid
 
 
 WHITE = 0
@@ -26,6 +26,11 @@ LAYOUTS = (
 	(SLIDE, 'Full screen sliding'),
 )
 
+def get_order_num(order):
+	try:
+		return int(max(order.keys())) + 1
+	except ValueError:
+		return 1
 
 class Language(models.Model):
 	language_code = models.CharField(max_length=5)
@@ -47,7 +52,7 @@ class PageSettings(models.Model):
 
 class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
-
+	photos_order = JSONField(default={}, blank=True, null=True)
 	
 	class Meta:
 		verbose_name_plural = 'Galleries'
@@ -85,6 +90,7 @@ class GalleryByLanguage(models.Model):
 
 class Category(models.Model):
 	gallery = models.ForeignKey(Gallery)
+	photos_order = JSONField(default={})
 
 	def __str__(self):
 		return self.gallery.__unicode__() + 'page settings for categories'
@@ -110,11 +116,10 @@ def image_path(instance, filename):
     return '/'.join([str(instance) + '_' + filename])
 
 class Photo(models.Model):
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	name = models.CharField(max_length=100, blank=True, null=True)
 	image = models.ImageField(upload_to=image_path)
 	gallery = models.ForeignKey(Gallery)
-	category = models.ManyToManyField(Category, blank=True)
-
 
 	def src(self):
 		return self.image.url
@@ -123,9 +128,26 @@ class Photo(models.Model):
 		return self.name
 	
 	def save(self, *args, **kwargs):
+		order_num = get_order_num(self.gallery.photos_order)
+		self.gallery.photos_order[order_num] = str(self.id)
+		self.gallery.save()
 		if not self.name:
 			self.name = self.image.name
 		super(Photo, self).save(*args, **kwargs)
+
+
+class PhotoCategory(models.Model):
+	photo = models.ForeignKey(Photo)
+	category = models.ForeignKey(Category)
+
+	class Meta:
+		unique_together = (('photo', 'category'),)
+
+	def save(self, *args, **kwargs):
+		order_num = get_order_num(self.category.photos_order)
+		self.category.photos_order[order_num] = self.photo.id
+		self.category.save()
+		super(PhotoCategory, self).save(*args, **kwargs)
 
 
 class AbstractPage(models.Model):
@@ -147,6 +169,11 @@ class ContactsPage(AbstractPage):
 	def __str__(self):
 		return 'Contacts Page'
 
+class ContactsPagePhoto(models.Model):
+	contacts_page = models.ForeignKey(ContactsPage)
+	photo = models.ForeignKey(Photo, unique=True)
+
+
 class PricePage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
 
@@ -155,6 +182,10 @@ class PricePage(models.Model):
 
 	class Meta:
 		verbose_name_plural = 'Price Page'
+
+class PricePagePhoto(models.Model):
+	price_page = models.ForeignKey(PricePage)
+	photo = models.ForeignKey(Photo, unique=True)
 
 
 class PricePageByLanguage(AbstractPage):
@@ -180,7 +211,7 @@ class Message(models.Model):
 			status = '(Unread)'
 		return '{0} message{1}'.format(self.sender, status)
 
-	
+
 class AboutPage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
 
@@ -191,6 +222,17 @@ class AboutPage(models.Model):
 		return 'About Page'
 
 
+class AboutPagePhoto(models.Model):
+	about = models.ForeignKey(AboutPage)
+	photo = models.ForeignKey(Photo, unique=True)
+
+	def __str__(self):
+		return 'About page photo'
+
+	def tumbnail(self):
+		pass
+
+
 class AboutPageByLanguage(AbstractPage):
 	language = models.ForeignKey(Language)
 	about_page = models.ForeignKey(AboutPage)
@@ -198,3 +240,19 @@ class AboutPageByLanguage(AbstractPage):
 	def __str__(self):
 		return self.language.language_code + 'about page' or None
 
+class FAQPage(models.Model):
+	modified = models.DateTimeField(default=timezone.now)
+
+
+class FAQPhoto(models.Model):
+	faq_page = models.ForeignKey(FAQPage)
+	photo = models.ForeignKey(Photo, unique=True)
+
+
+class FAQPageByLanguage(AbstractPage):
+	language = models.ForeignKey(Language, unique=True)
+
+class FAQQuestion(models.Model):
+	faq_page_by_language = models.ForeignKey(FAQPageByLanguage)
+	title = models.TextField()
+	text = models.TextField()

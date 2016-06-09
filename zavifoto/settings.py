@@ -37,14 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
 
     'website',
 
     # pypi packages
     'sortedm2m',
+    'django_spaghetti',
 ]
-SITE_ID = 1
+SPAGHETTI_SAUCE = {
+  'apps':['website',],
+  'show_fields':False,
+  'exclude':{'auth':['user']}
+}
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

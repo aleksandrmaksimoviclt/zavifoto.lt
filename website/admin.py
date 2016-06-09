@@ -50,6 +50,13 @@ class CategoryAdmin(admin.ModelAdmin):
 	]
 
 
+class AboutPagePhotoInline(admin.TabularInline):
+	model = AboutPagePhoto
+	extra = 1
+
+	def __str__(self):
+		return 'About page photo'
+
 class AboutPageByLanguageInline(admin.StackedInline):
 	model = AboutPageByLanguage
 
@@ -63,6 +70,7 @@ class AboutPageByLanguageInline(admin.StackedInline):
 class AboutPageAdmin(admin.ModelAdmin):
 	inlines = [
 		AboutPageByLanguageInline,
+		AboutPagePhotoInline
 	]
 
 	def has_add_permission(self, request):
