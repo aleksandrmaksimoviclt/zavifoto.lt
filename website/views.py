@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -40,6 +39,7 @@ class UploadView(TemplateView):
 		gallery = Gallery.objects.get(id=gallery_id)
 		for file in request.FILES.getlist('files'):
 			Photo.objects.create(name=file.name, image=file, gallery=gallery)
+
 		return HttpResponse('Done!')
 
 def contact (request):

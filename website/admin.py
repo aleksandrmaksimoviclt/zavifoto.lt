@@ -20,8 +20,10 @@ class PhotoAdmin(admin.ModelAdmin):
 	search_fields = [ 'name',
 	]
 
-class GalleryInline(admin.StackedInline):
+class GalleryInline(admin.TabularInline):
+
 	model = Photo
+
 
 	def get_extra(self, request, obj=None, **kwargs):
 	    extra = 2
@@ -38,16 +40,12 @@ class GalleryByLanguageInline(admin.StackedInline):
 class GalleryAdmin(admin.ModelAdmin):
 	inlines = [
 		# GalleryByLanguageInline,
-		# GalleryInline,
+		GalleryInline,
 	]
-	def photos(self):
-		return 'test'#Photo.objects.all()
-	photos.allow_html = True
-
-	## Cia rasom kokiu modelio fieldus norime matyti admin panelei
-	fields = [photos,]
-
-
+	# def photos(self):
+	# 	return 'test'#Photo.objects.all()
+	# photos.allow_html = True
+	# fields = [photos,]
 
 class CategoryInline(admin.StackedInline):
 	model = CategoryByLanguage
@@ -66,6 +64,13 @@ class CategoryAdmin(admin.ModelAdmin):
 	]
 
 
+class AboutPagePhotoInline(admin.TabularInline):
+	model = AboutPagePhoto
+	extra = 1
+
+	def __str__(self):
+		return 'About page photo'
+
 class AboutPageByLanguageInline(admin.StackedInline):
 	model = AboutPageByLanguage
 
@@ -79,6 +84,7 @@ class AboutPageByLanguageInline(admin.StackedInline):
 class AboutPageAdmin(admin.ModelAdmin):
 	inlines = [
 		AboutPageByLanguageInline,
+		AboutPagePhotoInline
 	]
 
 	def has_add_permission(self, request):

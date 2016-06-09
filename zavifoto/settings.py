@@ -26,20 +26,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
 
     'website',
 
     # pypi packages
-    'photologue',
     'sortedm2m',
-
     #wysiwyg redactor
     'redactor',
 
+    'django_spaghetti',
 
 ]
-SITE_ID = 1
+SPAGHETTI_SAUCE = {
+  'apps':['website',],
+  'show_fields':False,
+  'exclude':{'auth':['user']}
+}
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -131,6 +133,8 @@ MEDIA_URL = '/mediafiles/'
 # https://warehouse.python.org/project/whitenoise/
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+LOGIN_URL = '/admin/login/'
 
 try:
     from .local_settings import *
