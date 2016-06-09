@@ -18,6 +18,8 @@ urlpatterns = [
 	# WYSIWYG REDACTOR
 	url(r'^redactor/', include('redactor.urls')),
 
+	# Photos sorting
+	url(r'^sort/$', views.photosorting, name='photosorting'),
 	# url(r'^projects/(?P<name>[-\w]+)/$', views.project),
 	# url(r'^(?P<language>[-\w]+)/$', views.change_language)
 ]

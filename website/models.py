@@ -90,7 +90,7 @@ class Category(models.Model):
 	gallery = models.ForeignKey(Gallery)
 
 	def __str__(self):
-		return self.gallery.__unicode__() + 'page settings for categories'
+		return self.gallery.__str__() + 'page settings for categories'
 
 	class Meta:
 		verbose_name_plural = 'Categories'
@@ -217,3 +217,4 @@ class Review(models.Model):
 
 	def __str__(self):
 		return self.author
+

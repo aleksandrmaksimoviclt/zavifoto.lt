@@ -1,0 +1,16 @@
+ {% load staticfiles %}
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<title>Photos Upload page</title>
+ </head>
+ <body>
+ <section>
+ 	<select name='gallery'>
+  		{% for gallery in galleries %}
+ 	 		<option value={{gallery.id}}>{{gallery.name}}</option>
+  		{% endfor %}
+ 	</select>
+ </section>
+ </body>
+ </html> 
