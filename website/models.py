@@ -5,7 +5,9 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from django.contrib.postgres.fields import JSONField
+from collections import OrderedDict
 import uuid
+
 
 
 WHITE = 0
@@ -28,9 +30,9 @@ LAYOUTS = (
 
 def get_order_num(order):
 	try:
-		return int(max(order.keys())) + 1
+		return str(int(max(order.keys())) + 1)
 	except ValueError:
-		return 1
+		return str(1)
 
 class Language(models.Model):
 	language_code = models.CharField(max_length=5)
@@ -52,6 +54,7 @@ class PageSettings(models.Model):
 
 class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
+	category = models.ForeignKey('Category', null=True)
 	photos_order = JSONField(default={}, blank=True, null=True)
 	
 	class Meta:
@@ -87,16 +90,23 @@ class GalleryByLanguage(models.Model):
 	def __str__(self):
 		return self.name
 
+def sorted_order(photos_order):
+	ordered = OrderedDict()
+	for photo in photos_order.keys():
+		ordered.update({photo: photos_order[photo]})
+
+	return ordered
+
 
 class Category(models.Model):
-	gallery = models.ForeignKey(Gallery)
-	photos_order = JSONField(default={})
-
-	def __str__(self):
-		return self.gallery.__unicode__() + 'page settings for categories'
+	photos_order = JSONField(default={}, null=True, blank=True)
+# 'page settings for categories'
 
 	class Meta:
 		verbose_name_plural = 'Categories'
+
+	def get_photos_by_order(self):
+		return sorted_order(self.photos_order)
 
 class CategoryByLanguage(models.Model):
 	category = models.ForeignKey(Category)
@@ -145,7 +155,8 @@ class PhotoCategory(models.Model):
 
 	def save(self, *args, **kwargs):
 		order_num = get_order_num(self.category.photos_order)
-		self.category.photos_order[order_num] = self.photo.id
+
+		self.category.photos_order[order_num] = str(self.photo.id)
 		self.category.save()
 		super(PhotoCategory, self).save(*args, **kwargs)
 

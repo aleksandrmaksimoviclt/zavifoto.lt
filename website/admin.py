@@ -4,6 +4,11 @@ from .models import *
 
 
 # Register your models here.
+class PhotoInline(admin.StackedInline):
+	model = PhotoCategory
+
+class PhotoAdmin(admin.ModelAdmin):
+	inlines = [PhotoInline,]
 
 class GalleryInline(admin.TabularInline):
 	model = Photo
@@ -116,6 +121,6 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(AboutPage, AboutPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
-admin.site.register(Photo)
+admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Language)
 admin.site.register(PageSettings, PageSettingsAdmin)
