@@ -10,6 +10,11 @@ from .models import *
 
 
 # Register your models here.
+class PhotoInline(admin.StackedInline):
+	model = PhotoCategory
+
+class PhotoAdmin(admin.ModelAdmin):
+	inlines = [PhotoInline,]
 
 class PhotoAdmin(admin.ModelAdmin):
 	list_display = [

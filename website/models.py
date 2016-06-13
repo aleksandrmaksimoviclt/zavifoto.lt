@@ -7,7 +7,9 @@ from django.utils.text import slugify, mark_safe
 from redactor.fields import RedactorField
 from django.utils.text import slugify
 from django.contrib.postgres.fields import JSONField
+from collections import OrderedDict
 import uuid
+
 
 
 WHITE = 0
@@ -40,9 +42,38 @@ class Cms(models.Model):
 
 def get_order_num(order):
 	try:
-		return int(max(order.keys())) + 1
+		return str(int(max(order.keys())) + 1)
 	except ValueError:
-		return 1
+		return str(1)
+
+
+def sorted_order(photos_order):
+	ordered = OrderedDict()
+	for photo in sorted(photos_order.keys()):
+		ordered.update({photo: photos_order[photo]})
+	photos = OrderedDict()
+	for key, value in ordered.items():
+		try:
+			photos.update({key: Photo.objects.get(id=value)})
+		except ValueError:
+			pass
+	return photos
+
+def delete_photo_from_order(obj, id):
+	popped_key = None
+	new_order = OrderedDict()
+	for key, value in obj.photos_order.items():
+		if popped_key:
+			new_key = str(int(key) - 1)
+			new_order.update({new_key: value})
+		
+		elif value == id:
+			popped_key = key
+			obj.photos_order.pop(key)
+
+	obj.photos_order = new_order
+	obj.save()
+
 
 
 class Language(models.Model):
@@ -65,6 +96,7 @@ class PageSettings(models.Model):
 
 class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
+	category = models.ForeignKey('Category', null=True)
 	photos_order = JSONField(default={}, blank=True, null=True)
 	category = models.ForeignKey('Category', null=True)
 	class Meta:
@@ -81,6 +113,12 @@ class Gallery(models.Model):
 			return 'Untitled gallery '
 		except Exception:
 			return 'Untitled gallery '
+	
+	def get_photos_by_order(self):
+		return sorted_order(self.photos_order)
+
+	def remove_from_order(self, id):
+		delete_photo_from_order(self, id)
 
 
 class GalleryByLanguage(models.Model):
@@ -102,12 +140,19 @@ class GalleryByLanguage(models.Model):
 
 
 class Category(models.Model):
-	
-	photos_order = JSONField(default={}, null=True, blank=True,)
+
+	photos_order = JSONField(default={}, null=True, blank=True)
 
 
 	class Meta:
 		verbose_name_plural = 'Categories'
+
+	def get_photos_by_order(self):
+		return sorted_order(self.photos_order)
+
+	def remove_from_order(self, id):
+		delete_photo_from_order(self, id)
+
 
 class CategoryByLanguage(models.Model):
 	category = models.ForeignKey(Category)
@@ -154,6 +199,10 @@ class Photo(models.Model):
 			self.name = self.image.name
 		super(Photo, self).save(*args, **kwargs)
 
+	def delete(self, *args, **kwargs):
+		self.gallery.remove_from_order(self.id)
+		super(Photo, self).delete(*args, **kwargs)
+
 
 class PhotoCategory(models.Model):
 	photo = models.ForeignKey(Photo)
@@ -167,9 +216,13 @@ class ContactsPage(models.Model):
 
 	def save(self, *args, **kwargs):
 		order_num = get_order_num(self.category.photos_order)
-		self.category.photos_order[order_num] = self.photo.id
+		self.category.photos_order[order_num] = str(self.photo.id)
 		self.category.save()
 		super(PhotoCategory, self).save(*args, **kwargs)
+
+	def delete(self, *args, **kwargs):
+		self.category.remove_from_order(self.id)
+		super(PhotoCategory, self).delete(*args, **kwargs)
 
 
 class AbstractPage(models.Model):
