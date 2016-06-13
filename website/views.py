@@ -4,7 +4,7 @@ from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-from .models import Photo, Gallery
+from .models import Photo, Gallery, Category
 
 
 def index(request):
@@ -32,3 +32,14 @@ class UploadView(TemplateView):
 		for file in request.FILES.getlist('files'):
 			Photo.objects.create(name=file.name, image=file, gallery=gallery)
 		return HttpResponse('Done!')
+
+def change_order(request):
+	type = request.POST.get('type')
+	if type == 'gallery':
+		model = Gallery
+	elif type == 'category':
+		model = Category
+
+	obj = model.objects.get(id=request.POST.get('id'))
+	obj.photos_order = request.POST.get('order')
+	return HttpResponse('Changed')

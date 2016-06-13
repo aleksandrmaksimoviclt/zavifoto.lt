@@ -6,6 +6,7 @@ from . import views
 urlpatterns = [
 	url(r'^$', views.index, name='index'),
 	url(r'upload/', views.UploadView.as_view()),
+	url(r'^change-order$', views.change_order, name='change-order'),
 	# url(r'^about$', views.about, name='about'),
 	# url(r'^contact-us$', views.contact, name='contact-us'),
 	# url(r'^projects/$', views.projects, name='projects'),
