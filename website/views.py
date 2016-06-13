@@ -4,8 +4,7 @@ from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
-from .models import *
-
+from .models import Photo, Gallery, Category
 
 
 def set_language(language):
@@ -102,3 +101,14 @@ def galleriessorting(request, gallery_id):
 		request, 'website/photosorting.html', {'galleriesphotos': galleriesphotos,}
 		)
 	return response
+
+def change_order(request):
+	type = request.POST.get('type')
+	if type == 'gallery':
+		model = Gallery
+	elif type == 'category':
+		model = Category
+
+	obj = model.objects.get(id=request.POST.get('id'))
+	obj.photos_order = request.POST.get('order')
+	return HttpResponse('Changed')
