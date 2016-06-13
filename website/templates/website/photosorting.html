@@ -1,16 +1,72 @@
- {% load staticfiles %}
- <!DOCTYPE html>
- <html>
- <head>
- 	<title>Photos Upload page</title>
- </head>
- <body>
- <section>
- 	<select name='gallery'>
-  		{% for gallery in galleries %}
- 	 		<option value={{gallery.id}}>{{gallery.name}}</option>
-  		{% endfor %}
- 	</select>
- </section>
- </body>
- </html> 
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Photos Upload page</title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<style>
+#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+#sortable li span { position: absolute; margin-left: -1.3em; }
+</style>
+
+<script type="text/javascript" charset="utf-8">
+  // Sortable photos
+  // jQuery and jQuery-UI are in base.html
+  $(document).ready(function() {
+    $("#sortable").sortable({
+      update: function(event, ui) {
+        var serial = $('#sortable').sortable('serialize');
+    $.ajax({
+      url: "{% url 'versions:sort' version.id %}",
+      type: "post",
+      data: serial
+    });
+      },
+    }).disableSelection();
+  });
+</script>
+
+</head>
+
+<style>
+#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
+#sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+#sortable li span { position: absolute; margin-left: -1.3em; }
+</style>
+<script>
+$(function() {
+$( "#sortable" ).sortable();
+$( "#sortable" ).disableSelection();
+});
+</script>
+
+<body>
+<section style="font-size:18px;">
+<ul id="sortable">
+    {% for galleryphoto in galleriesphotos %}
+      <li id="{{galleryphoto.pk }}" class="ui-state-default">
+        <img src="{{ galleryphoto.url }}">
+      </li>
+    {% endfor %}
+    </ul>
+</section>
+
+<section>
+	{% for category in categories %}
+		<a href='/sort/{{category.id}}/category'>{{category.name}}</a>
+	{% endfor %}
+
+	{% for gallery_lang in galleries %}
+		<a href='/sort/{{gallery_lang.id}}/gallery'>{{gallery_lang}}</a>
+	{% endfor %} </section> 
+</section>
+<section>
+	
+		<img src="{{galleryphoto.url}}">
+	{% endfor %}
+</section>
+</body>
+</html> 

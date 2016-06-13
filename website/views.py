@@ -73,3 +73,32 @@ def faq(request):
 		request,
 		'website/faq.html')
 	return response
+
+def photosorting(request):
+	categories = CategoryByLanguage.objects.filter(language__language='lt')
+
+	response = render(
+		request, 'website/photosorting.html', {'categories':categories,})
+
+	return response
+
+def categorysorting(request, category_id):
+
+	categories = CategoryByLanguage.objects.filter(language__language='lt', id=category_id,)
+	galleries = Gallery.objects.filter(category=categories[0].category)
+	galleries_lang = GalleryByLanguage.objects.filter(gallery__in=galleries)
+	
+
+	response = render(
+		request, 'website/photosorting.html', {'categories': categories, 'galleries': galleries, 'galleries_lang': galleries_lang,})
+
+	return response
+
+def galleriessorting(request, gallery_id):
+
+	gallery_lang = Gallery.objects.get(id=gallery_id)
+	galleriesphotos = gallery_lang.photo_set.all()
+	response = render(
+		request, 'website/photosorting.html', {'galleriesphotos': galleriesphotos,}
+		)
+	return response

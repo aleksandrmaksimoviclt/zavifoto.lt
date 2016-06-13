@@ -25,6 +25,8 @@ urlpatterns = [
 
 	# Photos sorting
 	url(r'^sort/$', views.photosorting, name='photosorting'),
+	url(r'^sort/(?P<category_id>\w+)/category/$', views.categorysorting),
+	url(r'^sort/(?P<gallery_id>\w+)/gallery/$', views.galleriessorting),
 	# url(r'^projects/(?P<name>[-\w]+)/$', views.project),
 	# url(r'^(?P<language>[-\w]+)/$', views.change_language)
 ]

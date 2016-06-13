@@ -13,6 +13,7 @@ import uuid
 WHITE = 0
 BLACK = 1
 
+DEFAULT_LANGUAGE = 'lt'
 
 STYLES = (
 	(WHITE, 'White page style'),
@@ -65,7 +66,7 @@ class PageSettings(models.Model):
 class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
 	photos_order = JSONField(default={}, blank=True, null=True)
-	
+	category = models.ForeignKey('Category', null=True)
 	class Meta:
 		verbose_name_plural = 'Galleries'
 
@@ -75,7 +76,7 @@ class Gallery(models.Model):
 	@property	
 	def name(self):
 		try:
-			return self.gallerybylanguage_set.all()[0].name
+			return self.gallerybylanguage_set.all().get(language__language='lt').name
 		except IndexError:
 			return 'Untitled gallery '
 		except Exception:
@@ -101,11 +102,9 @@ class GalleryByLanguage(models.Model):
 
 
 class Category(models.Model):
-	gallery = models.ForeignKey(Gallery)
-	photos_order = JSONField(default={})
+	
+	photos_order = JSONField(default={}, null=True, blank=True,)
 
-	def __str__(self):
-		return self.gallery.__str__() + 'page settings for categories'
 
 	class Meta:
 		verbose_name_plural = 'Categories'
@@ -141,7 +140,7 @@ class Photo(models.Model):
 		return self.image.url
 
 	def thumbnail(self):
-		#pazymi, kad sitas daiktas devi durex ir yra saugus
+		#pazymi, kad sitas daiktas yra saugus
 	    return mark_safe('<img src="%s">' % self.image.url)
 		
 	def __str__(self):

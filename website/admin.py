@@ -39,7 +39,7 @@ class GalleryByLanguageInline(admin.StackedInline):
 
 class GalleryAdmin(admin.ModelAdmin):
 	inlines = [
-		# GalleryByLanguageInline,
+		GalleryByLanguageInline,
 		GalleryInline,
 	]
 	# def photos(self):
