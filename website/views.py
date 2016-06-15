@@ -1,8 +1,12 @@
+
+import ast
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
@@ -94,21 +98,23 @@ def categorysorting(request, category_id):
 	return response
 
 def galleriessorting(request, gallery_id):
+ 
+	gallery = Gallery.objects.get(id=gallery_id)
 
-	gallery_lang = Gallery.objects.get(id=gallery_id)
-	galleriesphotos = gallery_lang.photo_set.all()
 	response = render(
-		request, 'website/photosorting.html', {'galleriesphotos': galleriesphotos,}
+		request, 'website/photosorting.html', {'gallery': gallery, 'type': 'gallery'}
 		)
 	return response
-
+@csrf_exempt
 def change_order(request):
-	type = request.POST.get('type')
-	if type == 'gallery':
+	json = request.read()
+	data = ast.literal_eval(json.decode("utf-8"))
+	if data['type'] == 'gallery':
 		model = Gallery
-	elif type == 'category':
+	elif data['type'] == 'category':
 		model = Category
 
-	obj = model.objects.get(id=request.POST.get('id'))
-	obj.photos_order = request.POST.get('order')
+	obj = model.objects.get(id=data['id'])
+	obj.photos_order = data['order']
+	obj.save()
 	return HttpResponse('Changed')

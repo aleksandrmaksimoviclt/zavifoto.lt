@@ -96,9 +96,9 @@ class PageSettings(models.Model):
 
 class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
-	category = models.ForeignKey('Category', null=True)
 	photos_order = JSONField(default={}, blank=True, null=True)
 	category = models.ForeignKey('Category', null=True)
+	
 	class Meta:
 		verbose_name_plural = 'Galleries'
 
@@ -177,7 +177,6 @@ class Photo(models.Model):
 	name = models.CharField(max_length=100, blank=True, null=True)
 	image = models.ImageField(upload_to=image_path)
 	gallery = models.ForeignKey(Gallery)
-	category = models.ManyToManyField(Category, blank=True)
 	
 	@property	
 
