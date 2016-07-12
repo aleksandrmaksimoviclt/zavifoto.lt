@@ -2,7 +2,7 @@
 import ast
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -11,17 +11,23 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 
 
-def set_language(language):
-	try:
-		language = Language.objects.get(language_code=language).id
-	except Exception as e:
-		language = Language.objects.get(language_code='lt').id
-	return language
+# def set_language(language):
+# 	try:
+# 		language = Language.objects.get(language_code=language).id
+# 	except Exception as e:
+# 		language = Language.objects.get(language_code='lt').id
+# 	return language
 
 def index(request):
+	available_languages = Language.objects.all()
+	language = get_language_obj(request)
+
 	response = render(
 		request,
-		'website/index.html')
+		'website/index.html',{
+		'current_language': language.language_code,
+		'available_languages': available_languages,
+		})
 	return response
 
 class UploadView(TemplateView):
@@ -46,10 +52,23 @@ class UploadView(TemplateView):
 		return HttpResponse('Done!')
 
 def contact (request):
-	
+	available_languages = Language.objects.all()
+	language = get_language_obj(request)
+
+	try:
+		contactspage = ContactsPage.objects.filter(
+			language=language).first()
+
+	except Exception:
+		contactspage = []
+
 	response = render(
 		request,
-		'website/contact-us.html')
+		'website/contact-us.html',{
+		'current_language': language.language_code,
+		'available_languages': available_languages,
+		'contactspage': contactspage,
+		})
 	return response
 
 def pricing(request):
@@ -118,3 +137,18 @@ def change_order(request):
 	obj.photos_order = data['order']
 	obj.save()
 	return HttpResponse('Changed')
+
+def get_language_obj(request):
+	available_langs = [l.language_code for l in Language.objects.all()]
+	try:
+		lang = request.COOKIES['language']
+	except Exception:
+		lang = DEFAULT_LANGUAGE
+	if lang not in available_langs:
+		lang = DEFAULT_LANGUAGE 
+	return Language.objects.get(language_code=lang)
+
+def change_language(request, language):
+	response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+	response.set_cookie(key='language', value=language)
+	return response

@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{current_language}}">
 
 <head>
 
@@ -155,9 +155,9 @@
                 </div>
                 <div class="sidebar-bottom-group">
                     <div class="btn-group flat" role="group">
-                      <button type="button" class="btn btn-default">LT</button>
-                      <button type="button" class="btn btn-default">EN</button>
-                      <button type="button" class="btn btn-default">RU</button>
+                        {% for language in available_languages %}
+                            <button type="button" class="btn btn-default"><a class="language-button {% if language.language_code == current_language %}current-language{% endif %}" href="/set-language/{{language.language_code}}">{{language.language_code}}</a></button>
+                        {% endfor %}
                     </div>
                     <hr style="width:40%;">
                     <div class="secondary-menu sub-category">                 

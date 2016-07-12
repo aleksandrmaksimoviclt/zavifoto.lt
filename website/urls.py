@@ -6,6 +6,9 @@ from . import views
 urlpatterns = [
 	url(r'^$', views.index, name='index'),
 
+	# Change language
+	url(r'^set-language/(?P<language>[-\w]+)/$', views.change_language), 
+
 	url(r'^contact-us$', views.contact, name='contact-us'),
 	url(r'^pricing$', views.pricing, name='pricing'),
 	url(r'^about$', views.about, name='about'),

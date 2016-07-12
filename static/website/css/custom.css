@@ -51,6 +51,15 @@ hr {
     border-color: transparent;
 }
 
+.language-button {
+    text-transform: uppercase;
+    color:#333;
+}
+
+.current-language{
+	font-weight: bold;
+}
+
 /*SIDEBAR*/
 
 .primary-menu {

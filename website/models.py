@@ -82,6 +82,7 @@ def delete_photo_from_order(obj, id):
 class Language(models.Model):
 	language_code = models.CharField(max_length=5)
 	language = models.CharField(max_length=20)
+	is_hidden = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.language or None
@@ -213,7 +214,6 @@ class PhotoCategory(models.Model):
 	class Meta:
 		unique_together = (('photo', 'category'),)
 
-	#SITAS LIEKA VIENAS VISIEM LANGUAGE
 class ContactsPage(models.Model):
 
 	def save(self, *args, **kwargs):
@@ -231,7 +231,6 @@ class ContactsPage(models.Model):
 
 class AbstractPage(models.Model):
 	heading = RedactorField()
-	heading = RedactorField()
 	heading_slug = RedactorField()
 	message = RedactorField()
 	e_mail = RedactorField()
@@ -245,13 +244,21 @@ class AbstractPage(models.Model):
 	class Meta:
 		abstract = True
 
-class ContactsPage(AbstractPage):
-
-	description_editor = RedactorField(verbose_name=u'Description')
-
-	address = models.CharField(max_length=100, null=True, blank=True)
-	phone = models.CharField(max_length=50, null=True, blank=True)
-	email = models.EmailField(max_length=50, null=True, blank=True)
+class ContactsPage(models.Model):
+	page_title = models.CharField(max_length=100)
+	heading = RedactorField(verbose_name=u'Heading')
+	heading_text = RedactorField(verbose_name=u'Heading Text')
+	email = models.CharField(max_length=254, blank=True, null=True)
+	phone_number_display = models.CharField(max_length=20, blank=True, null=True)
+	phone_number_call = models.CharField(max_length=20, blank=True, null=True)
+	contact_form_heading = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_name = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_email = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_phone_number = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_question = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_message = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_send_button_text = models.CharField(max_length=50, blank=True, null=True)
+	language = models.ForeignKey(Language, null=True, blank=True)
 
 	class Meta:
 		verbose_name_plural = 'Contacts Page'
@@ -261,15 +268,8 @@ class ContactsPage(AbstractPage):
 			return mark_safe(self.description_editor)
 
 	def __str__(self):
-		return 'Contacts Page'
+		return 'Kontaktai ' + self.language.language_code + ' kalba'
 
-
-# class ContactsByLanguage(models.Model):
-# 	address = models.CharField(max_length=100, null=True, blank=True)
-# 	phone = models.CharField(max_length=50, null=True, blank=True)
-# 	email = models.EmailField(max_length=50, null=True, blank=True)
-
-	#SITAS NUSTATOMAS KIEKVINAM LANGUAGE ADMINKEI
 
 class ContactsPagePhoto(models.Model):
 	contacts_page = models.ForeignKey(ContactsPage)

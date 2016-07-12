@@ -4,9 +4,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from zavifoto import settings
 
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('website.urls')),    
+    url(r'^', include('website.urls')),   
 ]
 
 urlpatterns += staticfiles_urlpatterns()

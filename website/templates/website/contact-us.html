@@ -11,51 +11,51 @@
     
         <div class="faq-content-wrapper">
             <div class="contact-aboutself">
-                <b>Parašykite dabar!</b><br><br>
-                Jeigu norite užsisakyti, pasiteirauti, ar tiesiog pasidalinti jums svarbiomis mintimis, užpildykite susisiekimo formą ir gausite atsakymą per artimiausias 24 valandas.<br><br>
-                Lauksime Jūsų ;)
-                <br><br>
+                {{contactspage.heading|safe}}
+                <br>
+                {{contactspage.heading_text|safe}}
+                <br>
                  <span class="email-wrapper">
                     <i class="material-icons vallign">&#xE0BE;</i>
-                    <a class="email" href="mailto:info@zavifoto.lt">info@zavifoto.lt</a></span>        
+                    <a class="email" href="mailto:{{contactspage.email}}">{{contactspage.email}}</a></span>        
                 </span>
                 
                 <br><br>
                 <span class="tel-wrapper">
                     <i class="material-icons vallign">&#xE0CD;</i>
-                    <a class="tel" href="tel:+37062338655">+370 623 38655</a>
+                    <a class="tel" href="tel:{{contactspage.phone_number_call}}">{{contactspage.phone_number_display}}</a>
                 </span>
             </div>
             <div class="heading-wrapper contact">
-                <h1 style="font-size:24px; text-align:center;" class="nomargin">SUSISIEKITE SU MUMIS</h1> 
+                <h1 style="font-size:24px; text-align:center;" class="nomargin">{{contactspage.contact_form_heading}}</h1> 
                 <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
             </div>
             <div class="contact-form-wrapper ">
                 <div class="row">
                     <div class="col-xs-6 form-group">
-                        <label>Vardas</label>
+                        <label>{{contactspage.contact_form_name}}</label>
                         <input class="form-control" type="text"/>
                     </div>
                     <div class="col-xs-6 form-group">
-                        <label>El.Paštas</label>
+                        <label>{{contactspage.contact_form_email}}</label>
                         <input class="form-control" type="text"/>
                     </div>
 
                     <div class="col-xs-6 form-group">
-                        <label>Telefono Nr.</label>
+                        <label>{{contactspage.contact_form_phone_number}}</label>
                         <input class="form-control" type="text"/>
                     </div>
                     
                     <div class="col-xs-6 form-group">
-                        <label>Iš kur sužinojote apie mus?</label>
+                        <label>{{contactspage.contact_form_question}}</label>
                         <input class="form-control" type="text"/>
                     </div>
                     <div class="col-xs-12 form-group">
-                      <label for="comment">Jūsų žinutės tekstas:</label>
+                      <label for="comment">{{contactspage.contact_form_message}}</label>
                       <textarea class="form-control" rows="5" id="comment"></textarea>
                     </div>
                     <div class="col-xs-12 form-group center-block">
-                        <button type="submit" class="btn btn-default">SIŲSTI</button>
+                        <button type="submit" class="btn btn-default">{{contactspage.contact_form_send_button_text}}</button>
                     </div>
                 </div>
             </div>
