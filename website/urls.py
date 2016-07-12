@@ -21,7 +21,7 @@ urlpatterns = [
 	# # projects urls
 
 
-	# WYSIWYG REDACTOR
+	# URL FOR WYSIWYG REDACTOR
 	url(r'^redactor/', include('redactor.urls')),
 
 	# Photos sorting

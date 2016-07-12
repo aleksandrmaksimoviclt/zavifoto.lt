@@ -4,7 +4,10 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify, mark_safe
+
+# wysiwyg redactor in admin
 from redactor.fields import RedactorField
+
 from django.utils.text import slugify
 from django.contrib.postgres.fields import JSONField
 from collections import OrderedDict
@@ -224,16 +227,28 @@ class ContactsPage(models.Model):
 		self.category.remove_from_order(self.id)
 		super(PhotoCategory, self).delete(*args, **kwargs)
 
+	
+
 
 class AbstractPage(models.Model):
-	top_text = models.TextField(blank=True, null=True)
-	main_text = models.TextField(blank=True, null=True)
-	bottom_text = models.TextField(blank=True, null=True)
+	heading = RedactorField()
+	heading = RedactorField()
+	heading_slug = RedactorField()
+	message = RedactorField()
+	e_mail = RedactorField()
+	phone_number = RedactorField()
+	top_text = RedactorField()
+	photo = RedactorField()
+	author = RedactorField()
+	text_with_icons_on_left = RedactorField()
 	
+
 	class Meta:
 		abstract = True
 
 class ContactsPage(AbstractPage):
+
+	description_editor = RedactorField(verbose_name=u'Description')
 
 	address = models.CharField(max_length=100, null=True, blank=True)
 	phone = models.CharField(max_length=50, null=True, blank=True)
@@ -241,6 +256,10 @@ class ContactsPage(AbstractPage):
 
 	class Meta:
 		verbose_name_plural = 'Contacts Page'
+
+	def description(self):
+		if self.description_editor or self.adasd or self.sodasdasd:
+			return mark_safe(self.description_editor)
 
 	def __str__(self):
 		return 'Contacts Page'
