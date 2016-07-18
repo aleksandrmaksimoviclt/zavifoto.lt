@@ -69,41 +69,15 @@ class CategoryAdmin(admin.ModelAdmin):
 	]
 
 
-class AboutPagePhotoInline(admin.TabularInline):
-	model = AboutPagePhoto
-	extra = 1
+# class AboutPagePhotoInline(admin.TabularInline):
+# 	model = AboutPagePhoto
+# 	extra = 1
 
-	def __str__(self):
-		return 'About page photo'
+# 	def __str__(self):
+# 		return 'About page photo'
 
-class AboutPageByLanguageInline(admin.StackedInline):
-	model = AboutPageByLanguage
-
-	def get_extra(self, request, obj=None, **kwargs):
-	    extra = 2
-	    if obj:
-	        pass #return extra - obj.contactsbylanguage_set.count()
-	    return extra
-
-
-class AboutPageAdmin(admin.ModelAdmin):
-	inlines = [
-		AboutPageByLanguageInline,
-		AboutPagePhotoInline
-	]
-
-	def has_add_permission(self, request):
-		return False if self.model.objects.count() > 0 else True
-
-
-class QuestionInline(admin.StackedInline):
-	model = Question
-
-class PricePageAdmin(admin.ModelAdmin):
-	inlines = [QuestionInline,]
-
-# class PricePageByLanguageInline(admin.StackedInline):
-# 	model = PricePageByLanguage
+# class AboutPageByLanguageInline(admin.StackedInline):
+# 	model = AboutPage
 
 # 	def get_extra(self, request, obj=None, **kwargs):
 # 	    extra = 2
@@ -112,14 +86,21 @@ class PricePageAdmin(admin.ModelAdmin):
 # 	    return extra
 
 
-# class PricePageAdmin(admin.ModelAdmin):
+# class AboutPageAdmin(admin.ModelAdmin):
 # 	inlines = [
-# 		PricePageByLanguageInline,
+# 		AboutPage,
+# 		AboutPagePhotoInline
 # 	]
 
 # 	def has_add_permission(self, request):
 # 		return False if self.model.objects.count() > 0 else True
 
+
+class QuestionInline(admin.StackedInline):
+	model = Question
+
+class PricePageAdmin(admin.ModelAdmin):
+	inlines = [QuestionInline,]
 
 class ContactsPageAdmin(admin.ModelAdmin):
 	inlines = [
@@ -138,7 +119,7 @@ class PageSettingsAdmin(admin.ModelAdmin):
 
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(AboutPage, AboutPageAdmin)
+admin.site.register(AboutPage)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
 admin.site.register(Photo, PhotoAdmin)

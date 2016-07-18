@@ -314,12 +314,18 @@ class Message(models.Model):
 
 class AboutPage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
+	heading = models.CharField(max_length=100, null=True, blank=True)
+	quote = RedactorField(verbose_name=u'Quote', null=True, blank=True)
+	quote_author = RedactorField(verbose_name=u'Quote author', null=True, blank=True)
+	text = RedactorField(verbose_name=u'Text', null=True, blank=True)
+
+	language = models.ForeignKey(Language, null=True, blank=True)
 
 	class Meta:
 		verbose_name_plural = 'About Page'
 
 	def __str__(self):
-		return 'About Page'
+		return 'About page ' + self.language.language_code
 
 
 class AboutPagePhoto(models.Model):
@@ -331,15 +337,6 @@ class AboutPagePhoto(models.Model):
 
 	def tumbnail(self):
 		pass
-
-
-class AboutPageByLanguage(AbstractPage):
-
-	language = models.ForeignKey(Language)
-	about_page = models.ForeignKey(AboutPage)
-	
-	def __str__(self):
-		return self.language.language_code + 'about page' or None
 
 class Review(models.Model):
 	photo = models.ImageField(upload_to="reviews-photos/")

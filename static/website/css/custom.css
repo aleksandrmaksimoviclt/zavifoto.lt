@@ -307,13 +307,13 @@ div.faq-post:last-child {
 
 /* ABOUT US BEGIN */
 
-span.client-review {
+.client-review {
     display: block;
 }
 
-span.reviewer {
+.reviewer {
 	display: block;
-	float: right;
+	text-align: right;
 }
 
 .photographer-aboutself {

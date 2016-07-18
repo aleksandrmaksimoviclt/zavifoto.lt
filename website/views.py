@@ -80,7 +80,6 @@ def pricing(request):
 
 	except Exception:
 		pricepage = []
-		question = []
 
 	try:
 		questions = Question.objects.filter(pricepage=pricepage.id)
@@ -99,9 +98,22 @@ def pricing(request):
 	return response
 
 def about(request):
+	available_languages = Language.objects.all()
+	language = get_language_obj(request)
+
+	try:
+		aboutpage = AboutPage.objects.filter(language=language).first()
+
+	except Exception:
+		aboutpage = []
+
 	response = render(
 		request,
-		'website/about.html')
+		'website/about.html',{
+		'current_language': language.language_code,
+		'available_languages': available_languages,
+		'aboutpage': aboutpage,
+		})
 	return response
 
 def reviews(request):
