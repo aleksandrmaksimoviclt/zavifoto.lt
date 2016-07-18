@@ -252,7 +252,7 @@ li.faq-title {
     padding: 24px 0px;
 }
 
-span.post {
+.post {
     font-size: 16px;
     line-height: 24px;
     text-align: justify;
@@ -299,7 +299,7 @@ li.faq-title {
 	transition: transform 350ms;
 }
 
-p.faq-post:last-child {
+div.faq-post:last-child {
     padding-bottom: 24px;
 }
 

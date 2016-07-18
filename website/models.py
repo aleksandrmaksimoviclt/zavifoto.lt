@@ -275,27 +275,25 @@ class ContactsPagePhoto(models.Model):
 	contacts_page = models.ForeignKey(ContactsPage)
 	photo = models.ForeignKey(Photo, unique=True)
 
-
 class PricePage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
+	heading = models.CharField(max_length=100, null=True, blank=True)
+	language = models.ForeignKey(Language, null=True, blank=True)
 
 	def __str__(self):
-		return 'Prices page settings'
+		return 'Pricepage ' + self.language.language_code
 
 	class Meta:
 		verbose_name_plural = 'Price Page'
 
+class Question(models.Model):
+	heading = models.CharField(max_length=100, null=True, blank=True)
+	body = RedactorField(verbose_name=u'Question Body', null=True, blank=True)
+	pricepage = models.ForeignKey(PricePage, on_delete=models.CASCADE)
+
 class PricePagePhoto(models.Model):
 	price_page = models.ForeignKey(PricePage)
 	photo = models.ForeignKey(Photo, unique=True)
-
-
-class PricePageByLanguage(AbstractPage):
-	pricepage = models.ForeignKey(PricePage)
-	language = models.ForeignKey(Language)
-
-	def __str__(self):
-		return self.language.language_code or None
 
 
 class Message(models.Model):

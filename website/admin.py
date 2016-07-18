@@ -1,4 +1,4 @@
-	## TODO - 
+## TODO - 
 ##		READ ABOUT INLINES
 ## 		TABULARINLINE <-
 ## 		DJANGO ADMIN
@@ -96,23 +96,29 @@ class AboutPageAdmin(admin.ModelAdmin):
 		return False if self.model.objects.count() > 0 else True
 
 
-class PricePageByLanguageInline(admin.StackedInline):
-	model = PricePageByLanguage
-
-	def get_extra(self, request, obj=None, **kwargs):
-	    extra = 2
-	    if obj:
-	        pass #return extra - obj.contactsbylanguage_set.count()
-	    return extra
-
+class QuestionInline(admin.StackedInline):
+	model = Question
 
 class PricePageAdmin(admin.ModelAdmin):
-	inlines = [
-		PricePageByLanguageInline,
-	]
+	inlines = [QuestionInline,]
 
-	def has_add_permission(self, request):
-		return False if self.model.objects.count() > 0 else True
+# class PricePageByLanguageInline(admin.StackedInline):
+# 	model = PricePageByLanguage
+
+# 	def get_extra(self, request, obj=None, **kwargs):
+# 	    extra = 2
+# 	    if obj:
+# 	        pass #return extra - obj.contactsbylanguage_set.count()
+# 	    return extra
+
+
+# class PricePageAdmin(admin.ModelAdmin):
+# 	inlines = [
+# 		PricePageByLanguageInline,
+# 	]
+
+# 	def has_add_permission(self, request):
+# 		return False if self.model.objects.count() > 0 else True
 
 
 class ContactsPageAdmin(admin.ModelAdmin):

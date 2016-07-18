@@ -56,8 +56,7 @@ def contact (request):
 	language = get_language_obj(request)
 
 	try:
-		contactspage = ContactsPage.objects.filter(
-			language=language).first()
+		contactspage = ContactsPage.objects.filter(language=language).first()
 
 	except Exception:
 		contactspage = []
@@ -72,9 +71,31 @@ def contact (request):
 	return response
 
 def pricing(request):
+	available_languages = Language.objects.all()
+	language = get_language_obj(request)
+
+	try:
+		pricepage = PricePage.objects.filter(language=language).first()
+			
+
+	except Exception:
+		pricepage = []
+		question = []
+
+	try:
+		questions = Question.objects.filter(pricepage=pricepage.id)
+
+	except Exception:
+		question = []
+
 	response = render(
 		request,
-		'website/pricing.html')
+		'website/pricing.html',{
+		'current_language': language.language_code,
+		'available_languages': available_languages,
+		'pricepage': pricepage,
+		'questions':questions,
+		})
 	return response
 
 def about(request):
