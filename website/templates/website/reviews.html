@@ -1,8 +1,9 @@
 {% extends "website/index.html" %}
 {% load staticfiles %}
 {% block content %}
+<div id="page-content-wrapper">
     <div class="row nomargin" id="content">
-        <div class="col-md-9 nopadding">
+        <div class="col-md-9 nopadding" id="left">
             <div class="faq">
                 <div class="heading-wrapper">
                     <h1 style="font-size:24px; text-align:center;" class="nomargin">ATSILIEPIMAI</h1> 
@@ -33,7 +34,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 nopadding">
+        <div class="col-md-3 nopadding" id="right">
             <div class="demo-gallery">
                 <ul id="lightgallery" class="list-unstyled marginbottom0">
                     <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
@@ -111,6 +112,6 @@
                 </ul>
             </div>
         </div>
-    
+    </div>
 </div>
 {% endblock content %}
