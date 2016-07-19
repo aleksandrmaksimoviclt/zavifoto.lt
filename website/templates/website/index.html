@@ -50,10 +50,6 @@
 
 </head>
 
-
-
-
-
 <body>
 
     <div id="wrapper">
@@ -73,10 +69,13 @@
                     </a>
                 </li>
                 <div class="primary-menu">
-                <div style="overflow-y: scroll; max-height: 100%;">
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#weddings" href="#">Vestuvės</a>
-                    </li>
+
+                    <div style="overflow-y: scroll; max-height: 100%;">
+                    {% for gallery in galleries %}
+                        {{gallery.name}}
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#weddings" href="#">Vestuvės</a>
+                        </li>
                         <div id="weddings" class="collapse">
                             <ul class="sub-category">
                                 <li>
@@ -93,9 +92,9 @@
                                 </li>
                             </ul>
                         </div>
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#people" href="#">Žmonės</a>
-                    </li>
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#people" href="#">Žmonės</a>
+                        </li>
                         <div id="people" class="collapse">
                             <ul class="sub-category">
                                 <li>
@@ -112,9 +111,10 @@
                                 </li>
                             </ul>
                         </div>
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#boudoir" href="#">Boudoir</a>
-                    </li>
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#boudoir" href="#">Boudoir</a>
+                        </li>
+
                         <div id="boudoir" class="collapse">
                             <ul class="sub-category">
                                 <li>
@@ -131,10 +131,10 @@
                                 </li>
                             </ul>    
                         </div>
-                        
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#magazines" href="#">Žurnalai</a>
-                    </li>
+                            
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#magazines" href="#">Žurnalai</a>
+                        </li>
                         <div id="magazines" class="collapse">
                             <ul class="sub-category">
                                 <li>
@@ -151,7 +151,8 @@
                                 </li>
                             </ul>
                         </div>
-                </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="sidebar-bottom-group">
                     <div class="btn-group flat" role="group">

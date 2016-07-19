@@ -102,8 +102,10 @@ class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
 	photos_order = JSONField(default={}, blank=True, null=True)
 	category = models.ForeignKey('Category', null=True)
-	
-	class Meta:
+	my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
+
+	class Meta(object):
+		ordering = ('my_order',)
 		verbose_name_plural = 'Galleries'
 
 	def __str__(self):
@@ -130,8 +132,10 @@ class GalleryByLanguage(models.Model):
 	name = models.CharField(max_length=100)
 	url = models.CharField(max_length=100, blank=True)
 	language = models.ForeignKey(Language)
+	my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
-	class Meta:
+	class Meta(object):
+		ordering = ('my_order',)
 		unique_together = (('gallery', 'language'),)
 
 	def save(self, *args, **kwargs):

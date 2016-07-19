@@ -21,12 +21,14 @@ from .models import *
 def index(request):
 	available_languages = Language.objects.all()
 	language = get_language_obj(request)
+	galleries = GalleryByLanguage.objects.filter(language=language)
 
 	response = render(
 		request,
 		'website/index.html',{
 		'current_language': language.language_code,
 		'available_languages': available_languages,
+		'galleries': galleries,
 		})
 	return response
 
