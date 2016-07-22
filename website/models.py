@@ -57,7 +57,7 @@ def sorted_order(photos_order):
 	photos = OrderedDict()
 	for key, value in ordered.items():
 		try:
-			photos.update({key: Photo.objects.get(id=value)})
+			photos.update({key: value})
 		except ValueError:
 			pass
 	return photos

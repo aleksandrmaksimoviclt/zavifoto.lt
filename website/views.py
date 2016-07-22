@@ -1,4 +1,3 @@
-
 import ast
 
 from django.shortcuts import render
@@ -21,17 +20,38 @@ from .models import *
 def index(request):
 	available_languages = Language.objects.all()
 	language = get_language_obj(request)
-	galleries = GalleryByLanguage.objects.filter(language=language)
-
+	galleries = GalleryByLanguage.objects.filter(language=language).select_related('gallery__category').prefetch_related('gallery__category__categorybylanguage_set')
+	
+	print(galleries)
+	# categories = 
+	data = []
+	for gallery in galleries:
+		data.append(
+			{
+				'name': gallery.name,
+				'categories': [ {'name': cat.name, 'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
+			})
+	from pprint import pprint
+	pprint(data)
 	response = render(
 		request,
 		'website/index.html',{
 		'current_language': language.language_code,
 		'available_languages': available_languages,
-		'galleries': galleries,
+		'galleries': data,
 		})
 	return response
 
+
+# def category(request, slug):
+# 	photos = Photo.objects.filter(gallery__category__categorybylanguage__slug=slug).select_related('gallery__category)
+# 	if photos:
+# 		photos_order = photos.first().gallery.category.photos_order
+		
+# 	for photo in photos_order.values():
+# 		_photo = photos.get(id=photo[])
+
+# 	pass
 class UploadView(TemplateView):
 
 	template_name = 'website/upload.html'
