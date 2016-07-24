@@ -54,13 +54,13 @@ def sorted_order(photos_order):
 	ordered = OrderedDict()
 	for photo in sorted(photos_order.keys()):
 		ordered.update({photo: photos_order[photo]})
-	photos = OrderedDict()
-	for key, value in ordered.items():
-		try:
-			photos.update({key: value})
-		except ValueError:
-			pass
-	return photos
+	# photos = OrderedDict()
+	# for key, value in ordered.items():
+	# 	try:
+	# 		photos.update({key: value})
+	# 	except ValueError:
+	# 		pass
+	return ordered
 
 def delete_photo_from_order(obj, id):
 	popped_key = None

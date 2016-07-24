@@ -71,20 +71,23 @@
                 <div class="primary-menu">
 
                     <div style="overflow-y: scroll; max-height: 100%;">
-                   {% for gallery in galleries %}
+
+                    {% for gallery in galleries %}
+
                         <li>
                             <a class="main-category" data-toggle="collapse" data-target="#{{gallery.name|slugify}}" href="#">{{gallery.name}}</a>
                         </li>
+
                         <div id="{{gallery.name}}" class="collapse">
                             <ul class="sub-category">
-                              
                                 {% for category in  gallery.categories %}
-                                    {{category.name}}{{category.url}}
+                                    <li><a href="{{gallery.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
                                 {% endfor %}
-                           
                             </ul>
-                        </div>                       
+                        </div>
+
                     {% endfor %}
+
                     </div>
                 </div>
                 <div class="sidebar-bottom-group">

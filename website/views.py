@@ -9,21 +9,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
 
-
-# def set_language(language):
-# 	try:
-# 		language = Language.objects.get(language_code=language).id
-# 	except Exception as e:
-# 		language = Language.objects.get(language_code='lt').id
-# 	return language
-
 def index(request):
 	available_languages = Language.objects.all()
 	language = get_language_obj(request)
 	galleries = GalleryByLanguage.objects.filter(language=language).select_related('gallery__category').prefetch_related('gallery__category__categorybylanguage_set')
 	
 	print(galleries)
-	# categories = 
+
 	data = []
 	for gallery in galleries:
 		data.append(
@@ -42,16 +34,21 @@ def index(request):
 		})
 	return response
 
+def category(request, gallery_slug, category_slug):
 
-# def category(request, slug):
-# 	photos = Photo.objects.filter(gallery__category__categorybylanguage__slug=slug).select_related('gallery__category)
-# 	if photos:
-# 		photos_order = photos.first().gallery.category.photos_order
-		
-# 	for photo in photos_order.values():
-# 		_photo = photos.get(id=photo[])
+	available_languages = Language.objects.all()
+	language = get_language_obj(request)
 
-# 	pass
+	response = render(
+	request,
+	'website/category.html',{
+	'current_language': language.language_code,
+	'available_languages': available_languages,
+
+	})
+
+	return response
+
 class UploadView(TemplateView):
 
 	template_name = 'website/upload.html'
