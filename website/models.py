@@ -179,7 +179,6 @@ class Photo(models.Model):
 	gallery = models.ForeignKey(Gallery)
 	
 	@property	
-
 	def src(self):
 		return self.image.url
 

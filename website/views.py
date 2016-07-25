@@ -105,6 +105,7 @@ def galleriessorting(request, gallery_id):
 		request, 'website/photosorting.html', {'gallery': gallery, 'type': 'gallery'}
 		)
 	return response
+
 @csrf_exempt
 def change_order(request):
 	json = request.read()

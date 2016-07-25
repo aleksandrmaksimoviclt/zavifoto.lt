@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'sortedm2m',
     #wysiwyg redactor
     'redactor',
-
     'django_spaghetti',
 
 ]

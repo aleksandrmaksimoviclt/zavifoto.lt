@@ -1,7 +1,8 @@
 dj-database-url==0.4.1
 Django==1.9.5
-django-photologue==3.5.1
 django-sortedm2m==1.2.2
+django-spaghetti-and-meatballs==0.2.1
+django-wysiwyg-redactor==0.4.9
 ExifRead==2.1.2
 Pillow==3.2.0
 pkg-resources==0.0.0
