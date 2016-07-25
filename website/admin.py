@@ -1,81 +1,90 @@
 from django.contrib import admin
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
-from .models import * 
+from .models import *
+
 
 class PhotoInline(admin.StackedInline):
-	model = PhotoCategory
+    model = PhotoCategory
+
 
 class PhotoAdmin(admin.ModelAdmin):
-	inlines = [PhotoInline,]
+    inlines = [PhotoInline]
+
 
 class PhotoAdmin(admin.ModelAdmin):
-	list_display = [
-	'thumbnail', 'name', 
-	]
-	exclude = [ 'name',
-	]
-	search_fields = [ 'name',
-	]
+    list_display = [
+        'thumbnail', 'name',
+    ]
+    exclude = [
+        'name',
+    ]
+    search_fields = [
+        'name',
+    ]
+
 
 class GalleryInline(admin.TabularInline):
 
-	model = Photo
+    model = Photo
 
 
-# 	def get_extra(self, request, obj=None, **kwargs):
-# 	    extra = 2
-# 	    if obj:
-# 	        pass #return extra - 
-# 	    return extra
+#   def get_extra(self, request, obj=None, **kwargs):
+#       extra = 2
+#       if obj:
+#           pass #return extra -
+#       return extra
 
 
 class GalleryByLanguageInline(SortableInlineAdminMixin, admin.StackedInline):
-	model = GalleryByLanguage
-
+    model = GalleryByLanguage
 
 
 class GalleryAdmin(SortableAdminMixin, admin.ModelAdmin):
-	inlines = (GalleryByLanguageInline,	GalleryInline,)
-	# def photos(self):
-	# 	return 'test'#Photo.objects.all()
-	# photos.allow_html = True
-	# fields = [photos,]
+    inlines = (GalleryByLanguageInline, GalleryInline,)
+    # def photos(self):
+    #   return 'test'#Photo.objects.all()
+    # photos.allow_html = True
+    # fields = [photos,]
+
 
 class CategoryInline(admin.StackedInline):
-	model = CategoryByLanguage
+    model = CategoryByLanguage
 
-	def get_extra(self, request, obj=None, **kwargs):
-		## Kiek rodyti inline childu prie modelio admine
-	    extra = 2
-	    if obj:
-	        pass #return extra - obj.contactsbylanguage_set.count()
-	    return extra
+    def get_extra(self, request, obj=None, **kwargs):
+        # Kiek rodyti inline childu prie modelio admine
+        extra = 2
+        if obj:
+            pass  # return extra - obj.contactsbylanguage_set.count()
+        return extra
 
 
 class CategoryAdmin(admin.ModelAdmin):
-	inlines = [
-		CategoryInline,
-	]
+    inlines = [
+        CategoryInline,
+    ]
+
 
 class QuestionInline(admin.StackedInline):
-	model = Question
+    model = Question
+
 
 class PricePageAdmin(admin.ModelAdmin):
-	inlines = [QuestionInline,]
+    inlines = [QuestionInline]
+
 
 class ContactsPageAdmin(admin.ModelAdmin):
-	inlines = [
-		# ContactsPageByLanguageInline,
-	]
+    inlines = [
+        # ContactsPageByLanguageInline,
+    ]
 
-	def has_add_permission(self, request):
-		return False if self.model.objects.count() > 0 else True
+    def has_add_permission(self, request):
+        return False if self.model.objects.count() > 0 else True
 
 
 class PageSettingsAdmin(admin.ModelAdmin):
 
-	def has_add_permission(self, request):
-		return False if self.model.objects.count() > 0 else True
+    def has_add_permission(self, request):
+        return False if self.model.objects.count() > 0 else True
 
 
 admin.site.register(Gallery, GalleryAdmin)
