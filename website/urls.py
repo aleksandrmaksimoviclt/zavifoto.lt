@@ -14,6 +14,7 @@ urlpatterns = [
 	url(r'^about$', views.about, name='about'),
 	url(r'^reviews$', views.reviews, name='reviews'),
 	url(r'^faq$', views.faq, name='faq'),
+	url(r'^retouch$', views.retouch, name='retouch'),
 	url(r'^(?P<gallery_slug>[-\w]+)/(?P<category_slug>[-\w]+)/$', views.category),
 
 	url(r'upload/', views.UploadView.as_view()),

@@ -13,21 +13,43 @@ def index(request):
 	available_languages = Language.objects.all()
 	language = get_language_obj(request)
 	galleries = GalleryByLanguage.objects.filter(language=language).select_related('gallery__category').prefetch_related('gallery__category__categorybylanguage_set')
-	
-	print(galleries)
 
 	data = []
+
 	for gallery in galleries:
 		data.append(
 			{
 				'name': gallery.name,
 				'categories': [ {'name': cat.name, 'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
 			})
-	from pprint import pprint
-	pprint(data)
+
 	response = render(
 		request,
 		'website/index.html',{
+		'current_language': language.language_code,
+		'available_languages': available_languages,
+		'galleries': data,
+		})
+	return response
+
+def retouch(request):
+	available_languages = Language.objects.all()
+	language = get_language_obj(request)
+
+	galleries = GalleryByLanguage.objects.filter(language=language).select_related('gallery__category').prefetch_related('gallery__category__categorybylanguage_set')
+
+	data = []
+	
+	for gallery in galleries:
+		data.append(
+			{
+				'name': gallery.name,
+				'categories': [ {'name': cat.name, 'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
+			})
+	
+	response = render(
+		request,
+		'website/retouch.html',{
 		'current_language': language.language_code,
 		'available_languages': available_languages,
 		'galleries': data,
