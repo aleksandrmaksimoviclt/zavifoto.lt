@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{current_language}}">
 
 <head>
 
@@ -50,10 +50,6 @@
 
 </head>
 
-
-
-
-
 <body>
 
     <div id="wrapper">
@@ -73,91 +69,32 @@
                     </a>
                 </li>
                 <div class="primary-menu">
-                <div style="overflow-y: scroll; max-height: 100%;">
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#weddings" href="#">Vestuvės</a>
-                    </li>
-                        <div id="weddings" class="collapse">
+
+                    <div style="overflow-y: scroll; max-height: 100%;">
+
+                    {% for gallery in galleries %}
+
+                        <li>
+                            <a class="main-category" data-toggle="collapse" data-target="#{{gallery.name|slugify}}" href="#">{{gallery.name}}</a>
+                        </li>
+
+                        <div id="{{gallery.name}}" class="collapse">
                             <ul class="sub-category">
-                                <li>
-                                    Black and White
-                                </li>
-                                <li>
-                                    Selected color
-                                </li>
-                                <li>
-                                    Details
-                                </li>
-                                <li>
-                                    Submeniu
-                                </li>
+                                {% for category in  gallery.categories %}
+                                    <li><a href="{{gallery.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
+                                {% endfor %}
                             </ul>
                         </div>
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#people" href="#">Žmonės</a>
-                    </li>
-                        <div id="people" class="collapse">
-                            <ul class="sub-category">
-                                <li>
-                                    Black and White
-                                </li>
-                                <li>
-                                    Selected color
-                                </li>
-                                <li>
-                                    Details
-                                </li>
-                                <li>
-                                    Submeniu
-                                </li>
-                            </ul>
-                        </div>
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#boudoir" href="#">Boudoir</a>
-                    </li>
-                        <div id="boudoir" class="collapse">
-                            <ul class="sub-category">
-                                <li>
-                                    Black and White
-                                </li>
-                                <li>
-                                    Selected color
-                                </li>
-                                <li>
-                                    Details
-                                </li>
-                                <li>
-                                    Submeniu
-                                </li>
-                            </ul>    
-                        </div>
-                        
-                    <li>
-                        <a class="main-category" data-toggle="collapse" data-target="#magazines" href="#">Žurnalai</a>
-                    </li>
-                        <div id="magazines" class="collapse">
-                            <ul class="sub-category">
-                                <li>
-                                    Black and White
-                                </li>
-                                <li>
-                                    Selected color
-                                </li>
-                                <li>
-                                    Details
-                                </li>
-                                <li>
-                                    Submeniu
-                                </li>
-                            </ul>
-                        </div>
-                </div>
+
+                    {% endfor %}
+
+                    </div>
                 </div>
                 <div class="sidebar-bottom-group">
                     <div class="btn-group flat" role="group">
-                      <button type="button" class="btn btn-default">LT</button>
-                      <button type="button" class="btn btn-default">EN</button>
-                      <button type="button" class="btn btn-default">RU</button>
+                        {% for language in available_languages %}
+                            <button type="button" class="btn btn-default"><a class="language-button {% if language.language_code == current_language %}current-language{% endif %}" href="/set-language/{{language.language_code}}">{{language.language_code}}</a></button>
+                        {% endfor %}
                     </div>
                     <hr style="width:40%;">
                     <div class="secondary-menu sub-category">                 

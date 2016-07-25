@@ -4,7 +4,10 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify, mark_safe
+
+# wysiwyg redactor in admin
 from redactor.fields import RedactorField
+
 from django.utils.text import slugify
 from django.contrib.postgres.fields import JSONField
 from collections import OrderedDict
@@ -51,13 +54,13 @@ def sorted_order(photos_order):
 	ordered = OrderedDict()
 	for photo in sorted(photos_order.keys()):
 		ordered.update({photo: photos_order[photo]})
-	photos = OrderedDict()
-	for key, value in ordered.items():
-		try:
-			photos.update({key: Photo.objects.get(id=value)})
-		except ValueError:
-			pass
-	return photos
+	# photos = OrderedDict()
+	# for key, value in ordered.items():
+	# 	try:
+	# 		photos.update({key: value})
+	# 	except ValueError:
+	# 		pass
+	return ordered
 
 def delete_photo_from_order(obj, id):
 	popped_key = None
@@ -79,6 +82,7 @@ def delete_photo_from_order(obj, id):
 class Language(models.Model):
 	language_code = models.CharField(max_length=5)
 	language = models.CharField(max_length=20)
+	is_hidden = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.language or None
@@ -98,8 +102,10 @@ class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
 	photos_order = JSONField(default={}, blank=True, null=True)
 	category = models.ForeignKey('Category', null=True)
-	
-	class Meta:
+	my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
+
+	class Meta(object):
+		ordering = ('my_order',)
 		verbose_name_plural = 'Galleries'
 
 	def __str__(self):
@@ -126,8 +132,10 @@ class GalleryByLanguage(models.Model):
 	name = models.CharField(max_length=100)
 	url = models.CharField(max_length=100, blank=True)
 	language = models.ForeignKey(Language)
+	my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
-	class Meta:
+	class Meta(object):
+		ordering = ('my_order',)
 		unique_together = (('gallery', 'language'),)
 
 	def save(self, *args, **kwargs):
@@ -209,7 +217,6 @@ class PhotoCategory(models.Model):
 	class Meta:
 		unique_together = (('photo', 'category'),)
 
-	#SITAS LIEKA VIENAS VISIEM LANGUAGE
 class ContactsPage(models.Model):
 
 	def save(self, *args, **kwargs):
@@ -222,60 +229,74 @@ class ContactsPage(models.Model):
 		self.category.remove_from_order(self.id)
 		super(PhotoCategory, self).delete(*args, **kwargs)
 
+	
+
 
 class AbstractPage(models.Model):
-	top_text = models.TextField(blank=True, null=True)
-	main_text = models.TextField(blank=True, null=True)
-	bottom_text = models.TextField(blank=True, null=True)
+	heading = RedactorField()
+	heading_slug = RedactorField()
+	message = RedactorField()
+	e_mail = RedactorField()
+	phone_number = RedactorField()
+	top_text = RedactorField()
+	photo = RedactorField()
+	author = RedactorField()
+	text_with_icons_on_left = RedactorField()
 	
+
 	class Meta:
 		abstract = True
 
-class ContactsPage(AbstractPage):
-
-	address = models.CharField(max_length=100, null=True, blank=True)
-	phone = models.CharField(max_length=50, null=True, blank=True)
-	email = models.EmailField(max_length=50, null=True, blank=True)
+class ContactsPage(models.Model):
+	page_title = models.CharField(max_length=100)
+	heading = RedactorField(verbose_name=u'Heading')
+	heading_text = RedactorField(verbose_name=u'Heading Text')
+	email = models.CharField(max_length=254, blank=True, null=True)
+	phone_number_display = models.CharField(max_length=20, blank=True, null=True)
+	phone_number_call = models.CharField(max_length=20, blank=True, null=True)
+	contact_form_heading = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_name = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_email = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_phone_number = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_question = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_message = models.CharField(max_length=50, blank=True, null=True)
+	contact_form_send_button_text = models.CharField(max_length=50, blank=True, null=True)
+	language = models.ForeignKey(Language, null=True, blank=True)
 
 	class Meta:
 		verbose_name_plural = 'Contacts Page'
 
+	def description(self):
+		if self.description_editor or self.adasd or self.sodasdasd:
+			return mark_safe(self.description_editor)
+
 	def __str__(self):
-		return 'Contacts Page'
+		return 'Kontaktai ' + self.language.language_code + ' kalba'
 
-
-# class ContactsByLanguage(models.Model):
-# 	address = models.CharField(max_length=100, null=True, blank=True)
-# 	phone = models.CharField(max_length=50, null=True, blank=True)
-# 	email = models.EmailField(max_length=50, null=True, blank=True)
-
-	#SITAS NUSTATOMAS KIEKVINAM LANGUAGE ADMINKEI
 
 class ContactsPagePhoto(models.Model):
 	contacts_page = models.ForeignKey(ContactsPage)
 	photo = models.ForeignKey(Photo, unique=True)
 
-
 class PricePage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
+	heading = models.CharField(max_length=100, null=True, blank=True)
+	language = models.ForeignKey(Language, null=True, blank=True)
 
 	def __str__(self):
-		return 'Prices page settings'
+		return 'Pricepage ' + self.language.language_code
 
 	class Meta:
 		verbose_name_plural = 'Price Page'
 
+class Question(models.Model):
+	heading = models.CharField(max_length=100, null=True, blank=True)
+	body = RedactorField(verbose_name=u'Question Body', null=True, blank=True)
+	pricepage = models.ForeignKey(PricePage, on_delete=models.CASCADE)
+
 class PricePagePhoto(models.Model):
 	price_page = models.ForeignKey(PricePage)
 	photo = models.ForeignKey(Photo, unique=True)
-
-
-class PricePageByLanguage(AbstractPage):
-	pricepage = models.ForeignKey(PricePage)
-	language = models.ForeignKey(Language)
-
-	def __str__(self):
-		return self.language.language_code or None
 
 
 class Message(models.Model):
@@ -296,12 +317,18 @@ class Message(models.Model):
 
 class AboutPage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)
+	heading = models.CharField(max_length=100, null=True, blank=True)
+	quote = RedactorField(verbose_name=u'Quote', null=True, blank=True)
+	quote_author = RedactorField(verbose_name=u'Quote author', null=True, blank=True)
+	text = RedactorField(verbose_name=u'Text', null=True, blank=True)
+
+	language = models.ForeignKey(Language, null=True, blank=True)
 
 	class Meta:
 		verbose_name_plural = 'About Page'
 
 	def __str__(self):
-		return 'About Page'
+		return 'About page ' + self.language.language_code
 
 
 class AboutPagePhoto(models.Model):
@@ -313,15 +340,6 @@ class AboutPagePhoto(models.Model):
 
 	def tumbnail(self):
 		pass
-
-
-class AboutPageByLanguage(AbstractPage):
-
-	language = models.ForeignKey(Language)
-	about_page = models.ForeignKey(AboutPage)
-	
-	def __str__(self):
-		return self.language.language_code + 'about page' or None
 
 class Review(models.Model):
 	photo = models.ImageField(upload_to="reviews-photos/")
