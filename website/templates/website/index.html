@@ -41,6 +41,9 @@
     <!-- Custom Sidebar-CSS -->
     <link href="{% static "website/css/simple-sidebar.css" %}" rel="stylesheet">
 
+    {% block extra_css %}
+    {% endblock %}
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -141,8 +144,7 @@
         <!-- /#page-content-wrapper -->
 
     </div>
-      {% block content2 %}
-        {% endblock %}    
+
     <!-- /#wrapper -->
 
     <!-- jQuery -->
