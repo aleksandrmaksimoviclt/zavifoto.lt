@@ -6,7 +6,12 @@
     <div id="slider" class="flexslider">
         <ul class="slides">
             <li class="slide-image-wrapper">
-            	<img class="imgcover" src="{% static "website/img/1.jpg" %}"/>
+            	<div class="image-slider">
+                    <div>
+                        <img class="imgcover-left" src="{% static "website/img/2.jpg" %}"/>
+                    </div>
+                    <img class="imgcover-right" src="{% static "website/img/2.jpg" %}"/>
+                </div>
             </li>
             <li class="slide-image-wrapper">
                 <img class="imgcover" src="{% static "website/img/2.jpg" %}"/>
@@ -63,6 +68,7 @@
 {% endblock content %}
 
 {% block extra_css %}
+    <link rel="stylesheet" href=" {% static "website/css/twentytwenty.min.css" %}">
 {% endblock extra_css %}
 
 {% block extra_javascript %}
