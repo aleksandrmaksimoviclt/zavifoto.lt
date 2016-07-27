@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import uuid
+from collections import OrderedDict
 
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify, mark_safe
-
-# wysiwyg redactor in admin
-from redactor.fields import RedactorField
-
-from django.utils.text import slugify
 from django.contrib.postgres.fields import JSONField
-from collections import OrderedDict
-import uuid
+
+from redactor.fields import RedactorField
 
 
 WHITE = 0
@@ -34,6 +31,22 @@ LAYOUTS = (
 )
 
 
+def delete_from_order(obj, id):
+    popped_key = None
+    new_order = OrderedDict()
+    for key, value in obj.photos_order.items():
+        if popped_key:
+            new_key = str(int(key) - 1)
+            new_order.update({new_key: value})
+
+        elif value == id:
+            popped_key = key
+            obj.photos_order.pop(key)
+
+    obj.photos_order = new_order
+    obj.save()
+
+
 class Cms(models.Model):
     top_text = models.TextField(blank=True, null=True)
     main_text = models.TextField(blank=True, null=True)
@@ -50,39 +63,10 @@ def get_order_num(order):
         return str(1)
 
 
-def sorted_order(photos_order):
-    ordered = OrderedDict()
-    for photo in sorted(photos_order.keys()):
-        ordered.update({photo: photos_order[photo]})
-    # photos = OrderedDict()
-    # for key, value in ordered.items():
-    #   try:
-    #       photos.update({key: value})
-    #   except ValueError:
-    #       pass
-    return ordered
-
-
-def delete_photo_from_order(obj, id):
-    popped_key = None
-    new_order = OrderedDict()
-    for key, value in obj.photos_order.items():
-        if popped_key:
-            new_key = str(int(key) - 1)
-            new_order.update({new_key: value})
-
-        elif value == id:
-            popped_key = key
-            obj.photos_order.pop(key)
-
-    obj.photos_order = new_order
-    obj.save()
-
-
 class Language(models.Model):
     language_code = models.CharField(max_length=5)
     language = models.CharField(max_length=20)
-    is_hidden = models.BooleanField(default=False)
+    # is_hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return self.language or None
@@ -102,10 +86,8 @@ class Gallery(models.Model):
     created = models.DateTimeField(default=timezone.now)
     photos_order = JSONField(default={}, blank=True, null=True)
     category = models.ForeignKey('Category', null=True)
-    my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     class Meta(object):
-        ordering = ('my_order',)
         verbose_name_plural = 'Galleries'
 
     def __str__(self):
@@ -121,11 +103,8 @@ class Gallery(models.Model):
         except Exception:
             return 'Untitled gallery '
 
-    def get_photos_by_order(self):
-        return sorted_order(self.photos_order)
-
     def remove_from_order(self, id):
-        delete_photo_from_order(self, id)
+        delete_from_order(self, id)
 
 
 class GalleryByLanguage(models.Model):
@@ -133,10 +112,8 @@ class GalleryByLanguage(models.Model):
     name = models.CharField(max_length=100)
     url = models.CharField(max_length=100, blank=True)
     language = models.ForeignKey(Language)
-    my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     class Meta(object):
-        ordering = ('my_order',)
         unique_together = (('gallery', 'language'),)
 
     def save(self, *args, **kwargs):
@@ -155,11 +132,8 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-    def get_photos_by_order(self):
-        return sorted_order(self.photos_order)
-
     def remove_from_order(self, id):
-        delete_photo_from_order(self, id)
+        delete_from_order(self, id)
 
 
 class CategoryByLanguage(models.Model):
@@ -193,7 +167,7 @@ class Photo(models.Model):
 
     def thumbnail(self):
         # pazymi, kad sitas daiktas yra saugus
-        return mark_safe('<img src="%s">' % self.image.url)
+        return mark_safe('<img src="%s" width=60 height=60>' % self.image.url)
 
     def __str__(self):
         return self.name
@@ -217,9 +191,6 @@ class PhotoCategory(models.Model):
 
     class Meta:
         unique_together = (('photo', 'category'),)
-
-
-class ContactsPage(models.Model):
 
     def save(self, *args, **kwargs):
         order_num = get_order_num(self.category.photos_order)

@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
+from .utils import get_ordered_photos
 
 
 def index(request):
@@ -17,18 +18,14 @@ def index(request):
         language=language).select_related(
         'gallery__category').prefetch_related(
         'gallery__category__categorybylanguage_set')
-    print(galleries)
-
     data = []
     for gallery in galleries:
-        data.append(
-            {
-                'name': gallery.name,
-                'categories': [{
-                    'name': cat.name,
-                    'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
-            })
-    pprint(data)
+        data.append({
+            'name': gallery.name,
+            'categories': [{
+                'name': cat.name,
+                'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
+        })
     response = render(
         request,
         'website/index.html',

@@ -1,5 +1,4 @@
 from django.contrib import admin
-from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from .models import *
 
 
@@ -8,7 +7,7 @@ class PhotoInline(admin.StackedInline):
 
 
 class PhotoAdmin(admin.ModelAdmin):
-    inlines = [PhotoInline]
+    inlines = (PhotoInline,)
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -35,16 +34,12 @@ class GalleryInline(admin.TabularInline):
 #       return extra
 
 
-class GalleryByLanguageInline(SortableInlineAdminMixin, admin.StackedInline):
+class GalleryByLanguageInline(admin.StackedInline):
     model = GalleryByLanguage
 
 
-class GalleryAdmin(SortableAdminMixin, admin.ModelAdmin):
+class GalleryAdmin(admin.ModelAdmin):
     inlines = (GalleryByLanguageInline, GalleryInline,)
-    # def photos(self):
-    #   return 'test'#Photo.objects.all()
-    # photos.allow_html = True
-    # fields = [photos,]
 
 
 class CategoryInline(admin.StackedInline):
