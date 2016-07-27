@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
-from .utils import get_ordered_photos
+from .utils import get_ordered_photos # va sitai siusk belekuri photos_order attr
 
 
 def index(request):
@@ -30,6 +30,36 @@ def index(request):
         request,
         'website/index.html',
         {
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'galleries': data,
+        })
+    return response
+
+
+def retouch(request):
+    available_languages = Language.objects.all()
+    language = get_language_obj(request)
+
+    galleries = GalleryByLanguage.objects.filter(
+        language=language).select_related(
+        'gallery__category').prefetch_related(
+        'gallery__category__categorybylanguage_set')
+
+    data = []
+
+    for gallery in galleries:
+        data.append(
+            {
+                'name': gallery.name,
+                'categories': [{
+                    'name': cat.name,
+                    'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
+            })
+
+    response = render(
+        request,
+        'website/retouch.html', {
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,

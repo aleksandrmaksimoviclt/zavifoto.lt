@@ -41,6 +41,9 @@
     <!-- Custom Sidebar-CSS -->
     <link href="{% static "website/css/simple-sidebar.css" %}" rel="stylesheet">
 
+    {% block extra_css %}
+    {% endblock %}
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -102,6 +105,9 @@
                             <a href={% url 'contact-us' %}>Kontaktai</a>
                         </li>
                         <li>
+                            <a href={% url 'retouch' %}>Retušavimas</a>
+                        </li>
+                        <li>
                             <a href={% url 'pricing' %}>Kainos</a>
                         </li>
                         <li>
@@ -138,6 +144,7 @@
         <!-- /#page-content-wrapper -->
 
     </div>
+
     <!-- /#wrapper -->
 
     <!-- jQuery -->
@@ -152,17 +159,9 @@
     <script src="{% static "website/js/jquery.flexslider.js" %}" type="text/javascript"></script>
     <!-- Custom JS -->
     <script src="{% static "website/js/custom.js" %}" type="text/javascript"></script>
+    {% block extra_javascript %}
+    {% endblock extra_javascript %}
     <!--Grid Gallery Init-->
-    <script src="{% static "website/js/gridGalleryInit.js" %}" type="text/javascript"></script>
-    <script src="{% static "website/js/lightgallery.js" %}"></script>
-    <script src="{% static "website/js/lg-fullscreen.js" %}"></script>
-    <script src="{% static "website/js/lg-thumbnail.js" %}"></script>
-    <script src="{% static "website/js/lg-video.js" %} "></script>
-    <script src="{% static "website/js/lg-autoplay.js" %} "></script>
-    <script src="{% static "website/js/lg-zoom.js" %} "></script>
-    <script src="{% static "website/js/lg-hash.js" %} "></script>
-    <script src="{% static "website/js/lg-pager.js" %} "></script>
-    <script src="{% static "website/js/jquery.mousewheel.min.js" %} "></script>
 </body>
 
 </html>

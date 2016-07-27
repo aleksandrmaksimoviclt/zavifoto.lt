@@ -64,7 +64,7 @@ hr {
 
 .primary-menu {
     margin-top: 90px;
-    height: calc(100% - 430px);
+    height: calc(100% - 494px);
     margin-bottom: 420px;
 }
 
@@ -368,3 +368,11 @@ div.faq-post:last-child {
 }
 
 /* Reviews End */
+.comparison-wrapper{
+	height: 85vh !important;
+}
+.comparison-image{
+	object-fit: cover;
+    width: 100% !important;
+    height: 100% !important;
+}
