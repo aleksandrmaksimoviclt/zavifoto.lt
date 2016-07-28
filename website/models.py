@@ -166,7 +166,6 @@ class Photo(models.Model):
         return self.image.url
 
     def thumbnail(self):
-        # pazymi, kad sitas daiktas yra saugus
         return mark_safe('<img src="%s" width=60 height=60>' % self.image.url)
 
     def __str__(self):
@@ -335,21 +334,23 @@ class Review(models.Model):
     def __str__(self):
         return self.author
 
-
-class FAQPage(models.Model):
+class FaqPage(models.Model):
     modified = models.DateTimeField(default=timezone.now)
+    heading = models.CharField(max_length=100, null=True, blank=True)
 
+    language = models.ForeignKey(Language, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'FAQ Page'
+
+    def __str__(self):
+        return 'FAQ Page ' + self.language.language_code
+
+class Question_FaqPage(models.Model):
+    heading = models.CharField(max_length=100, null=True, blank=True)
+    body = RedactorField(verbose_name=u'Question Body', null=True, blank=True)
+    faqpage = models.ForeignKey(FaqPage, on_delete=models.CASCADE)
 
 class FAQPhoto(models.Model):
-    faq_page = models.ForeignKey(FAQPage)
+    faq_page = models.ForeignKey(FaqPage)
     photo = models.ForeignKey(Photo, unique=True)
-
-
-class FAQPageByLanguage(AbstractPage):
-    language = models.ForeignKey(Language, unique=True)
-
-
-class FAQQuestion(models.Model):
-    faq_page_by_language = models.ForeignKey(FAQPageByLanguage)
-    title = models.TextField()
-    text = models.TextField()

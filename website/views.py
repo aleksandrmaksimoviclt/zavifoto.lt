@@ -8,24 +8,15 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import *
-from .utils import get_ordered_photos # va sitai siusk belekuri photos_order attr
+from .utils import get_ordered_photos
 
 
 def index(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
-    galleries = GalleryByLanguage.objects.filter(
-        language=language).select_related(
-        'gallery__category').prefetch_related(
-        'gallery__category__categorybylanguage_set')
-    data = []
-    for gallery in galleries:
-        data.append({
-            'name': gallery.name,
-            'categories': [{
-                'name': cat.name,
-                'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
-        })
+
+    data = retrieve_sidemenu_galleries(request, language=language)
+
     response = render(
         request,
         'website/index.html',
@@ -41,21 +32,7 @@ def retouch(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
-    galleries = GalleryByLanguage.objects.filter(
-        language=language).select_related(
-        'gallery__category').prefetch_related(
-        'gallery__category__categorybylanguage_set')
-
-    data = []
-
-    for gallery in galleries:
-        data.append(
-            {
-                'name': gallery.name,
-                'categories': [{
-                    'name': cat.name,
-                    'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
-            })
+    data = retrieve_sidemenu_galleries(request, language=language)
 
     response = render(
         request,
@@ -72,12 +49,23 @@ def category(request, gallery_slug, category_slug):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    data = retrieve_sidemenu_galleries(request, language=language)
+
+    category = CategoryByLanguage.objects.filter(
+        language=language, url=category_slug,).first().category.photos_order
+
+    # category_photos_order = category.category.photos_order
+
+    category_photos = get_ordered_photos(photos_order=category)
+
     response = render(
         request,
         'website/category.html',
         {
             'current_language': language.language_code,
             'available_languages': available_languages,
+            'galleries': data,
+            'photos': category_photos
 
         })
 
@@ -110,6 +98,8 @@ def contact(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    data = retrieve_sidemenu_galleries(request, language=language)
+
     try:
         contactspage = ContactsPage.objects.filter(language=language).first()
 
@@ -123,6 +113,7 @@ def contact(request):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'contactspage': contactspage,
+            'galleries': data,
         })
     return response
 
@@ -130,6 +121,8 @@ def contact(request):
 def pricing(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
         pricepage = PricePage.objects.filter(language=language).first()
@@ -151,6 +144,7 @@ def pricing(request):
             'available_languages': available_languages,
             'pricepage': pricepage,
             'questions': questions,
+            'galleries': data,
         })
     return response
 
@@ -158,6 +152,8 @@ def pricing(request):
 def about(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
         aboutpage = AboutPage.objects.filter(language=language).first()
@@ -172,22 +168,42 @@ def about(request):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'aboutpage': aboutpage,
+            'galleries': data,
         })
     return response
 
 
 def reviews(request):
+    available_languages = Language.objects.all()
+    language = get_language_obj(request)
+
+    data = retrieve_sidemenu_galleries(request, language=language)
+
     reviews = Review.objects.all()
     response = render(
         request,
-        'website/reviews.html', {'reviews': reviews})
+        'website/reviews.html', {
+        'reviews': reviews,
+        'current_language': language.language_code,
+        'available_languages': available_languages,
+        'galleries': data,
+        })
     return response
 
 
 def faq(request):
+    available_languages = Language.objects.all()
+    language = get_language_obj(request)
+
+    data = retrieve_sidemenu_galleries(request, language=language)
+
     response = render(
         request,
-        'website/faq.html')
+        'website/faq.html',{
+        'current_language': language.language_code,
+        'available_languages': available_languages,
+        'galleries': data,
+        })
     return response
 
 
@@ -260,3 +276,21 @@ def change_language(request, language):
     response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     response.set_cookie(key='language', value=language)
     return response
+
+def retrieve_sidemenu_galleries(request, language):
+    galleries = GalleryByLanguage.objects.filter(
+        language=language).select_related(
+        'gallery__category').prefetch_related(
+        'gallery__category__categorybylanguage_set')
+
+    data = []
+
+    for gallery in galleries:
+        data.append(
+            {
+                'name': gallery.name,
+                'categories': [{
+                    'name': cat.name,
+                    'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
+            })
+    return data
