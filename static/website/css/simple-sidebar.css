@@ -24,6 +24,7 @@
     top:0;
     left: 360px;
     width: 0;
+    min-height: 640px;
     height: 100vh;
     margin-left: -360px;
     overflow-y: auto;
@@ -100,6 +101,7 @@
     top: 28px;
     left: 28px;
     color:#999999;
+    z-index: 9999;
 }
 
 .logo-wrapper{
@@ -155,10 +157,8 @@
         position: relative;
         margin-right: 0;
     }
-@media only screen and (max-width : 425px) {
-    /* #sidebar-wrapper {
-        width: 100%;
-    }*/
+
+/*@media only screen and (max-width : 425px) {
 
     .sidebar-nav {
         position: relative;
@@ -197,17 +197,14 @@
     #wrapper.toggled #sidebar-wrapper {
         width: 60px;
     }
+}*/
 
-}
-
-@media only screen and (max-width : 375px) {
-    /* #sidebar-wrapper {
-        width: 100%;
-    }*/
+@media only screen and (max-width : 720px) {
 
     .sidebar-nav {
         position: relative;
         padding: 60px 80px;
+        overflow-y: scroll;
     }
 
     .sidebar-bottom-group{
@@ -232,7 +229,7 @@
     .primary-menu {
         margin-bottom: 345px;
         margin-top: 65px;
-        height: calc(100% - 350px);
+        height: calc(100% - 390px);
     }
 
     .sidebar-nav > .sidebar-brand {
@@ -243,9 +240,14 @@
         width: 60px;
     }
 
+    #wrapper {
+        padding-left: 60px;
+    }
 
     #wrapper.toggled {
         padding-left: 60px;
     }
+
+
 
 }
