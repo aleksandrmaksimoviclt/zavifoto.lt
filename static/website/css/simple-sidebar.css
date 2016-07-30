@@ -77,9 +77,13 @@
     transition: 250ms color;
 /*    background: rgba(255,255,255,0.2);*/}
 
-.sidebar-nav li a:active,
+/*.sidebar-nav li a:active,
 .sidebar-nav li a:focus {
     text-decoration: none;
+}*/
+
+.sidebar-nav li a.active {
+    color: #333333;
 }
 
 .sidebar-nav > .sidebar-brand {

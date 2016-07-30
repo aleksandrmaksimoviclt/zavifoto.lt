@@ -51,13 +51,13 @@ hr {
     border-color: transparent;
 }
 
-.language-button {
+a.language-button>button {
     text-transform: uppercase;
-    color:#333;
+    color:#999;
 }
 
-.current-language{
-	font-weight: bold;
+a.current-language>button {
+    color: #333;
 }
 
 /*SIDEBAR*/

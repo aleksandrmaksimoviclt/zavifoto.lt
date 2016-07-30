@@ -1,8 +1,10 @@
 $(document).ready(function() {
 
-    $("img").on("contextmenu",function(){
-       return false;
-    }); 
+  $("img").on("contextmenu",function(){
+     return false;
+  });
+
+  setNavigation();
 
 	var ww = window.innerWidth;
 
@@ -31,4 +33,16 @@ $(document).ready(function() {
         }
     }); 
     
+  function setNavigation() {
+    var path = window.location.pathname;
+    path = path.replace(/\/$/, "");
+    path = decodeURIComponent(path);
+
+    $("a").each(function () {
+        var href = $(this).attr('href');
+        if (path.substring(0, href.length) === href) {
+            $(this).addClass('active');
+        }
+    });
+  }
 });

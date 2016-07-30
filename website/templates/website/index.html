@@ -96,7 +96,7 @@
                 <div class="sidebar-bottom-group">
                     <div class="btn-group flat" role="group">
                         {% for language in available_languages %}
-                            <button type="button" class="btn btn-default"><a class="language-button {% if language.language_code == current_language %}current-language{% endif %}" href="/set-language/{{language.language_code}}">{{language.language_code}}</a></button>
+                            <a class="language-button {% if language.language_code == current_language %}current-language{% endif %}" href="/set-language/{{language.language_code}}"><button type="button" class="btn btn-default">{{language.language_code}}</button></a>
                         {% endfor %}
                     </div>
                     <hr style="width:40%;">

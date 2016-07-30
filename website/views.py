@@ -51,12 +51,15 @@ def category(request, gallery_slug, category_slug):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
-    category = CategoryByLanguage.objects.filter(
-        language=language, url=category_slug,).first().category.photos_order
+    try: 
+        category = CategoryByLanguage.objects.filter(language=language, url=category_slug,).first().category.photos_order
+    except:
+        category = []
 
-    # category_photos_order = category.category.photos_order
-
-    category_photos = get_ordered_photos(photos_order=category)
+    try:
+        category_photos = get_ordered_photos(photos_order=category)
+    except:
+        category_photos = []
 
     response = render(
         request,
@@ -278,19 +281,27 @@ def change_language(request, language):
     return response
 
 def retrieve_sidemenu_galleries(request, language):
-    galleries = GalleryByLanguage.objects.filter(
-        language=language).select_related(
-        'gallery__category').prefetch_related(
-        'gallery__category__categorybylanguage_set')
 
-    data = []
+    try:
 
-    for gallery in galleries:
-        data.append(
-            {
-                'name': gallery.name,
-                'categories': [{
-                    'name': cat.name,
-                    'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
-            })
+        galleries = GalleryByLanguage.objects.filter(
+            language=language).select_related(
+            'gallery__category').prefetch_related(
+            'gallery__category__categorybylanguage_set')
+
+        data = []
+
+        for gallery in galleries:
+            data.append(
+                {
+                    'name': gallery.name,
+                    'categories': [{
+                        'name': cat.name,
+                        'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
+                })
+    except:
+
+        data = []
+        galleries = []
+
     return data

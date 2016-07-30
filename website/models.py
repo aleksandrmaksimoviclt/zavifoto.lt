@@ -135,6 +135,15 @@ class Category(models.Model):
     def remove_from_order(self, id):
         delete_from_order(self, id)
 
+    def __str__(self):
+        try:
+            return self.categorybylanguage_set.filter(
+                language__language_code='lt').first().name
+        except IndexError:
+            return 'Untitled gallery '
+        except Exception:
+            return 'Untitled gallery '
+
 
 class CategoryByLanguage(models.Model):
     category = models.ForeignKey(Category)

@@ -7,7 +7,7 @@ urlpatterns = [
 	url(r'^$', views.index, name='index'),
 
 	# Change language
-	url(r'^set-language/(?P<language>[-\w]+)/$', views.change_language), 
+	url(r'^set-language/(?P<language>[-\w]+)$', views.change_language), 
 
 	url(r'^contact-us$', views.contact, name='contact-us'),
 	url(r'^pricing$', views.pricing, name='pricing'),
@@ -30,4 +30,3 @@ urlpatterns = [
 	# url(r'^projects/(?P<name>[-\w]+)/$', views.project),
 	# url(r'^(?P<language>[-\w]+)/$', views.change_language)
 ]
-urlpatterns.append(url(r'^plate/', include('django_spaghetti.urls')))
