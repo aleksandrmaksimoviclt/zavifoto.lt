@@ -7,20 +7,29 @@ $(document).ready(function() {
   setNavigation();
 
 	var ww = window.innerWidth;
+  var wh = window.innerHeight;
 
 	if (ww > 768) {
-	    console.log('true');
+
 	} else {
-	    console.log('false');
-	    $('#wrapper').toggleClass("toggled");
-	    $('#hambrger').removeClass("is-active");  
+    $('#wrapper').toggleClass("toggled");
+    $('#hambrger').removeClass("is-active");  
 	}
+
 
 	var $hamburger = $(".hamburger");
   	$hamburger.on("click", function(e) {
   		$hamburger.toggleClass("is-active");
     	e.preventDefault();
         $("#wrapper").toggleClass("toggled");
+
+        if (wh < 768 ) {
+            $('body').toggleClass("noscroll");
+            $('.overlay').toggleClass("activated");
+        }
+
+        // $('#hambrger').hasClass("is-active")
+
   	});
 
     $('.faq-titlea').on('click', function() {
