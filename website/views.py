@@ -2,10 +2,11 @@ import ast
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
 
 from .models import *
 from .utils import get_ordered_photos
@@ -221,6 +222,8 @@ def categorysorting(request, category_id):
 
     categories = CategoryByLanguage.objects.filter(
         language__language='lt', id=category_id,)
+    category = categories.first().category
+    photos = get_ordered_photos(category.photos_order)
     galleries = Gallery.objects.filter(category=categories[0].category)
     galleries_lang = GalleryByLanguage.objects.filter(gallery__in=galleries)
 
@@ -229,7 +232,10 @@ def categorysorting(request, category_id):
         {
             'categories': categories,
             'galleries': galleries,
-            'galleries_lang': galleries_lang
+            'galleries_lang': galleries_lang,
+            'category': category,
+            'photos': photos,
+            'type': 'category',
         })
 
     return response
@@ -238,10 +244,10 @@ def categorysorting(request, category_id):
 def galleriessorting(request, gallery_id):
 
     gallery = Gallery.objects.get(id=gallery_id)
-
+    photos = get_ordered_photos(gallery.photos_order)
     response = render(
         request, 'website/photosorting.html',
-        {'gallery': gallery, 'type': 'gallery'}
+        {'gallery': gallery, 'type': 'gallery', 'photos': photos}
         )
     return response
 
@@ -254,11 +260,13 @@ def change_order(request):
         model = Gallery
     elif data['type'] == 'category':
         model = Category
+    else:
+        return HttpResponse('Something went wrong')
 
     obj = model.objects.get(id=data['id'])
     obj.photos_order = data['order']
     obj.save()
-    return HttpResponse('Changed')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 def get_language_obj(request):

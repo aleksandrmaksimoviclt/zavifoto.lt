@@ -47,6 +47,13 @@ def delete_from_order(obj, id):
     obj.save()
 
 
+def get_order_num(order):
+    try:
+        return str(int(max(order.keys())) + 1)
+    except (AttributeError, ValueError):
+        return str(1)
+
+
 class Cms(models.Model):
     top_text = models.TextField(blank=True, null=True)
     main_text = models.TextField(blank=True, null=True)
@@ -54,13 +61,6 @@ class Cms(models.Model):
 
     class Meta:
         abstract = True
-
-
-def get_order_num(order):
-    try:
-        return str(int(max(order.keys())) + 1)
-    except ValueError:
-        return str(1)
 
 
 class Language(models.Model):
@@ -172,9 +172,10 @@ class Photo(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        order_num = get_order_num(self.gallery.photos_order)
-        self.gallery.photos_order[order_num] = str(self.id)
-        self.gallery.save()
+        if self._state.adding:
+            order_num = get_order_num(self.gallery.photos_order)
+            self.gallery.photos_order[order_num] = str(self.id)
+            self.gallery.save()
         if not self.name:
             self.name = self.image.name
         super(Photo, self).save(*args, **kwargs)

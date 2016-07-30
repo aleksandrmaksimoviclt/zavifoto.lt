@@ -53,8 +53,20 @@ class CategoryInline(admin.StackedInline):
         return extra
 
 
+class PhotoCategoryAdmin(admin.StackedInline):
+    model = PhotoCategory
+
+    def get_extra(self, request, obj=None, **kwargs):
+        # Kiek rodyti inline childu prie modelio admine
+        extra = 2
+        if obj:
+            pass  # return extra - obj.contactsbylanguage_set.count()
+        return extra
+
+
 class CategoryAdmin(admin.ModelAdmin):
     inlines = [
+        PhotoCategoryAdmin,
         CategoryInline,
     ]
 
@@ -83,8 +95,7 @@ class PageSettingsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Gallery, GalleryAdmin)
-# admin.site.register(Category, CategoryAdmin)
-admin.site.register(Category)
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(AboutPage)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
