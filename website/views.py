@@ -35,12 +35,18 @@ def retouch(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
+    try:
+        comparisonphotos = ComparisonPhoto.objects.all()
+    except:
+        comparisonphotos = []
+
     response = render(
         request,
         'website/retouch.html', {
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
+            'comparisonphotos': comparisonphotos,
         })
     return response
 
@@ -110,6 +116,11 @@ def contact(request):
     except Exception:
         contactspage = []
 
+    try:
+        photos = Photo.objects.filter(is_for_price_page_side=True)
+    except:
+        photos = []
+
     response = render(
         request,
         'website/contact-us.html',
@@ -118,6 +129,7 @@ def contact(request):
             'available_languages': available_languages,
             'contactspage': contactspage,
             'galleries': data,
+            'photos': photos,
         })
     return response
 
@@ -140,6 +152,11 @@ def pricing(request):
     except Exception:
         question = []
 
+    try:
+        photos = Photo.objects.filter(is_for_price_page_side=True)
+    except:
+        photos = []
+
     response = render(
         request,
         'website/pricing.html',
@@ -149,6 +166,7 @@ def pricing(request):
             'pricepage': pricepage,
             'questions': questions,
             'galleries': data,
+            'photos': photos,
         })
     return response
 
@@ -165,6 +183,11 @@ def about(request):
     except Exception:
         aboutpage = []
 
+    try:
+        photos = Photo.objects.filter(is_for_about_us_page_side=True)
+    except:
+        photos = []
+
     response = render(
         request,
         'website/about.html',
@@ -173,6 +196,7 @@ def about(request):
             'available_languages': available_languages,
             'aboutpage': aboutpage,
             'galleries': data,
+            'photos': photos,
         })
     return response
 
@@ -184,6 +208,12 @@ def reviews(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     reviews = Review.objects.all()
+
+    try:
+        photos = Photo.objects.filter(is_for_review_page_side=True)
+    except:
+        photos = []
+
     response = render(
         request,
         'website/reviews.html', {
@@ -191,6 +221,7 @@ def reviews(request):
         'current_language': language.language_code,
         'available_languages': available_languages,
         'galleries': data,
+        'photos': photos,
         })
     return response
 
@@ -201,12 +232,18 @@ def faq(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
+    try:
+        photos = Photo.objects.filter(is_for_faq_page_side=True)
+    except:
+        photos = []
+
     response = render(
         request,
         'website/faq.html',{
         'current_language': language.language_code,
         'available_languages': available_languages,
         'galleries': data,
+        'photos': photos,
         })
     return response
 

@@ -169,6 +169,12 @@ class Photo(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to=image_path)
     gallery = models.ForeignKey(Gallery)
+    is_for_contacts_page_side = models.BooleanField(default=False)
+    is_for_price_page_side = models.BooleanField(default=False)
+    is_for_about_us_page_side = models.BooleanField(default=False)
+    is_for_faq_page_side = models.BooleanField(default=False)
+    is_for_review_page_side = models.BooleanField(default=False)
+
 
     @property
     def src(self):
@@ -364,3 +370,11 @@ class Question_FaqPage(models.Model):
 class FAQPhoto(models.Model):
     faq_page = models.ForeignKey(FaqPage)
     photo = models.ForeignKey(Photo, unique=True)
+
+class ComparisonPhoto(models.Model):
+    before = models.ImageField(upload_to='retouch/')
+    after = models.ImageField(upload_to='retouch/')
+    name = models.CharField(max_length=150, blank=True, null=True)
+
+    def __str__(self):
+        return self.name

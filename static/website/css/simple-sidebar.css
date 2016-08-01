@@ -58,13 +58,14 @@
     right: 0;
     background-color: #333;
     opacity: 0;
-    z-index: 2;
-    transition: 500ms all;
+    z-index: 0;
+    transition: 500ms opacity;
 }
 
 .overlay.activated{
     opacity: 0.5;
-    transition: 500ms all;
+    z-index: 2;
+    transition: 500ms opacity;
 }
 
 /* Sidebar Styles */
