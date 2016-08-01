@@ -261,7 +261,6 @@ def galleriessorting(request, category_id, gallery_id):
 
 
 @login_required(login_url='/')
-@csrf_exempt
 def change_order(request):
     json = request.read()
     data = ast.literal_eval(json.decode("utf-8"))
