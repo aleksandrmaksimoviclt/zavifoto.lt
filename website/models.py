@@ -78,8 +78,11 @@ class PageSettings(models.Model):
     layout = models.IntegerField(choices=LAYOUTS, default=GRID)
 
     class Meta:
-        verbose_name_plural = 'Page Default Settings'
+        verbose_name_plural = 'Default Settings'
         verbose_name = verbose_name_plural
+
+    def __str__(self):
+        return 'Default Settings'
 
 
 class Gallery(models.Model):
@@ -197,6 +200,10 @@ class Photo(models.Model):
 
     def delete(self, *args, **kwargs):
         self.gallery.remove_from_order(self.id)
+        try:
+            delete_from_order(self.photo.photocategory_set.first().category, self.id)
+        except Exception as e:
+            pass
         super(Photo, self).delete(*args, **kwargs)
 
 

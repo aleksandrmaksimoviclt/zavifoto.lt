@@ -11,10 +11,11 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .utils import get_ordered_photos
 
-
 def index(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -25,6 +26,7 @@ def index(request):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -32,6 +34,8 @@ def index(request):
 def retouch(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -47,6 +51,7 @@ def retouch(request):
             'available_languages': available_languages,
             'galleries': data,
             'comparisonphotos': comparisonphotos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -55,6 +60,8 @@ def category(request, gallery_slug, category_slug):
 
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -75,7 +82,8 @@ def category(request, gallery_slug, category_slug):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
-            'photos': category_photos
+            'photos': category_photos,
+            'pagesettings': pagesettings,
 
         })
 
@@ -108,6 +116,8 @@ def contact(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    pagesettings = PageSettings.objects.first()
+
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
@@ -130,6 +140,7 @@ def contact(request):
             'contactspage': contactspage,
             'galleries': data,
             'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -137,6 +148,8 @@ def contact(request):
 def pricing(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -167,6 +180,7 @@ def pricing(request):
             'questions': questions,
             'galleries': data,
             'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -174,6 +188,8 @@ def pricing(request):
 def about(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -197,6 +213,7 @@ def about(request):
             'aboutpage': aboutpage,
             'galleries': data,
             'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -204,6 +221,8 @@ def about(request):
 def reviews(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -222,6 +241,7 @@ def reviews(request):
         'available_languages': available_languages,
         'galleries': data,
         'photos': photos,
+        'pagesettings': pagesettings,
         })
     return response
 
@@ -229,6 +249,8 @@ def reviews(request):
 def faq(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -244,6 +266,7 @@ def faq(request):
         'available_languages': available_languages,
         'galleries': data,
         'photos': photos,
+        'pagesettings': pagesettings,
         })
     return response
 
