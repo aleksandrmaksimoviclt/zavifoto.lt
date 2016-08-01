@@ -64,6 +64,7 @@ hr {
 a.language-button>button {
     text-transform: uppercase;
     color:#666;
+    letter-spacing: 0.1em;
 }
 
 a.current-language>button {
@@ -76,6 +77,7 @@ a.current-language>button {
     margin-top: 90px;
     height: calc(100% - 494px);
     margin-bottom: 420px;
+    letter-spacing: 0.1em;
 }
 
 .secondary-menu{
