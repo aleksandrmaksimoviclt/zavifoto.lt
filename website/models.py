@@ -3,14 +3,22 @@
 
 from django.db import models
 from django.utils import timezone
+from django.utils.text import slugify, mark_safe
+
+# wysiwyg redactor in admin
+from redactor.fields import RedactorField
+
 from django.utils.text import slugify
 from django.contrib.postgres.fields import JSONField
+from collections import OrderedDict
 import uuid
+
 
 
 WHITE = 0
 BLACK = 1
 
+DEFAULT_LANGUAGE = 'lt'
 
 STYLES = (
 	(WHITE, 'White page style'),
@@ -26,11 +34,50 @@ LAYOUTS = (
 	(SLIDE, 'Full screen sliding'),
 )
 
+class Cms(models.Model):
+	top_text = models.TextField(blank=True, null=True)
+	main_text = models.TextField(blank=True, null=True)
+	bottom_text = models.TextField(blank=True, null=True)
+
+	class Meta:
+		abstract = True
+
+
 def get_order_num(order):
 	try:
-		return int(max(order.keys())) + 1
+		return str(int(max(order.keys())) + 1)
 	except ValueError:
-		return 1
+		return str(1)
+
+
+def sorted_order(photos_order):
+	ordered = OrderedDict()
+	for photo in sorted(photos_order.keys()):
+		ordered.update({photo: photos_order[photo]})
+	photos = OrderedDict()
+	for key, value in ordered.items():
+		try:
+			photos.update({key: Photo.objects.get(id=value)})
+		except ValueError:
+			pass
+	return photos
+
+def delete_photo_from_order(obj, id):
+	popped_key = None
+	new_order = OrderedDict()
+	for key, value in obj.photos_order.items():
+		if popped_key:
+			new_key = str(int(key) - 1)
+			new_order.update({new_key: value})
+		
+		elif value == id:
+			popped_key = key
+			obj.photos_order.pop(key)
+
+	obj.photos_order = new_order
+	obj.save()
+
+
 
 class Language(models.Model):
 	language_code = models.CharField(max_length=5)
@@ -53,6 +100,7 @@ class PageSettings(models.Model):
 class Gallery(models.Model):
 	created = models.DateTimeField(default=timezone.now)
 	photos_order = JSONField(default={}, blank=True, null=True)
+	category = models.ForeignKey('Category', null=True)
 	
 	class Meta:
 		verbose_name_plural = 'Galleries'
@@ -63,11 +111,17 @@ class Gallery(models.Model):
 	@property	
 	def name(self):
 		try:
-			return self.gallerybylanguage_set.all()[0].name
+			return self.gallerybylanguage_set.all().get(language__language='lt').name
 		except IndexError:
 			return 'Untitled gallery '
 		except Exception:
 			return 'Untitled gallery '
+	
+	def get_photos_by_order(self):
+		return sorted_order(self.photos_order)
+
+	def remove_from_order(self, id):
+		delete_photo_from_order(self, id)
 
 
 class GalleryByLanguage(models.Model):
@@ -89,14 +143,19 @@ class GalleryByLanguage(models.Model):
 
 
 class Category(models.Model):
-	gallery = models.ForeignKey(Gallery)
-	photos_order = JSONField(default={})
 
-	def __str__(self):
-		return self.gallery.__unicode__() + 'page settings for categories'
+	photos_order = JSONField(default={}, null=True, blank=True)
+
 
 	class Meta:
 		verbose_name_plural = 'Categories'
+
+	def get_photos_by_order(self):
+		return sorted_order(self.photos_order)
+
+	def remove_from_order(self, id):
+		delete_photo_from_order(self, id)
+
 
 class CategoryByLanguage(models.Model):
 	category = models.ForeignKey(Category)
@@ -109,6 +168,7 @@ class CategoryByLanguage(models.Model):
 
 	def save(self, *args, **kwargs):
 		self.url = slugify(self.name)
+
 		super(CategoryByLanguage, self).save(*args, **kwargs)
 
 
@@ -120,10 +180,16 @@ class Photo(models.Model):
 	name = models.CharField(max_length=100, blank=True, null=True)
 	image = models.ImageField(upload_to=image_path)
 	gallery = models.ForeignKey(Gallery)
+	
+	@property	
 
 	def src(self):
 		return self.image.url
 
+	def thumbnail(self):
+		#pazymi, kad sitas daiktas yra saugus
+	    return mark_safe('<img src="%s">' % self.image.url)
+		
 	def __str__(self):
 		return self.name
 	
@@ -135,6 +201,10 @@ class Photo(models.Model):
 			self.name = self.image.name
 		super(Photo, self).save(*args, **kwargs)
 
+	def delete(self, *args, **kwargs):
+		self.gallery.remove_from_order(self.id)
+		super(Photo, self).delete(*args, **kwargs)
+
 
 class PhotoCategory(models.Model):
 	photo = models.ForeignKey(Photo)
@@ -143,22 +213,42 @@ class PhotoCategory(models.Model):
 	class Meta:
 		unique_together = (('photo', 'category'),)
 
+	#SITAS LIEKA VIENAS VISIEM LANGUAGE
+class ContactsPage(models.Model):
+
 	def save(self, *args, **kwargs):
 		order_num = get_order_num(self.category.photos_order)
-		self.category.photos_order[order_num] = self.photo.id
+		self.category.photos_order[order_num] = str(self.photo.id)
 		self.category.save()
 		super(PhotoCategory, self).save(*args, **kwargs)
 
+	def delete(self, *args, **kwargs):
+		self.category.remove_from_order(self.id)
+		super(PhotoCategory, self).delete(*args, **kwargs)
+
+	
+
 
 class AbstractPage(models.Model):
-	top_text = models.TextField(blank=True, null=True)
-	main_text = models.TextField(blank=True, null=True)
-	bottom_text = models.TextField(blank=True, null=True)
+	heading = RedactorField()
+	heading = RedactorField()
+	heading_slug = RedactorField()
+	message = RedactorField()
+	e_mail = RedactorField()
+	phone_number = RedactorField()
+	top_text = RedactorField()
+	photo = RedactorField()
+	author = RedactorField()
+	text_with_icons_on_left = RedactorField()
 	
+
 	class Meta:
 		abstract = True
 
 class ContactsPage(AbstractPage):
+
+	description_editor = RedactorField(verbose_name=u'Description')
+
 	address = models.CharField(max_length=100, null=True, blank=True)
 	phone = models.CharField(max_length=50, null=True, blank=True)
 	email = models.EmailField(max_length=50, null=True, blank=True)
@@ -166,8 +256,20 @@ class ContactsPage(AbstractPage):
 	class Meta:
 		verbose_name_plural = 'Contacts Page'
 
+	def description(self):
+		if self.description_editor or self.adasd or self.sodasdasd:
+			return mark_safe(self.description_editor)
+
 	def __str__(self):
 		return 'Contacts Page'
+
+
+# class ContactsByLanguage(models.Model):
+# 	address = models.CharField(max_length=100, null=True, blank=True)
+# 	phone = models.CharField(max_length=50, null=True, blank=True)
+# 	email = models.EmailField(max_length=50, null=True, blank=True)
+
+	#SITAS NUSTATOMAS KIEKVINAM LANGUAGE ADMINKEI
 
 class ContactsPagePhoto(models.Model):
 	contacts_page = models.ForeignKey(ContactsPage)
@@ -234,11 +336,24 @@ class AboutPagePhoto(models.Model):
 
 
 class AboutPageByLanguage(AbstractPage):
+
 	language = models.ForeignKey(Language)
 	about_page = models.ForeignKey(AboutPage)
 	
 	def __str__(self):
 		return self.language.language_code + 'about page' or None
+
+class Review(models.Model):
+	photo = models.ImageField(upload_to="reviews-photos/")
+	text_editor = RedactorField(verbose_name=u'Review')
+	author = models.CharField(max_length=200)
+
+	def text(self):
+		if self.text_editor:
+			return mark_safe(self.text_editor)
+
+	def __str__(self):
+		return self.author
 
 class FAQPage(models.Model):
 	modified = models.DateTimeField(default=timezone.now)

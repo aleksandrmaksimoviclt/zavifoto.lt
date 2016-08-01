@@ -1,0 +1,75 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Photos Upload page</title>
+
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<!-- 	<link rel="stylesheet" type="text/css" href="{% static "website/css/sort.css" %}"> -->
+  <style>
+  #sortable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
+  #sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 1em; text-align: center; }
+  </style>
+  <script>
+  $(function() {
+    $( "#sortable" ).sortable();
+    $( "#sortable" ).disableSelection();
+  });
+  </script>
+</head>
+
+<body>
+<section class="photos-wrapper" style="font-size:18px;">
+	<ul id="sortable">
+	    {% for key, value in gallery.get_photos_by_order.items %}
+	      <li photo_id="{{ value.id }}" class="ui-state-default">
+	      	{{ key }}
+	      </li>
+	    {% endfor %}
+    </ul>
+    <button id='save'>Save</button>
+</section>
+
+
+<section class="categories-wrapper">
+	{% for category in categories %}
+		<a href='/sort/{{category.id}}/category'>{{category.name}}</a>
+	{% endfor %}
+</section>
+
+<section class="galleries-wrapper">
+	{% for gallery_lang in galleries %}
+		<a href='/sort/{{gallery_lang.id}}/gallery'>{{gallery_lang}}</a>
+	{% endfor %} </section> 
+</section>
+<script type="text/javascript">
+$( document ).ready(function(){
+	
+})
+$('#save').click(function(){
+	var photos = $('#sortable').find('.ui-state-default');
+	var new_order = {
+		"type": "{{type}}",
+		"id": "{{gallery.id}}" };
+	var order = {};
+
+	for (i = 0; i < photos.length; i++) {
+		order[i + 1] = photos[i].getAttribute('photo_id');
+	};
+	new_order['order'] = order;
+	console.log(new_order);
+	$.ajax({
+            url: '/change-order',
+            type: 'POST',
+            data: JSON.stringify(new_order),
+            contentType: "application/json",
+            success: function(response) {
+            	console.log(response);
+            }
+        });
+});
+</script>
+</body>
+</html> 

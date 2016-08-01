@@ -1,0 +1,144 @@
+{% extends "website/index.html" %}
+{% load staticfiles %}
+{% block content %}
+<div class="row nomargin" id="content">
+<div class="col-md-9 nopadding" id="left">
+    <div class="faq">
+        <div class="heading-wrapper">
+            <h1 style="font-size:24px; text-align:center;" class="nomargin">KONTAKTAI</h1> 
+            <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
+        </div>
+    
+        <div class="faq-content-wrapper">
+            <div class="contact-aboutself">
+                <b>Parašykite dabar!</b><br><br>
+                Jeigu norite užsisakyti, pasiteirauti, ar tiesiog pasidalinti jums svarbiomis mintimis, užpildykite susisiekimo formą ir gausite atsakymą per artimiausias 24 valandas.<br><br>
+                Lauksime Jūsų ;)
+                <br><br>
+                 <span class="email-wrapper">
+                    <i class="material-icons vallign">&#xE0BE;</i>
+                    <a class="email" href="mailto:info@zavifoto.lt">info@zavifoto.lt</a></span>        
+                </span>
+                
+                <br><br>
+                <span class="tel-wrapper">
+                    <i class="material-icons vallign">&#xE0CD;</i>
+                    <a class="tel" href="tel:+37062338655">+370 623 38655</a>
+                </span>
+            </div>
+            <div class="heading-wrapper contact">
+                <h1 style="font-size:24px; text-align:center;" class="nomargin">SUSISIEKITE SU MUMIS</h1> 
+                <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
+            </div>
+            <div class="contact-form-wrapper ">
+                <div class="row">
+                    <div class="col-xs-6 form-group">
+                        <label>Vardas</label>
+                        <input class="form-control" type="text"/>
+                    </div>
+                    <div class="col-xs-6 form-group">
+                        <label>El.Paštas</label>
+                        <input class="form-control" type="text"/>
+                    </div>
+
+                    <div class="col-xs-6 form-group">
+                        <label>Telefono Nr.</label>
+                        <input class="form-control" type="text"/>
+                    </div>
+                    
+                    <div class="col-xs-6 form-group">
+                        <label>Iš kur sužinojote apie mus?</label>
+                        <input class="form-control" type="text"/>
+                    </div>
+                    <div class="col-xs-12 form-group">
+                      <label for="comment">Jūsų žinutės tekstas:</label>
+                      <textarea class="form-control" rows="5" id="comment"></textarea>
+                    </div>
+                    <div class="col-xs-12 form-group center-block">
+                        <button type="submit" class="btn btn-default">SIŲSTI</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-3 nopadding" id="right">
+    <div class="demo-gallery">
+        <ul id="lightgallery" class="list-unstyled marginbottom0">
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
+            We are ready for 2017 and 2018 year bookings!</p>">
+                <a href="">
+                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</div>                    
+{% endblock content %}

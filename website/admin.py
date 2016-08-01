@@ -1,11 +1,32 @@
+	## TODO - 
+##		READ ABOUT INLINES
+## 		TABULARINLINE <-
+## 		DJANGO ADMIN
+##		to hide model field - EXCLUDE command
+##		unique 
 
 from django.contrib import admin
 from .models import * 
 
 
 # Register your models here.
+class PhotoInline(admin.StackedInline):
+	model = PhotoCategory
+
+class PhotoAdmin(admin.ModelAdmin):
+	inlines = [PhotoInline,]
+
+class PhotoAdmin(admin.ModelAdmin):
+	list_display = [
+	'thumbnail', 'name', 
+	]
+	exclude = [ 'name',
+	]
+	search_fields = [ 'name',
+	]
 
 class GalleryInline(admin.TabularInline):
+
 	model = Photo
 
 
@@ -23,21 +44,19 @@ class GalleryByLanguageInline(admin.StackedInline):
 
 class GalleryAdmin(admin.ModelAdmin):
 	inlines = [
-		# GalleryByLanguageInline,
+		GalleryByLanguageInline,
 		GalleryInline,
 	]
 	# def photos(self):
 	# 	return 'test'#Photo.objects.all()
 	# photos.allow_html = True
-
 	# fields = [photos,]
-
-
 
 class CategoryInline(admin.StackedInline):
 	model = CategoryByLanguage
 
 	def get_extra(self, request, obj=None, **kwargs):
+		## Kiek rodyti inline childu prie modelio admine
 	    extra = 2
 	    if obj:
 	        pass #return extra - obj.contactsbylanguage_set.count()
@@ -116,6 +135,7 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(AboutPage, AboutPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
-admin.site.register(Photo)
+admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Language)
 admin.site.register(PageSettings, PageSettingsAdmin)
+admin.site.register(Review)

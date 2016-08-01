@@ -339,3 +339,23 @@ span.reviewer {
 }
 
 /* CONTACT END */
+
+/* Reviews Begin */
+
+.review-text{
+	font-style: italic;
+}
+
+.review-text:before{
+	font-family: FontAwesome;
+	content: "\f10d";
+	font-style: normal;
+
+}
+
+.review-author{
+	float:right;
+	font-weight: bold;
+}
+
+/* Reviews End */
