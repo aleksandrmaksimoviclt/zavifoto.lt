@@ -2,10 +2,11 @@ import ast
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic.base import TemplateView
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from django.views.generic.base import TemplateView
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
 
 from .models import *
 from .utils import get_ordered_photos
@@ -206,12 +207,15 @@ def faq(request):
         })
     return response
 
-
+@login_required(login_url='/')
 def photosorting(request):
     categories = CategoryByLanguage.objects.filter(language__language='lt')
+    categories = [{
+        'name': cat.name,
+        'url': '/sort/{}/category/'.format(cat.id)} for cat in categories]
 
     response = render(
-        request, 'website/photosorting.html',
+        request, 'sorting/base.html',
         {'categories': categories})
 
     return response
@@ -220,33 +224,43 @@ def photosorting(request):
 def categorysorting(request, category_id):
 
     categories = CategoryByLanguage.objects.filter(
-        language__language='lt', id=category_id,)
-    galleries = Gallery.objects.filter(category=categories[0].category)
-    galleries_lang = GalleryByLanguage.objects.filter(gallery__in=galleries)
+        language__language='lt', id=category_id,).select_related('category')
+    category = categories.first()
+    galleries = Gallery.objects.filter(
+        category=category.category).prefetch_related('gallerybylanguage_set')
+    galleries = [
+        {
+            'name': gal.gallerybylanguage_set.first().name,
+            'url': '/sort/{}/category/{}/gallery/'.format(category.id, gal.id)
+        } for gal in galleries]
 
     response = render(
-        request, 'website/photosorting.html',
+        request, 'sorting/category.html',
         {
-            'categories': categories,
+            'back_url': '/sort/',
             'galleries': galleries,
-            'galleries_lang': galleries_lang
+            'category': category,
+            'photos': get_ordered_photos(category.category.photos_order),
+            'type': 'category',
         })
 
     return response
 
 
-def galleriessorting(request, gallery_id):
-
+def galleriessorting(request, category_id, gallery_id):
     gallery = Gallery.objects.get(id=gallery_id)
-
     response = render(
-        request, 'website/photosorting.html',
-        {'gallery': gallery, 'type': 'gallery'}
+        request, 'sorting/gallery.html',
+        {
+            'back_url': '/sort/{}/category'.format(category_id),
+            'gallery': gallery,
+            'type': 'gallery',
+            'photos': get_ordered_photos(gallery.photos_order)}
         )
     return response
 
 
-@csrf_exempt
+@login_required(login_url='/')
 def change_order(request):
     json = request.read()
     data = ast.literal_eval(json.decode("utf-8"))
@@ -254,11 +268,16 @@ def change_order(request):
         model = Gallery
     elif data['type'] == 'category':
         model = Category
+    else:
+        return HttpResponse('Something went wrong')
+    try:
+        obj = model.objects.get(id=data['id'])
+        obj.photos_order = data['order']
+        obj.save()
+        return HttpResponse('Successfully changed order.')
+    except Exception as e:
+        return HttpResponse(e)
 
-    obj = model.objects.get(id=data['id'])
-    obj.photos_order = data['order']
-    obj.save()
-    return HttpResponse('Changed')
 
 
 def get_language_obj(request):
@@ -276,6 +295,7 @@ def change_language(request, language):
     response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
     response.set_cookie(key='language', value=language)
     return response
+
 
 def retrieve_sidemenu_galleries(request, language):
     galleries = GalleryByLanguage.objects.filter(
