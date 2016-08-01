@@ -51,11 +51,20 @@ hr {
     border-color: transparent;
 }
 
+.language-button {
+    text-transform: uppercase;
+    color:#333;
+}
+
+.current-language{
+	font-weight: bold;
+}
+
 /*SIDEBAR*/
 
 .primary-menu {
     margin-top: 90px;
-    height: calc(100% - 430px);
+    height: calc(100% - 494px);
     margin-bottom: 420px;
 }
 
@@ -243,7 +252,7 @@ li.faq-title {
     padding: 24px 0px;
 }
 
-span.post {
+.post {
     font-size: 16px;
     line-height: 24px;
     text-align: justify;
@@ -290,7 +299,7 @@ li.faq-title {
 	transition: transform 350ms;
 }
 
-p.faq-post:last-child {
+div.faq-post:last-child {
     padding-bottom: 24px;
 }
 
@@ -298,13 +307,13 @@ p.faq-post:last-child {
 
 /* ABOUT US BEGIN */
 
-span.client-review {
+.client-review {
     display: block;
 }
 
-span.reviewer {
+.reviewer {
 	display: block;
-	float: right;
+	text-align: right;
 }
 
 .photographer-aboutself {
@@ -359,3 +368,11 @@ span.reviewer {
 }
 
 /* Reviews End */
+.comparison-wrapper{
+	height: 85vh !important;
+}
+.comparison-image{
+	object-fit: cover;
+    width: 100% !important;
+    height: 100% !important;
+}

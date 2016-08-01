@@ -1,0 +1,98 @@
+{% extends "website/index.html" %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="slider-wrapper">
+    <div id="slider" class="flexslider">
+        <ul class="slides">
+            <li class="slide-image-wrapper">
+            	<div class="twentytwenty-container comparison-wrapper">
+                     <!-- The before image is first -->
+                     <img class="comparison-image" src="{% static "website/img/1.jpg" %}"/>
+                     <!-- The after image is last -->
+                     <img class="comparison-image" src="{% static "website/img/1.jpg" %}"/>
+                </div>
+            </li>
+            <li class="slide-image-wrapper">
+                <div class="twentytwenty-container comparison-wrapper">
+                     <!-- The before image is first -->
+                     <img class="comparison-image" src="{% static "website/img/2.jpg" %}"/>
+                     <!-- The after image is last -->
+                     <img class="comparison-image" src="{% static "website/img/2.jpg" %}"/>
+                </div>
+            </li>
+            <li class="slide-image-wrapper">
+                <div class="twentytwenty-container">
+                     <!-- The before image is first -->
+                     <img src="{% static "website/img/2.jpg" %}"/>
+                     <!-- The after image is last -->
+                     <img src="{% static "website/img/2.jpg" %}"/>
+                </div>
+            </li>
+            <li class="slide-image-wrapper">
+                <div class="twentytwenty-container">
+                     <!-- The before image is first -->
+                     <img src="http://placehold.it/400x200" />
+                     <!-- The after image is last -->
+                     <img src="http://placehold.it/400x200" />
+                </div>
+            </li>
+             <li class="slide-image-wrapper">
+                <img class="imgcover" src="{% static "website/img/1.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+                <img class="imgcover" src="{% static "website/img/2.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+                <img class="imgcover" src="{% static "website/img/3.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+                <img class="imgcover" src="{% static "website/img/4.jpg" %}"/>
+            </li>
+        </ul>
+    </div>
+    <div id="carousel" class="flexslider">
+        <ul class="slides">
+            <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/1.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/2.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/3.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/4.jpg" %}"/>
+            </li>
+             <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/1.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/2.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/3.jpg" %}"/>
+            </li>
+            <li class="slide-image-wrapper">
+              <img class="imgcover" src="{% static "website/img/4.jpg" %}"/>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "website/css/twentytwenty.css" %}">
+{% endblock extra_css %}
+
+{% block extra_javascript %}
+	<script src=" {% static "website/js/retouch.js" %}" type="text/javascript"></script>
+    <script src=" {% static "website/js/jquery.event.move.js" %}" type="text/javascript"></script>
+    <script src=" {% static "website/js/jquery.twentytwenty.js" %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(window).load(function(){
+            $(".twentytwenty-container").twentytwenty();
+        });
+    </script>
+{% endblock extra_javascript %}

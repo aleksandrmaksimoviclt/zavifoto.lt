@@ -6,20 +6,22 @@
         <div class="col-md-9 nopadding" id="left">
             <div class="faq">
                 <div class="heading-wrapper">
-                    <h1 style="font-size:24px; text-align:center;" class="nomargin">APIE MUS</h1> 
+                    <h1 style="font-size:24px; text-align:center;" class="nomargin">{{aboutpage.heading}}</h1> 
                     <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
                 </div>
             
                 <div class="faq-content-wrapper">
                     <div class="client-review-wrapper">
-                    	<span class="client-review"><i> „Vos pradėjus dirbti kartu su Vilmantu supratau, jog jis savo srities profesionalas, puikus vestuvių fotografas, kuriuo tikrai galima pasitikėti. Jis puikiai išmano tai ką daro, o merginos, „pakliuvę į jo rankas" tiesiog pražysta. </i> </span>
-                    	<span class="reviewer"><b>"Justė, projektų vadovė"</b></span>
+                    	<div class="client-review">
+                            {{aboutpage.quote|safe}}
+                        </div>
+                    	<div class="reviewer">
+                            {{aboutpage.quote_author|safe}}   
+                        </div>
                     </div>
                     <br>
                     <div class="photographer-aboutself">
-                    	<b>Sveiki, esu fotografas Vilmantas Žilinskas,</b><br><br>Neatsitiktinai pradėjau svetima citata - nemėgstu kalbėti apie save kaip fotografą, tegul tai daro mano klientai arba pačios nuotraukos. Todėl mieliau papasakosiu apie save patį . Manau, jog užmegzti artimą ryšį su savo fotografu yra kur kas svarbiau, nei tai, kokiu fotoaparatu jis fotografuoja. Taigi, esu priklausomas nuo bendravimo su žmonėmis, pagal M. Briggs asmenybės teoriją esu ESTJ:<br><br>
-                    	<i>„Praktiški ir realistiški. Jais galima pasitikėti, jie sąžiningai atlieka, kas reikalinga ir tvarko visus reikalus, jie visada vykdo savo pareigas. Mėgsta organizuoti ir veikti.  Yra ryžtingi ir greitai imasi vykdyti sprendimus“.</i><br><br> Ir žinote, kad ir kaip skeptiškai žiūrėčiau į visus asmenybės testus, šis, atrodo, kad nemeluoja :) Be fotografijos turiu aistrą mokyti kitus žmones, dalintis savo žiniomis, esu vedęs ne vienus mokymus pradedant bendravimo psichologija, baigiant nuotraukų retušavimu. Jau daug metų organizuoju didžiausią Lietuvoje stovyklą fotografijos entuziastams www.noriufotografuotis.com. <br><br>  Dar viena mano aistra (be fotografijos ir edukacinės veiklos) - katės.  Auginu didelį, „ryžą“ ir be galo mielą meino meškėną, vardu Diego. Nuotraukoje kairėje jam vos 4 mėnesiai. Dievinu kates ir jeigu galėčiau pasirinkti į ką reinkarnuotis kitame gyvenime, nedvejodamas rinkčiausi katės gyvenimą. Apskritai, Diego net ne katinas. Jis lygiavertis šeimos narys!<br><br>
-                    	<b>Dar keletas faktų apie mane:</b><br><br>Esu „naktibalda“ - mane dažnai galima sutikti Facebook'e 02.00 val, o ryte anksčiau 11.00 val geriau man neskambinti :)Mėgstu viską pasidaryti pats. Darausi remontą savo bute. Jau trečius metus. Esu estetas smulkmenoms: vos milimetru kreivai pakabintas paveikslas arba chaotiškai sudėti maisto produktai šaldytuve? Mano namuose to nebus!
+                    	{{aboutpage.text|safe}}
                     </div>
                 </div>
             </div>

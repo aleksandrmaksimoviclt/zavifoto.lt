@@ -31,16 +31,16 @@ INSTALLED_APPS = [
 
     # pypi packages
     'sortedm2m',
-    #wysiwyg redactor
+    # wysiwyg redactor
     'redactor',
-
+    # 'adminsortable2',
     'django_spaghetti',
 
 ]
 SPAGHETTI_SAUCE = {
-  'apps':['website',],
-  'show_fields':False,
-  'exclude':{'auth':['user']}
+  'apps': ['website'],
+  'show_fields': False,
+  'exclude': {'auth': ['user']}
 }
 
 MIDDLEWARE_CLASSES = [
@@ -77,7 +77,6 @@ WSGI_APPLICATION = 'zavifoto.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
 
 
 # Password validation
@@ -144,6 +143,7 @@ except ImportError:
 
     # Honor the 'X-Forwarded-Proto' header for request.is_secure()
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+    DATABASES = {
+        'default': dj_database_url.config(default='postgres://localhost')}
 except Exception as e:
     print(e)
