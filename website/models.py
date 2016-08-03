@@ -203,8 +203,8 @@ class Photo(models.Model):
 @receiver(
     pre_delete, sender=Photo,
     dispatch_uid='photos_delete_from_order_signal')
-    def delete_photos_from_order(sender, instance, using, **kwargs):
-        instance.gallery.remove_from_order(instance.id)
+def delete_photos_from_order(sender, instance, using, **kwargs):
+    instance.gallery.remove_from_order(instance.id)
 
 
 
