@@ -11,20 +11,27 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .utils import get_ordered_photos
 
-
 def index(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    pagesettings = PageSettings.objects.first()
+
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    if pagesettings.layout == 0:
+        template = 'website/index_grid.html'
+    if pagesettings.layout == 1:
+        template = 'website/index_slider.html'
 
     response = render(
         request,
-        'website/index.html',
+        template,
         {
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -33,7 +40,14 @@ def retouch(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    pagesettings = PageSettings.objects.first()
+
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        comparisonphotos = ComparisonPhoto.objects.all()
+    except:
+        comparisonphotos = []
 
     response = render(
         request,
@@ -41,6 +55,8 @@ def retouch(request):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
+            'comparisonphotos': comparisonphotos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -50,14 +66,19 @@ def category(request, gallery_slug, category_slug):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    pagesettings = PageSettings.objects.first()
+
     data = retrieve_sidemenu_galleries(request, language=language)
 
-    category = CategoryByLanguage.objects.filter(
-        language=language, url=category_slug,).first().category.photos_order
+    try: 
+        category = CategoryByLanguage.objects.filter(language=language, url=category_slug,).first().category.photos_order
+    except:
+        category = []
 
-    # category_photos_order = category.category.photos_order
-
-    category_photos = get_ordered_photos(photos_order=category)
+    try:
+        category_photos = get_ordered_photos(photos_order=category)
+    except:
+        category_photos = []
 
     response = render(
         request,
@@ -66,7 +87,8 @@ def category(request, gallery_slug, category_slug):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
-            'photos': category_photos
+            'photos': category_photos,
+            'pagesettings': pagesettings,
 
         })
 
@@ -99,6 +121,8 @@ def contact(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    pagesettings = PageSettings.objects.first()
+
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
@@ -106,6 +130,11 @@ def contact(request):
 
     except Exception:
         contactspage = []
+
+    try:
+        photos = Photo.objects.filter(is_for_price_page_side=True)
+    except:
+        photos = []
 
     response = render(
         request,
@@ -115,6 +144,8 @@ def contact(request):
             'available_languages': available_languages,
             'contactspage': contactspage,
             'galleries': data,
+            'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -122,6 +153,8 @@ def contact(request):
 def pricing(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -132,10 +165,15 @@ def pricing(request):
         pricepage = []
 
     try:
-        questions = Question.objects.filter(pricepage=pricepage.id)
+        questions = Question.objects.filter(pricepage=pricepage.id).first()
 
     except Exception:
-        question = []
+        questions = []
+
+    try:
+        photos = Photo.objects.filter(is_for_price_page_side=True)
+    except:
+        photos = []
 
     response = render(
         request,
@@ -146,6 +184,8 @@ def pricing(request):
             'pricepage': pricepage,
             'questions': questions,
             'galleries': data,
+            'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -153,6 +193,8 @@ def pricing(request):
 def about(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
@@ -162,6 +204,11 @@ def about(request):
     except Exception:
         aboutpage = []
 
+    try:
+        photos = Photo.objects.filter(is_for_about_us_page_side=True)
+    except:
+        photos = []
+
     response = render(
         request,
         'website/about.html',
@@ -170,6 +217,8 @@ def about(request):
             'available_languages': available_languages,
             'aboutpage': aboutpage,
             'galleries': data,
+            'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -178,9 +227,17 @@ def reviews(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    pagesettings = PageSettings.objects.first()
+
     data = retrieve_sidemenu_galleries(request, language=language)
 
     reviews = Review.objects.all()
+
+    try:
+        photos = Photo.objects.filter(is_for_review_page_side=True)
+    except:
+        photos = []
+
     response = render(
         request,
         'website/reviews.html', {
@@ -188,6 +245,8 @@ def reviews(request):
         'current_language': language.language_code,
         'available_languages': available_languages,
         'galleries': data,
+        'photos': photos,
+        'pagesettings': pagesettings,
         })
     return response
 
@@ -196,14 +255,38 @@ def faq(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
+    pagesettings = PageSettings.objects.first()
+
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        faqpage = FaqPage.objects.filter(language=language).first()
+
+    except Exception:
+        faqpage = []
+
+    try:
+        questions = Question_FaqPage.objects.filter(faqpage=faqpage.id).first()
+
+    except Exception:
+        questions = []
+
+    try:
+        photos = Photo.objects.filter(is_for_faq_page_side=True)
+    except:
+        photos = []
 
     response = render(
         request,
-        'website/faq.html',{
-        'current_language': language.language_code,
-        'available_languages': available_languages,
-        'galleries': data,
+        'website/faq.html',
+        {
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'faqpage': faqpage,
+            'questions': questions,
+            'galleries': data,
+            'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -298,19 +381,26 @@ def change_language(request, language):
 
 
 def retrieve_sidemenu_galleries(request, language):
-    galleries = GalleryByLanguage.objects.filter(
-        language=language).select_related(
-        'gallery__category').prefetch_related(
-        'gallery__category__categorybylanguage_set')
+    try:
 
-    data = []
+        galleries = GalleryByLanguage.objects.filter(
+            language=language).select_related(
+            'gallery__category').prefetch_related(
+            'gallery__category__categorybylanguage_set')
 
-    for gallery in galleries:
-        data.append(
-            {
-                'name': gallery.name,
-                'categories': [{
-                    'name': cat.name,
-                    'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
-            })
+        data = []
+
+        for gallery in galleries:
+            data.append(
+                {
+                    'name': gallery.name,
+                    'categories': [{
+                        'name': cat.name,
+                        'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
+                })
+    except:
+
+        data = []
+        galleries = []
+
     return data

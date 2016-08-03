@@ -78,6 +78,14 @@ class GalleryAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'modified',)
 
 
+class Question_FAQInline(admin.StackedInline):
+    model = Question_FaqPage
+
+
+class FaqPageAdmin(admin.ModelAdmin):
+    inlines = [Question_FAQInline]
+
+
 class QuestionInline(admin.StackedInline):
     model = Question
 
@@ -119,9 +127,11 @@ class ReviewAdmin(admin.ModelAdmin):
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(AboutPage, AboutPageAdmin)
+admin.site.register(FaqPage, FaqPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Language)
 admin.site.register(PageSettings, PageSettingsAdmin)
 admin.site.register(Review, ReviewAdmin)
+admin.site.register(ComparisonPhoto)

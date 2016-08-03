@@ -80,8 +80,11 @@ class PageSettings(models.Model):
     layout = models.IntegerField(choices=LAYOUTS, default=GRID)
 
     class Meta:
-        verbose_name_plural = 'Page Default Settings'
+        verbose_name_plural = 'Default Settings'
         verbose_name = verbose_name_plural
+
+    def __str__(self):
+        return 'Default Settings'
 
 
 class Gallery(models.Model):
@@ -146,6 +149,15 @@ class Category(models.Model):
     def remove_from_order(self, id):
         delete_from_order(self, id)
 
+    def __str__(self):
+        try:
+            return self.categorybylanguage_set.filter(
+                language__language_code='lt').first().name
+        except IndexError:
+            return 'Untitled gallery '
+        except Exception:
+            return 'Untitled gallery '
+
 
 class CategoryByLanguage(models.Model):
     category = models.ForeignKey(Category)
@@ -172,6 +184,11 @@ class Photo(models.Model):
     image = models.ImageField(upload_to=image_path)
     gallery = models.ForeignKey(Gallery, null=True, blank=True)
     uploaded_at = models.DateTimeField(default=timezone.now)
+    # is_for_contacts_page_side = models.BooleanField(default=False)
+    # is_for_price_page_side = models.BooleanField(default=False)
+    # is_for_about_us_page_side = models.BooleanField(default=False)
+    # is_for_faq_page_side = models.BooleanField(default=False)
+    # is_for_review_page_side = models.BooleanField(default=False)
 
     @property
     def src(self):
@@ -193,7 +210,6 @@ class Photo(models.Model):
             self.name = self.image.name
         super(Photo, self).save(*args, **kwargs)
 
-
 @receiver(
     pre_delete, sender=Photo,
     dispatch_uid='photos_delete_from_order_signal')
@@ -202,6 +218,7 @@ def delete_photos_from_order(sender, instance, using, **kwargs):
         instance.gallery.remove_from_order(instance.id)
     except Gallery.DoesNotExist:
         pass
+
 
 
 class PhotoCategory(models.Model):
@@ -355,8 +372,8 @@ class Review(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     def text(self):
-        if self.text_editor:
-            return mark_safe(self.text_editor)
+        if self.review:
+            return mark_safe(self.review)
 
     def __str__(self):
         return self.author
@@ -384,3 +401,12 @@ class Question_FaqPage(models.Model):
 class FAQPhoto(models.Model):
     faq_page = models.ForeignKey(FaqPage)
     photo = models.ForeignKey(Photo, unique=True)
+
+
+class ComparisonPhoto(models.Model):
+    before = models.ImageField(upload_to='retouch/')
+    after = models.ImageField(upload_to='retouch/')
+    name = models.CharField(max_length=150, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
