@@ -15,3 +15,8 @@ def deploy():
             run('echo "yes\n" | python3 manage.py collectstatic')
     run('supervisorctl restart zavi')
     run('systemctl restart nginx')
+
+
+def logs(file='*'):
+    with cd('/web/zavi/logs/'):
+        run('tail -f {}'.format(file))
