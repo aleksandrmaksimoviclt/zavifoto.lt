@@ -7,6 +7,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify, mark_safe
 from django.contrib.postgres.fields import JSONField
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 from redactor.fields import RedactorField
 
@@ -180,9 +182,12 @@ class Photo(models.Model):
             self.name = self.image.name
         super(Photo, self).save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        self.gallery.remove_from_order(self.id)
-        super(Photo, self).delete(*args, **kwargs)
+
+@receiver(
+    pre_delete, sender=Photo,
+    dispatch_uid='photos_delete_from_order_signal')
+def delete_photos_from_order(sender, instance, using, **kwargs):
+    instance.gallery.remove_from_order(instance.id)
 
 
 class PhotoCategory(models.Model):
@@ -201,6 +206,13 @@ class PhotoCategory(models.Model):
     def delete(self, *args, **kwargs):
         self.category.remove_from_order(self.id)
         super(PhotoCategory, self).delete(*args, **kwargs)
+
+
+@receiver(
+    pre_delete, sender=PhotoCategory,
+    dispatch_uid='photos_delete_from_category_order_signal')
+def delete_photos_from_category_order(sender, instance, using, **kwargs):
+    instance.category.remove_from_order(instance.photo.id)
 
 
 class AbstractPage(models.Model):
@@ -334,6 +346,7 @@ class Review(models.Model):
 
     def __str__(self):
         return self.author
+
 
 class FaqPage(models.Model):
     modified = models.DateTimeField(default=timezone.now)
