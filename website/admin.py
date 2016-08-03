@@ -123,6 +123,18 @@ class ReviewAdmin(admin.ModelAdmin):
         return mark_safe(obj.photo.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
+class ComparisonPhotoAdmin(admin.ModelAdmin):
+    model = ComparisonPhoto
+
+    list_display = ('before_thumb', 'after_thumb')
+
+    def before_thumb(self, obj):
+        return mark_safe('<img src="{}" width=60 height=60>'.format(obj.before.url))
+    before_thumb.short_description = u"Before"
+
+    def after_thumb(self, obj):
+        return mark_safe('<img src="{}" width=60 height=60>'.format(obj.before.url))
+    after_thumb.short_description = u"After"
 
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
@@ -134,4 +146,4 @@ admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Language)
 admin.site.register(PageSettings, PageSettingsAdmin)
 admin.site.register(Review, ReviewAdmin)
-admin.site.register(ComparisonPhoto)
+admin.site.register(ComparisonPhoto, ComparisonPhotoAdmin)
