@@ -19,9 +19,14 @@ def index(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
+    if pagesettings.layout == 0:
+        template = 'website/index_grid.html'
+    if pagesettings.layout == 1:
+        template = 'website/index_slider.html'
+
     response = render(
         request,
-        'website/index.html',
+        template,
         {
             'current_language': language.language_code,
             'available_languages': available_languages,
@@ -160,10 +165,10 @@ def pricing(request):
         pricepage = []
 
     try:
-        questions = Question.objects.filter(pricepage=pricepage.id)
+        questions = Question.objects.filter(pricepage=pricepage.id).first()
 
     except Exception:
-        question = []
+        questions = []
 
     try:
         photos = Photo.objects.filter(is_for_price_page_side=True)
@@ -255,18 +260,33 @@ def faq(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
+        faqpage = FaqPage.objects.filter(language=language).first()
+
+    except Exception:
+        faqpage = []
+
+    try:
+        questions = Question_FaqPage.objects.filter(faqpage=faqpage.id).first()
+
+    except Exception:
+        questions = []
+
+    try:
         photos = Photo.objects.filter(is_for_faq_page_side=True)
     except:
         photos = []
 
     response = render(
         request,
-        'website/faq.html',{
-        'current_language': language.language_code,
-        'available_languages': available_languages,
-        'galleries': data,
-        'photos': photos,
-        'pagesettings': pagesettings,
+        'website/faq.html',
+        {
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'faqpage': faqpage,
+            'questions': questions,
+            'galleries': data,
+            'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 

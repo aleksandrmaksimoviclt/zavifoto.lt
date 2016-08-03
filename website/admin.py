@@ -70,6 +70,12 @@ class CategoryAdmin(admin.ModelAdmin):
         CategoryInline,
     ]
 
+class Question_FAQInline(admin.StackedInline):
+    model = Question_FaqPage
+
+
+class FaqPageAdmin(admin.ModelAdmin):
+    inlines = [Question_FAQInline]
 
 class QuestionInline(admin.StackedInline):
     model = Question
@@ -97,6 +103,7 @@ class PageSettingsAdmin(admin.ModelAdmin):
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(AboutPage)
+admin.site.register(FaqPage, FaqPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
 admin.site.register(Photo, PhotoAdmin)
