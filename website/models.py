@@ -134,6 +134,13 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
+    def __str__(self):
+        _categories = self.categorybylanguage_set
+        if _categories.exists():
+            return _categories.first().name
+        else:
+            return 'Category by language is not attached'
+
     def remove_from_order(self, id):
         delete_from_order(self, id)
 
