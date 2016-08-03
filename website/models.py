@@ -203,6 +203,8 @@ class PhotoCategory(models.Model):
 
     class Meta:
         unique_together = (('photo', 'category'),)
+        verbose_name = 'Photo for category'
+        verbose_name_plural = 'Photos for category'
 
     def save(self, *args, **kwargs):
         order_num = get_order_num(self.category.photos_order)
@@ -322,7 +324,7 @@ class AboutPage(models.Model):
         verbose_name=u'Quote author', null=True, blank=True)
     text = RedactorField(verbose_name=u'Text', null=True, blank=True)
 
-    language = models.ForeignKey(Language, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True, unique=True)
 
     class Meta:
         verbose_name_plural = 'About Page'

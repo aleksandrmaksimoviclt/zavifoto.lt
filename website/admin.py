@@ -2,12 +2,39 @@ from django.contrib import admin
 from .models import *
 
 
-class PhotoInline(admin.StackedInline):
+class AboutPagePhotos(admin.TabularInline):
+    model = AboutPagePhoto
+    raw_id_fields = ("photo",)
+
+
+class AboutPageAdmin(admin.ModelAdmin):
+    model = AboutPage
+    list_display = ('heading', 'language', 'modified',)
+    inlines = [AboutPagePhotos,]
+    fields = (
+        'heading', 'quote', 'quote_author', 'text', 'language')
+
+
+class CategoryInline(admin.StackedInline):
+    model = CategoryByLanguage
+
+    def get_extra(self, request, obj=None, **kwargs):
+        extra = 3
+        if obj:
+            return extra - obj.categorybylanguage_set.count()
+        return extra
+
+
+class PhotoCategoryAdmin(admin.TabularInline):
     model = PhotoCategory
+    raw_id_fields = ('photo',)
 
 
-class PhotoAdmin(admin.ModelAdmin):
-    inlines = (PhotoInline,)
+class CategoryAdmin(admin.ModelAdmin):
+    inlines = [
+        PhotoCategoryAdmin,
+        CategoryInline,
+    ]
 
 
 class PhotoAdmin(admin.ModelAdmin):
@@ -42,35 +69,6 @@ class GalleryAdmin(admin.ModelAdmin):
     inlines = (GalleryByLanguageInline, GalleryInline,)
 
 
-class CategoryInline(admin.StackedInline):
-    model = CategoryByLanguage
-
-    def get_extra(self, request, obj=None, **kwargs):
-        # Kiek rodyti inline childu prie modelio admine
-        extra = 2
-        if obj:
-            pass  # return extra - obj.contactsbylanguage_set.count()
-        return extra
-
-
-class PhotoCategoryAdmin(admin.StackedInline):
-    model = PhotoCategory
-
-    def get_extra(self, request, obj=None, **kwargs):
-        # Kiek rodyti inline childu prie modelio admine
-        extra = 2
-        if obj:
-            pass  # return extra - obj.contactsbylanguage_set.count()
-        return extra
-
-
-class CategoryAdmin(admin.ModelAdmin):
-    inlines = [
-        PhotoCategoryAdmin,
-        CategoryInline,
-    ]
-
-
 class QuestionInline(admin.StackedInline):
     model = Question
 
@@ -96,7 +94,7 @@ class PageSettingsAdmin(admin.ModelAdmin):
 
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(AboutPage)
+admin.site.register(AboutPage, AboutPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
 admin.site.register(Photo, PhotoAdmin)
