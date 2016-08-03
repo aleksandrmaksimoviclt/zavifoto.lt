@@ -86,6 +86,7 @@ class PageSettings(models.Model):
 
 class Gallery(models.Model):
     created = models.DateTimeField(default=timezone.now)
+    modified = models.DateTimeField(auto_now=True)
     photos_order = JSONField(default={}, blank=True, null=True)
     category = models.ForeignKey('Category', null=True)
 
@@ -130,6 +131,7 @@ class GalleryByLanguage(models.Model):
 class Category(models.Model):
 
     photos_order = JSONField(default={}, null=True, blank=True)
+    modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -168,12 +170,14 @@ class Photo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to=image_path)
-    gallery = models.ForeignKey(Gallery)
+    gallery = models.ForeignKey(Gallery, null=True, blank=True)
+    uploaded_at = models.DateTimeField(default=timezone.now)
 
     @property
     def src(self):
         return self.image.url
 
+    @property
     def thumbnail(self):
         return mark_safe('<img src="%s" width=60 height=60>' % self.image.url)
 
@@ -194,7 +198,10 @@ class Photo(models.Model):
     pre_delete, sender=Photo,
     dispatch_uid='photos_delete_from_order_signal')
 def delete_photos_from_order(sender, instance, using, **kwargs):
-    instance.gallery.remove_from_order(instance.id)
+    try:
+        instance.gallery.remove_from_order(instance.id)
+    except Gallery.DoesNotExist:
+        pass
 
 
 class PhotoCategory(models.Model):
@@ -259,7 +266,7 @@ class ContactsPage(models.Model):
         max_length=50, blank=True, null=True)
     contact_form_send_button_text = models.CharField(
         max_length=50, blank=True, null=True)
-    language = models.ForeignKey(Language, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
 
     class Meta:
         verbose_name_plural = 'Contacts Page'
@@ -278,9 +285,9 @@ class ContactsPagePhoto(models.Model):
 
 
 class PricePage(models.Model):
-    modified = models.DateTimeField(default=timezone.now)
+    modified = models.DateTimeField(auto_now=True)
     heading = models.CharField(max_length=100, null=True, blank=True)
-    language = models.ForeignKey(Language, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
 
     def __str__(self):
         return 'Pricepage ' + self.language.language_code
@@ -340,14 +347,12 @@ class AboutPagePhoto(models.Model):
     def __str__(self):
         return 'About page photo'
 
-    def tumbnail(self):
-        pass
-
 
 class Review(models.Model):
-    photo = models.ImageField(upload_to="reviews-photos/")
-    text_editor = RedactorField(verbose_name=u'Review')
+    photo = models.ForeignKey('Photo')
+    review = RedactorField(verbose_name=u'Review')
     author = models.CharField(max_length=200)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def text(self):
         if self.text_editor:
@@ -369,10 +374,12 @@ class FaqPage(models.Model):
     def __str__(self):
         return 'FAQ Page ' + self.language.language_code
 
+
 class Question_FaqPage(models.Model):
     heading = models.CharField(max_length=100, null=True, blank=True)
     body = RedactorField(verbose_name=u'Question Body', null=True, blank=True)
     faqpage = models.ForeignKey(FaqPage, on_delete=models.CASCADE)
+
 
 class FAQPhoto(models.Model):
     faq_page = models.ForeignKey(FaqPage)
