@@ -27,13 +27,8 @@
     <link href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css" rel="stylesheet">
 
     <!-- Hamburger -->
-    <link rel="stylesheet" type="text/css" href="{% static "website/css/hamburgers.css" %}">        
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/hamburgers.css" %}">
 
-    <!-- Flex Slider for Index-slider.html -->
-    <link rel="stylesheet" type="text/css" href="{% static "website/css/flexslider.css" %}">
-
-    <!-- LightGallery for Index-grid.html -->
-    <link rel="stylesheet" type="text/css" href="{% static "website/css/lightgallery.css" %}">
     <!-- Custom CSS -->
     {% if pagesettings.style == 0 %}
         <link href="{% static "website/css/white-theme.css" %}" rel="stylesheet">
@@ -45,6 +40,14 @@
         <link href="{% static "website/css/sidebar-white.css" %}" rel="stylesheet">
     {% elif pagesettings.style == 1 %}
         <link href="{% static "website/css/sidebar-black.css" %}" rel="stylesheet">
+    {% endif %}
+
+    {% if pagesettings.layout == 0 %}
+        <link rel="stylesheet" type="text/css" href="{% static "website/css/lightgallery.css" %}">
+    {% endif %}
+
+    {% if pagesettings.layout == 1 %}
+        <link rel="stylesheet" type="text/css" href="{% static "website/css/flexslider.css" %}">
     {% endif %}
 
     {% block extra_css %}

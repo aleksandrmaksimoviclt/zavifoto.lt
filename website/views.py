@@ -21,8 +21,16 @@ def index(request):
 
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
+        try:
+            photos = Photo.objects.filter(is_for_index_grid=True)
+        except:
+            photos = []
     if pagesettings.layout == 1:
         template = 'website/index_slider.html'
+        try:
+            photos = Photo.objects.filter(is_for_index_slider=True)
+        except:
+            photos = []
 
     response = render(
         request,
@@ -32,6 +40,7 @@ def index(request):
             'available_languages': available_languages,
             'galleries': data,
             'pagesettings': pagesettings,
+            'photos': photos,
         })
     return response
 
