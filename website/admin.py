@@ -1,67 +1,45 @@
+
 from django.contrib import admin
 from .models import *
 
 
-class PhotoInline(admin.StackedInline):
-    model = PhotoCategory
+class AboutPagePhotos(admin.TabularInline):
+    model = AboutPagePhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
 
 
-class PhotoAdmin(admin.ModelAdmin):
-    inlines = (PhotoInline,)
-
-
-class PhotoAdmin(admin.ModelAdmin):
-    list_display = [
-        'thumbnail', 'name',
-    ]
-    exclude = [
-        'name',
-    ]
-    search_fields = [
-        'name',
-    ]
-
-
-class GalleryInline(admin.TabularInline):
-
-    model = Photo
-
-
-#   def get_extra(self, request, obj=None, **kwargs):
-#       extra = 2
-#       if obj:
-#           pass #return extra -
-#       return extra
-
-
-class GalleryByLanguageInline(admin.StackedInline):
-    model = GalleryByLanguage
-
-
-class GalleryAdmin(admin.ModelAdmin):
-    inlines = (GalleryByLanguageInline, GalleryInline,)
+class AboutPageAdmin(admin.ModelAdmin):
+    model = AboutPage
+    list_display = ('__str__', 'heading', 'language', 'modified',)
+    inlines = [AboutPagePhotos]
+    fields = (
+        'heading', 'quote', 'quote_author', 'text', 'language')
 
 
 class CategoryInline(admin.StackedInline):
     model = CategoryByLanguage
 
     def get_extra(self, request, obj=None, **kwargs):
-        # Kiek rodyti inline childu prie modelio admine
-        extra = 2
+        extra = 3
         if obj:
-            pass  # return extra - obj.contactsbylanguage_set.count()
+            return extra - obj.categorybylanguage_set.count()
         return extra
 
 
-class PhotoCategoryAdmin(admin.StackedInline):
+class PhotoCategoryAdmin(admin.TabularInline):
     model = PhotoCategory
+    raw_id_fields = ('photo',)
+    readonly_fields = ('thumbnail',)
 
-    def get_extra(self, request, obj=None, **kwargs):
-        # Kiek rodyti inline childu prie modelio admine
-        extra = 2
-        if obj:
-            pass  # return extra - obj.contactsbylanguage_set.count()
-        return extra
+    def thumbnail(self, obj):
+        return mark_safe(obj.photo.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -69,37 +47,156 @@ class CategoryAdmin(admin.ModelAdmin):
         PhotoCategoryAdmin,
         CategoryInline,
     ]
+    list_display = ('__str__', 'modified')
+    exclude = ('photos_order',)
+
+
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = [
+        'thumbnail',
+        'name',
+        'uploaded_at',
+    ]
+    readonly_fields = ('uploaded_at',)
+    search_fields = [
+        'name',
+    ]
+
+
+class GalleryInline(admin.TabularInline):
+    model = Photo
+    readonly_fields = ('thumbnail',)
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
+
+
+class GalleryByLanguageInline(admin.TabularInline):
+    model = GalleryByLanguage
+
+
+class GalleryAdmin(admin.ModelAdmin):
+    inlines = (
+        GalleryByLanguageInline,
+        GalleryInline,)
+
+    exclude = ('photos_order', 'created')
+    list_display = ('__str__', 'modified',)
+
+
+class FaqPhotosInline(admin.TabularInline):
+    model = FAQPhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
+
+
+class QuestionFAQInline(admin.StackedInline):
+    model = Question_FaqPage
+
+
+class FaqPageAdmin(admin.ModelAdmin):
+    inlines = [QuestionFAQInline, FaqPhotosInline]
+    exclude = ('modified',)
+    list_display = ('__str__', 'language', 'modified')
 
 
 class QuestionInline(admin.StackedInline):
     model = Question
 
 
+class PricePhotosInline(admin.TabularInline):
+    model = PricePagePhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
+
+
 class PricePageAdmin(admin.ModelAdmin):
-    inlines = [QuestionInline]
+    inlines = [PricePhotosInline, QuestionInline]
+    list_display = ('__str__', 'heading', 'language', 'modified',)
+
+
+class ContactsPhotosInline(admin.TabularInline):
+    model = ContactsPagePhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
 
 
 class ContactsPageAdmin(admin.ModelAdmin):
     inlines = [
-        # ContactsPageByLanguageInline,
+        ContactsPhotosInline,
     ]
+    list_display = ('__str__', 'language')
 
     def has_add_permission(self, request):
-        return False if self.model.objects.count() > 0 else True
+        return False if self.model.objects.count() > 2 else True
 
 
 class PageSettingsAdmin(admin.ModelAdmin):
+    list_display = ('style', 'language', 'layout')
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 0 else True
+
+
+class ReviewAdminInline(admin.TabularInline):
+    model = ReviewPhoto
+    raw_id_fields = ('photo',)
+    fields = ('photo', 'thumbnail')
+    readonly_fields = ('thumbnail',)
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.photo.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    model = Review
+    inlines = (ReviewAdminInline,)
+    fields = ('author', 'review',)
+    list_display = ('__str__', 'author', 'created_at')
+    exclude = ('created_at',)
+
+
+class ComparisonPhotoAdmin(admin.ModelAdmin):
+    model = ComparisonPhoto
+
+    list_display = ('before_thumb', 'after_thumb')
+
+    def before_thumb(self, obj):
+        return mark_safe(
+            '<img src="{}" width=60 height=60>'.format(obj.before.url))
+    before_thumb.short_description = u"Before"
+
+    def after_thumb(self, obj):
+        return mark_safe(
+            '<img src="{}" width=60 height=60>'.format(obj.before.url))
+    after_thumb.short_description = u"After"
 
 
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
-admin.site.register(AboutPage)
+admin.site.register(AboutPage, AboutPageAdmin)
+admin.site.register(FaqPage, FaqPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
 admin.site.register(ContactsPage, ContactsPageAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Language)
 admin.site.register(PageSettings, PageSettingsAdmin)
-admin.site.register(Review)
+admin.site.register(Review, ReviewAdmin)
+admin.site.register(ComparisonPhoto, ComparisonPhotoAdmin)

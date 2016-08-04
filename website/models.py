@@ -80,12 +80,16 @@ class PageSettings(models.Model):
     layout = models.IntegerField(choices=LAYOUTS, default=GRID)
 
     class Meta:
-        verbose_name_plural = 'Page Default Settings'
+        verbose_name_plural = 'Default Settings'
         verbose_name = verbose_name_plural
+
+    def __str__(self):
+        return 'Default Settings'
 
 
 class Gallery(models.Model):
     created = models.DateTimeField(default=timezone.now)
+    modified = models.DateTimeField(auto_now=True)
     photos_order = JSONField(default={}, blank=True, null=True)
     category = models.ForeignKey('Category', null=True)
 
@@ -130,6 +134,7 @@ class GalleryByLanguage(models.Model):
 class Category(models.Model):
 
     photos_order = JSONField(default={}, null=True, blank=True)
+    modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -143,6 +148,15 @@ class Category(models.Model):
 
     def remove_from_order(self, id):
         delete_from_order(self, id)
+
+    def __str__(self):
+        try:
+            return self.categorybylanguage_set.filter(
+                language__language_code='lt').first().name
+        except IndexError:
+            return 'Untitled gallery '
+        except Exception:
+            return 'Untitled gallery '
 
 
 class CategoryByLanguage(models.Model):
@@ -168,12 +182,14 @@ class Photo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to=image_path)
-    gallery = models.ForeignKey(Gallery)
+    gallery = models.ForeignKey(Gallery, null=True, blank=True)
+    uploaded_at = models.DateTimeField(default=timezone.now)
 
     @property
     def src(self):
         return self.image.url
 
+    @property
     def thumbnail(self):
         return mark_safe('<img src="%s" width=60 height=60>' % self.image.url)
 
@@ -194,7 +210,10 @@ class Photo(models.Model):
     pre_delete, sender=Photo,
     dispatch_uid='photos_delete_from_order_signal')
 def delete_photos_from_order(sender, instance, using, **kwargs):
-    instance.gallery.remove_from_order(instance.id)
+    try:
+        instance.gallery.remove_from_order(instance.id)
+    except Gallery.DoesNotExist:
+        pass
 
 
 class PhotoCategory(models.Model):
@@ -203,6 +222,8 @@ class PhotoCategory(models.Model):
 
     class Meta:
         unique_together = (('photo', 'category'),)
+        verbose_name = 'Photo for category'
+        verbose_name_plural = 'Photos for category'
 
     def save(self, *args, **kwargs):
         order_num = get_order_num(self.category.photos_order)
@@ -257,7 +278,7 @@ class ContactsPage(models.Model):
         max_length=50, blank=True, null=True)
     contact_form_send_button_text = models.CharField(
         max_length=50, blank=True, null=True)
-    language = models.ForeignKey(Language, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
 
     class Meta:
         verbose_name_plural = 'Contacts Page'
@@ -273,12 +294,13 @@ class ContactsPage(models.Model):
 class ContactsPagePhoto(models.Model):
     contacts_page = models.ForeignKey(ContactsPage)
     photo = models.ForeignKey(Photo, unique=True)
+    is_side_photo = models.BooleanField(default=False)
 
 
 class PricePage(models.Model):
-    modified = models.DateTimeField(default=timezone.now)
+    modified = models.DateTimeField(auto_now=True)
     heading = models.CharField(max_length=100, null=True, blank=True)
-    language = models.ForeignKey(Language, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
 
     def __str__(self):
         return 'Pricepage ' + self.language.language_code
@@ -287,15 +309,16 @@ class PricePage(models.Model):
         verbose_name_plural = 'Price Page'
 
 
+class PricePagePhoto(models.Model):
+    price_page = models.ForeignKey(PricePage)
+    photo = models.ForeignKey(Photo, unique=True)
+    is_side_photo = models.BooleanField(default=False)
+
+
 class Question(models.Model):
     heading = models.CharField(max_length=100, null=True, blank=True)
     body = RedactorField(verbose_name=u'Question Body', null=True, blank=True)
     pricepage = models.ForeignKey(PricePage, on_delete=models.CASCADE)
-
-
-class PricePagePhoto(models.Model):
-    price_page = models.ForeignKey(PricePage)
-    photo = models.ForeignKey(Photo, unique=True)
 
 
 class Message(models.Model):
@@ -322,7 +345,7 @@ class AboutPage(models.Model):
         verbose_name=u'Quote author', null=True, blank=True)
     text = RedactorField(verbose_name=u'Text', null=True, blank=True)
 
-    language = models.ForeignKey(Language, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True, unique=True)
 
     class Meta:
         verbose_name_plural = 'About Page'
@@ -334,32 +357,36 @@ class AboutPage(models.Model):
 class AboutPagePhoto(models.Model):
     about = models.ForeignKey(AboutPage)
     photo = models.ForeignKey(Photo, unique=True)
+    is_side_photo = models.BooleanField(default=False)
 
     def __str__(self):
         return 'About page photo'
 
-    def tumbnail(self):
-        pass
-
 
 class Review(models.Model):
-    photo = models.ImageField(upload_to="reviews-photos/")
-    text_editor = RedactorField(verbose_name=u'Review')
+    review = RedactorField(verbose_name=u'Review')
     author = models.CharField(max_length=200)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def text(self):
-        if self.text_editor:
-            return mark_safe(self.text_editor)
+        if self.review:
+            return mark_safe(self.review)
 
     def __str__(self):
         return self.author
+
+
+class ReviewPhoto(models.Model):
+    review = models.ForeignKey('Review')
+    photo = models.ForeignKey('Photo')
+    is_side_photo = models.BooleanField(default=False)
 
 
 class FaqPage(models.Model):
     modified = models.DateTimeField(default=timezone.now)
     heading = models.CharField(max_length=100, null=True, blank=True)
 
-    language = models.ForeignKey(Language, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
 
     class Meta:
         verbose_name_plural = 'FAQ Page'
@@ -367,11 +394,23 @@ class FaqPage(models.Model):
     def __str__(self):
         return 'FAQ Page ' + self.language.language_code
 
+
 class Question_FaqPage(models.Model):
     heading = models.CharField(max_length=100, null=True, blank=True)
     body = RedactorField(verbose_name=u'Question Body', null=True, blank=True)
     faqpage = models.ForeignKey(FaqPage, on_delete=models.CASCADE)
 
+
 class FAQPhoto(models.Model):
     faq_page = models.ForeignKey(FaqPage)
     photo = models.ForeignKey(Photo, unique=True)
+    is_side_photo = models.BooleanField(default=False)
+
+
+class ComparisonPhoto(models.Model):
+    before = models.ImageField(upload_to='retouch/')
+    after = models.ImageField(upload_to='retouch/')
+    name = models.CharField(max_length=150, blank=True, null=True)
+
+    def __str__(self):
+        return self.name

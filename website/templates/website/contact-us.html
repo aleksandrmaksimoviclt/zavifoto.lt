@@ -2,11 +2,11 @@
 {% load staticfiles %}
 {% block content %}
 <div class="row nomargin" id="content">
-<div class="col-md-9 nopadding" id="left">
+<div class="col-md-9 col-sm-12 col-xs-12 nopadding" id="left">
     <div class="faq">
         <div class="heading-wrapper">
-            <h1 style="font-size:24px; text-align:center;" class="nomargin">KONTAKTAI</h1> 
-            <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
+            <h1 class="page-heading" style="font-size:24px; text-align:center;" class="nomargin">KONTAKTAI</h1> 
+            <hr class="page-heading" style="width:100px; margin-top:8px; margin-bottom:8px;">
         </div>
     
         <div class="faq-content-wrapper">
@@ -62,81 +62,16 @@
         </div>
     </div>
 </div>
-<div class="col-md-3 nopadding" id="right">
+<div class="col-md-3 hidden-xs hidden-sm nopadding" id="right">
     <div class="demo-gallery">
         <ul id="lightgallery" class="list-unstyled marginbottom0">
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
-            <li class="col-xs-12 grid nopadding" data-src="{% static "website/img/1.jpg" %}" data-sub-html="<h4>Her morning</h4><p>Wedding, Portrait, Fashion, Nude, Nightlife.
-            We are ready for 2017 and 2018 year bookings!</p>">
-                <a href="">
-                    <img class="imgcover grid" src="{% static "website/img/1.jpg" %}">
-                </a>
-            </li>
+            {% for photo in photos %}
+                <li class="col-xs-12 grid nopadding" data-src="{{photo.image.url}}">
+                    <a href="">
+                        <img class="imgcover grid" src="{{photo.image.url}}">
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     </div>
 </div>

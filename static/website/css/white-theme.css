@@ -10,6 +10,10 @@ body{
 /*	position: fixed;*/
 }
 
+.noscroll{
+	overflow: hidden;
+}
+
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     line-height: 1;
 }
@@ -51,13 +55,14 @@ hr {
     border-color: transparent;
 }
 
-.language-button {
+a.language-button>button {
     text-transform: uppercase;
-    color:#333;
+    color:#999;
+    letter-spacing: 0.1em;
 }
 
-.current-language{
-	font-weight: bold;
+a.current-language>button {
+    color: #333;
 }
 
 /*SIDEBAR*/
@@ -66,11 +71,13 @@ hr {
     margin-top: 90px;
     height: calc(100% - 494px);
     margin-bottom: 420px;
+    letter-spacing: 0.1em;
 }
 
 .secondary-menu{
 	padding-bottom: 25px !important;
 	padding-top: 25px !important;
+	letter-spacing: 0.1em;
 }
 
 .main-category{

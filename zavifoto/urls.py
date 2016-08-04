@@ -13,3 +13,6 @@ urlpatterns = [
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += patterns('',
+  url(r'^plate/', include('django_spaghetti.urls')),
+)

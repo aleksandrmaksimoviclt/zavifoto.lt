@@ -35,11 +35,17 @@
     <!-- LightGallery for Index-grid.html -->
     <link rel="stylesheet" type="text/css" href="{% static "website/css/lightgallery.css" %}">
     <!-- Custom CSS -->
-    <link href="{% static "website/css/custom.css" %}" rel="stylesheet">
-
-
+    {% if pagesettings.style == 0 %}
+        <link href="{% static "website/css/white-theme.css" %}" rel="stylesheet">
+    {% elif pagesettings.style == 1 %}
+        <link href="{% static "website/css/black-theme.css" %}" rel="stylesheet">
+    {% endif %}
     <!-- Custom Sidebar-CSS -->
-    <link href="{% static "website/css/simple-sidebar.css" %}" rel="stylesheet">
+    {% if pagesettings.style == 0 %}
+        <link href="{% static "website/css/sidebar-white.css" %}" rel="stylesheet">
+    {% elif pagesettings.style == 1 %}
+        <link href="{% static "website/css/sidebar-black.css" %}" rel="stylesheet">
+    {% endif %}
 
     {% block extra_css %}
     {% endblock %}
@@ -59,12 +65,12 @@
 
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
+            <div id="hambrger" class="hamburger hamburger--collapse is-active menu-close" type="button">
+              <span class="hamburger-box">
+                <span class="hamburger-inner"></span>
+              </span>
+            </div>
             <ul class="sidebar-nav">
-                <div id="hambrger" class="hamburger hamburger--collapse is-active menu-close" type="button">
-                  <span class="hamburger-box">
-                    <span class="hamburger-inner"></span>
-                  </span>
-                </div>
                 <li class="sidebar-brand">
                     <a class="logo-wrapper" href="/">
                         <span class="logo">VILMANTAS ŽILINSKAS</span><br>
@@ -96,7 +102,7 @@
                 <div class="sidebar-bottom-group">
                     <div class="btn-group flat" role="group">
                         {% for language in available_languages %}
-                            <button type="button" class="btn btn-default"><a class="language-button {% if language.language_code == current_language %}current-language{% endif %}" href="/set-language/{{language.language_code}}">{{language.language_code}}</a></button>
+                            <a class="language-button {% if language.language_code == current_language %}current-language{% endif %}" href="/set-language/{{language.language_code}}"><button type="button" class="btn btn-default">{{language.language_code}}</button></a>
                         {% endfor %}
                     </div>
                     <hr style="width:40%;">
@@ -128,7 +134,7 @@
                     </div>
                     <div class="copyright wrapper">
                         <span class="client">2016 &copy; Vilmantas Žilinskas.</span><br>
-                        <span class="author">Made with <i style="font-size:9.5px; color:red;" class="material-icons">&#xE87D;</i> by litebits</span>
+                        <span class="author">Made with <i style="font-size:9.5px; color:red;" class="material-icons">&#xE87D;</i> by <a class="litebits" href="http://litebits.co">litebits</a></span>
                     </div>
                 </div>
                 
@@ -138,6 +144,7 @@
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
+            <div class="overlay"></div>
             {% block content %}
             {% endblock %}                     
         </div>
@@ -148,6 +155,7 @@
     <!-- /#wrapper -->
 
     <!-- jQuery -->
+    <script async defer data-pin-hover="true" data-pin-tall="true" data-pin-lang="en" data-pin-save="true" src="//assets.pinterest.com/js/pinit.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
