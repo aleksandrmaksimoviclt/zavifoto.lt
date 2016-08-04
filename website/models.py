@@ -181,6 +181,8 @@ class Photo(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to=image_path)
     gallery = models.ForeignKey(Gallery)
+    is_for_index_slider = models.BooleanField(default=False)
+    is_for_index_grid = models.BooleanField(default=False)
     is_for_contacts_page_side = models.BooleanField(default=False)
     is_for_price_page_side = models.BooleanField(default=False)
     is_for_about_us_page_side = models.BooleanField(default=False)
