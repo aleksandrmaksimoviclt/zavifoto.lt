@@ -1,3 +1,4 @@
+
 from django.contrib import admin
 from .models import *
 
@@ -5,6 +6,12 @@ from .models import *
 class AboutPagePhotos(admin.TabularInline):
     model = AboutPagePhoto
     raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
 
 
 class AboutPageAdmin(admin.ModelAdmin):
@@ -78,27 +85,63 @@ class GalleryAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'modified',)
 
 
-class Question_FAQInline(admin.StackedInline):
+class FaqPhotosInline(admin.TabularInline):
+    model = FAQPhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
+
+
+class QuestionFAQInline(admin.StackedInline):
     model = Question_FaqPage
 
 
 class FaqPageAdmin(admin.ModelAdmin):
-    inlines = [Question_FAQInline]
+    inlines = [QuestionFAQInline, FaqPhotosInline]
+    exclude = ('modified',)
+    list_display = ('__str__', 'language', 'modified')
 
 
 class QuestionInline(admin.StackedInline):
     model = Question
 
 
+class PricePhotosInline(admin.TabularInline):
+    model = PricePagePhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
+
+
 class PricePageAdmin(admin.ModelAdmin):
-    inlines = [QuestionInline]
+    inlines = [PricePhotosInline, QuestionInline]
     list_display = ('__str__', 'heading', 'language', 'modified',)
+
+
+class ContactsPhotosInline(admin.TabularInline):
+    model = ContactsPagePhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
 
 
 class ContactsPageAdmin(admin.ModelAdmin):
     inlines = [
-        # ContactsPageByLanguageInline,
+        ContactsPhotosInline,
     ]
+    list_display = ('__str__', 'language')
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 2 else True
@@ -111,17 +154,24 @@ class PageSettingsAdmin(admin.ModelAdmin):
         return False if self.model.objects.count() > 0 else True
 
 
-class ReviewAdmin(admin.ModelAdmin):
-    model = Review
+class ReviewAdminInline(admin.TabularInline):
+    model = ReviewPhoto
     raw_id_fields = ('photo',)
-    fields = ('author', 'review', 'photo', 'thumbnail')
+    fields = ('photo', 'thumbnail')
     readonly_fields = ('thumbnail',)
-    list_display = ('__str__', 'author', 'thumbnail', 'created_at')
-    exclude = ('created_at',)
 
     def thumbnail(self, obj):
         return mark_safe(obj.photo.thumbnail)
     thumbnail.short_description = u"Thumbnail"
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    model = Review
+    inlines = (ReviewAdminInline,)
+    fields = ('author', 'review',)
+    list_display = ('__str__', 'author', 'created_at')
+    exclude = ('created_at',)
+
 
 class ComparisonPhotoAdmin(admin.ModelAdmin):
     model = ComparisonPhoto
@@ -129,12 +179,15 @@ class ComparisonPhotoAdmin(admin.ModelAdmin):
     list_display = ('before_thumb', 'after_thumb')
 
     def before_thumb(self, obj):
-        return mark_safe('<img src="{}" width=60 height=60>'.format(obj.before.url))
+        return mark_safe(
+            '<img src="{}" width=60 height=60>'.format(obj.before.url))
     before_thumb.short_description = u"Before"
 
     def after_thumb(self, obj):
-        return mark_safe('<img src="{}" width=60 height=60>'.format(obj.before.url))
+        return mark_safe(
+            '<img src="{}" width=60 height=60>'.format(obj.before.url))
     after_thumb.short_description = u"After"
+
 
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
