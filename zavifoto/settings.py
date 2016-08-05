@@ -31,17 +31,16 @@ INSTALLED_APPS = [
 
     # pypi packages
     'sortedm2m',
-    # wysiwyg redactor
     'redactor',
-    # 'adminsortable2',
-    'django_spaghetti',
-
 ]
-SPAGHETTI_SAUCE = {
-  'apps': ['website'],
-  'show_fields': False,
-  'exclude': {'auth': ['user']}
-}
+
+if DEBUG:
+    INSTALLED_APPS += ['django_spaghetti']
+    SPAGHETTI_SAUCE = {
+      'apps': ['website'],
+      'show_fields': False,
+      'exclude': {'auth': ['user']}
+    }
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -138,15 +137,7 @@ LOGIN_URL = '/admin/login/'
 try:
     from .local_settings import *
 except ImportError:
-    print('--------------------------------')
-    import dj_database_url
-
-    # Honor the 'X-Forwarded-Proto' header for request.is_secure()
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    DATABASES = {
-        'default': dj_database_url.config(default='postgres://localhost')}
-except Exception as e:
-    print(e)
+    print(10*'-' + 'Create local_settings.py' + 10*'-')
 
 if not DEBUG:
     LOGGING = {
@@ -181,3 +172,6 @@ if not DEBUG:
             },
         }
     }
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'fixtures'),
+)
