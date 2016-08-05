@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .utils import get_ordered_photos
 
+
 def index(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
@@ -108,7 +109,7 @@ class UploadView(TemplateView):
 
     template_name = 'website/upload.html'
 
-    @method_decorator(login_required)
+    @method_decorator(login_required(login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(UploadView, self).dispatch(*args, **kwargs)
 
@@ -249,13 +250,13 @@ def reviews(request):
 
     response = render(
         request,
-        'website/reviews.html', {
-        'reviews': reviews,
-        'current_language': language.language_code,
-        'available_languages': available_languages,
-        'galleries': data,
-        'photos': photos,
-        'pagesettings': pagesettings,
+            'website/reviews.html', {
+            'reviews': reviews,
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'galleries': data,
+            'photos': photos,
+            'pagesettings': pagesettings,
         })
     return response
 
@@ -299,6 +300,7 @@ def faq(request):
         })
     return response
 
+
 @login_required(login_url='/')
 def photosorting(request):
     categories = CategoryByLanguage.objects.filter(language__language='lt')
@@ -312,7 +314,7 @@ def photosorting(request):
 
     return response
 
-
+@login_required(login_url='/')
 def categorysorting(request, category_id):
 
     categories = CategoryByLanguage.objects.filter(
@@ -338,7 +340,7 @@ def categorysorting(request, category_id):
 
     return response
 
-
+@login_required(login_url='/')
 def galleriessorting(request, category_id, gallery_id):
     gallery = Gallery.objects.get(id=gallery_id)
     response = render(
@@ -369,7 +371,6 @@ def change_order(request):
         return HttpResponse('Successfully changed order.')
     except Exception as e:
         return HttpResponse(e)
-
 
 
 def get_language_obj(request):
