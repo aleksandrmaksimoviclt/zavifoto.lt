@@ -65,4 +65,4 @@ $(document).ready(function() {
         slider1.resize();
         slider2.resize();
     });
-};
+});
