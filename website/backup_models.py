@@ -276,7 +276,6 @@ class AbstractPage(models.Model):
 
 
 class ContactsPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     page_title = models.CharField(max_length=100)
     heading = RedactorField(verbose_name=u'Heading')
     heading_text = RedactorField(verbose_name=u'Heading Text')
@@ -324,7 +323,6 @@ class ContactsPagePhoto(models.Model):
 
 
 class PricePage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     modified = models.DateTimeField(auto_now=True)
     heading = models.CharField(max_length=100, null=True, blank=True)
     language = models.ForeignKey(Language, null=True)
@@ -372,7 +370,6 @@ class Message(models.Model):
 
 
 class AboutPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     modified = models.DateTimeField(default=timezone.now)
     heading = models.CharField(max_length=100, null=True, blank=True)
     quote = RedactorField(verbose_name=u'Quote', null=True, blank=True)
@@ -425,7 +422,6 @@ class ReviewPhoto(models.Model):
 
 
 class FaqPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     modified = models.DateTimeField(default=timezone.now)
     heading = models.CharField(max_length=100, null=True, blank=True)
 
@@ -457,9 +453,10 @@ class FAQPhoto(models.Model):
     photo = models.ForeignKey(Photo, unique=True)
     is_side_photo = models.BooleanField(default=False)
 
+#new model
 class RetouchPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     language = models.ForeignKey(Language, null=True)
+#endnew model
 
 class RetouchPage_Seo(models.Model):
     page_title = models.CharField(max_length=70)
@@ -476,14 +473,3 @@ class ComparisonPhoto(models.Model):
 
     def __str__(self):
         return self.name
-
-class IndexPage(models.Model):
-    language = models.ForeignKey(Language, null=True)
-
-class IndexPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
-    indexpage = models.ForeignKey(IndexPage,null=True)

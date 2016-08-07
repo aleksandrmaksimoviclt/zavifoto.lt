@@ -59,6 +59,8 @@ def retouch(request):
     except:
         comparisonphotos = []
 
+    seo = RetouchPage.objects.filter(language=language).seo.first()
+
     response = render(
         request,
         'website/retouch.html', {
@@ -67,6 +69,7 @@ def retouch(request):
             'galleries': data,
             'comparisonphotos': comparisonphotos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
