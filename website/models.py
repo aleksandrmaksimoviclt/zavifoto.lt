@@ -55,7 +55,6 @@ def get_order_num(order):
     except (AttributeError, ValueError):
         return str(1)
 
-
 class Cms(models.Model):
     top_text = models.TextField(blank=True, null=True)
     main_text = models.TextField(blank=True, null=True)
@@ -73,6 +72,17 @@ class Language(models.Model):
     def __str__(self):
         return self.language or None
 
+##new
+class Seo(models.Model):
+    google_site_verification_code = models.CharField(max_length=100)
+    page_title = models.CharField(max_length=70)
+    meta_description = models.CharField(max_length=156)
+    title_for_facebook = models.CharField(max_length=27)
+    description_for_facebook = models.CharField(max_length=300)
+    image_for_facebook = models.ImageField(upload_to='seo/')
+    # language = models.ForeignKey(Language)
+##endnew
+
 
 class PageSettings(models.Model):
     style = models.IntegerField(choices=STYLES, default=WHITE)
@@ -85,7 +95,6 @@ class PageSettings(models.Model):
 
     def __str__(self):
         return 'Default Settings'
-
 
 class Gallery(models.Model):
     created = models.DateTimeField(default=timezone.now)
@@ -117,6 +126,8 @@ class GalleryByLanguage(models.Model):
     gallery = models.ForeignKey(Gallery)
     name = models.CharField(max_length=100)
     url = models.CharField(max_length=100, blank=True)
+    #newfield seo
+    seo = models.ForeignKey(Seo, null=True)
     language = models.ForeignKey(Language)
 
     class Meta(object):
@@ -164,6 +175,8 @@ class CategoryByLanguage(models.Model):
     name = models.CharField(max_length=100)
     language = models.ForeignKey(Language)
     url = models.CharField(max_length=100, blank=True)
+    #newfield seo
+    seo = models.ForeignKey(Seo, null=True)
 
     def __str__(self):
         return self.name
@@ -279,6 +292,8 @@ class ContactsPage(models.Model):
     contact_form_send_button_text = models.CharField(
         max_length=50, blank=True, null=True)
     language = models.ForeignKey(Language, null=True)
+    #newfield seo
+    seo = models.ForeignKey(Seo, null=True)
 
     class Meta:
         verbose_name_plural = 'Contacts Page'
@@ -301,6 +316,8 @@ class PricePage(models.Model):
     modified = models.DateTimeField(auto_now=True)
     heading = models.CharField(max_length=100, null=True, blank=True)
     language = models.ForeignKey(Language, null=True)
+    #newfield seo
+    seo = models.ForeignKey(Seo, null=True)
 
     def __str__(self):
         return 'Pricepage ' + self.language.language_code
@@ -344,6 +361,8 @@ class AboutPage(models.Model):
     quote_author = RedactorField(
         verbose_name=u'Quote author', null=True, blank=True)
     text = RedactorField(verbose_name=u'Text', null=True, blank=True)
+    #newfield
+    seo = models.ForeignKey(Seo, null=True)
 
     language = models.ForeignKey(Language, null=True, unique=True)
 
@@ -386,6 +405,8 @@ class FaqPage(models.Model):
     modified = models.DateTimeField(default=timezone.now)
     heading = models.CharField(max_length=100, null=True, blank=True)
 
+    seo = models.ForeignKey(Seo, null=True)
+
     language = models.ForeignKey(Language, null=True)
 
     class Meta:
@@ -406,6 +427,11 @@ class FAQPhoto(models.Model):
     photo = models.ForeignKey(Photo, unique=True)
     is_side_photo = models.BooleanField(default=False)
 
+#new model
+class RetouchPage(models.Model):
+    seo = models.ForeignKey(Seo, null=True)
+    language = models.ForeignKey(Language, null=True)
+#endnew model
 
 class ComparisonPhoto(models.Model):
     before = models.ImageField(upload_to='retouch/')
