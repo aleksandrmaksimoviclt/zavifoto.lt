@@ -20,6 +20,8 @@ def index(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
+    seo = IndexPage.objects.get(language=language).indexpage_seo_set.first()
+
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
         try:
@@ -42,6 +44,7 @@ def index(request):
             'galleries': data,
             'pagesettings': pagesettings,
             'photos': photos,
+            'seo': seo,
         })
     return response
 
@@ -59,7 +62,7 @@ def retouch(request):
     except:
         comparisonphotos = []
 
-    seo = RetouchPage.objects.filter(language=language).seo.first()
+    seo = RetouchPage.objects.get(language=language).retouchpage_seo_set.first()
 
     response = render(
         request,
@@ -138,6 +141,8 @@ def contact(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
+    seo = ContactsPage.objects.get(language=language).contactspage_seo_set.first()
+
     try:
         contactspage = ContactsPage.objects.filter(language=language).first()
 
@@ -159,6 +164,7 @@ def contact(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -170,6 +176,8 @@ def pricing(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    seo = PricePage.objects.get(language=language).pricepage_seo_set.first()
 
     try:
         pricepage = PricePage.objects.filter(language=language).first()
@@ -199,10 +207,11 @@ def pricing(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
-
+# FINISHED HERE, CONTINUE TO ADD SEO UERIES BELOW!
 def about(request):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
