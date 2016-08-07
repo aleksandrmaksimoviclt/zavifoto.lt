@@ -40,17 +40,18 @@ $( "#sortable" ).disableSelection();
 <a href="{{ back_url }}">Go back</a>
 </div>
 {% endif %}
-{% block content %}
 
-<div class=" container categories-wrapper">
-    <p>Categories</p>
+{% block content %}
+<div class="container">
     <ul>
-    {% for category in categories %}
-        <li><a href="{{category.url}}">{{category.name}}</a></li>
-    {% endfor %}
+        <li><a href="/sort/categories">Categories</a></li>
+        <li><a href="/sort/contacts">Contacts</a></li>
+        <li><a href="/sort/prices">Prices</a></li>
+        <li><a href="/sort/reviews">Reviews</a></li>
+        <li><a href="/sort/about">About</a></li>
+        <li><a href="/sort/faq">FAQ</a></li>
     </ul>
 </div>
-
 {% endblock %}
 
 <div class="container photos-wrapper" style="font-size:18px;">
@@ -99,15 +100,10 @@ $.ajaxSetup({
 
 $('#save').click(function(){
     var photos = $('#sortable').find('.ui-state-default');
-    if ('{{type}}' == 'gallery'){
-        var id = '{{gallery.id}}'
-    }
-    else {
-        var id = '{{category.category.id}}'
-    }
     var new_order = {
-        "type": "{{type}}",
-        "id": id };
+        "type": "{{ type }}",
+        "id": "{{ id }}"
+    };
     var order = {};
 
     for (i = 0; i < photos.length; i++) {
@@ -116,7 +112,7 @@ $('#save').click(function(){
     new_order['order'] = order;
     console.log(new_order);
     $.ajax({
-            url: '/change-order',
+            url: '/sort/change-order',
             type: 'POST',
             data: JSON.stringify(new_order),
             contentType: "application/json",
