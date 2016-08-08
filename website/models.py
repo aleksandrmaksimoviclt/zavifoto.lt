@@ -180,8 +180,10 @@ class CategoryByLanguage(models.Model):
 
         super(CategoryByLanguage, self).save(*args, **kwargs)
 
+
 class CategoryByLanguage_Seo(SEO):
     categorybylanguage = models.ForeignKey(CategoryByLanguage ,null=True)
+
 
 def image_path(instance, filename):
     return '/'.join([str(instance) + '_' + filename])
@@ -251,6 +253,7 @@ class PhotoCategory(models.Model):
 def delete_photos_from_category_order(sender, instance, using, **kwargs):
     instance.category.remove_from_order(instance.photo.id)
 
+
 class ContactsPage(models.Model):
     page_name_in_menu = models.CharField(max_length=100)
     photos_order = JSONField(default={}, null=True, blank=True)
@@ -285,8 +288,9 @@ class ContactsPage(models.Model):
     def __str__(self):
         return 'Kontaktai ' + self.language.language_code + ' kalba'
 
+
 class ContactsPage_Seo(SEO):
-    contactspage = models.ForeignKey(ContactsPage ,null=True)
+    contactspage = models.ForeignKey(ContactsPage, null=True)
 
 
 class ContactsPagePhoto(models.Model):
@@ -322,8 +326,10 @@ class PricePage(models.Model):
     class Meta:
         verbose_name_plural = 'Price Page'
 
+
 class PricePage_Seo(SEO):
-    pricepage = models.ForeignKey(PricePage ,null=True)
+    pricepage = models.ForeignKey(PricePage, null=True)
+
 
 class PricePagePhoto(models.Model):
     price_page = models.ForeignKey(PricePage, related_name='photos')
@@ -385,8 +391,10 @@ class AboutPage(models.Model):
     def __str__(self):
         return 'About page ' + self.language.language_code
 
+
 class AboutPage_Seo(SEO):
-    aboutpage = models.ForeignKey(AboutPage ,null=True)
+    aboutpage = models.ForeignKey(AboutPage, null=True)
+
 
 class AboutPagePhoto(models.Model):
     about = models.ForeignKey('AboutPage', related_name='photos')
@@ -430,8 +438,10 @@ class ReviewPhoto(models.Model):
     photo = models.ForeignKey('Photo')
     is_side_photo = models.BooleanField(default=False)
 
+
 class ReviewPage(models.Model):
     language = models.ForeignKey(Language, null=True)
+
 
 class ReviewPage_Seo(SEO):
     reviewpage = models.ForeignKey(ReviewPage, null=True)
@@ -449,6 +459,7 @@ class FaqPage(models.Model):
 
     def __str__(self):
         return 'FAQ Page ' + self.language.language_code
+
     def save(self, *args, **kwargs):
         if self._state.adding:
             order_num = get_order_num(self.review.photos_order)
@@ -463,8 +474,9 @@ class FaqPage(models.Model):
 def delete_photos_from_review_order(sender, instance, using, **kwargs):
     delete_from_order(instance.review, instance.photo.id)
 
+
 class FaqPage_Seo(SEO):
-    faqpage = models.ForeignKey(FaqPage ,null=True)
+    faqpage = models.ForeignKey(FaqPage, null=True)
 
 
 class Question_FaqPage(models.Model):
@@ -485,18 +497,22 @@ class FAQPhoto(models.Model):
             self.faq_page.save()
         super(FAQPhoto, self).save(*args, **kwargs)
 
+
 @receiver(
     pre_delete, sender=FAQPhoto,
     dispatch_uid='photos_delete_from_faq_order_signal')
 def delete_photos_from_faq_order(sender, instance, using, **kwargs):
     delete_from_order(instance.faq_page, instance.photo.id)
 
+
 class RetouchPage(models.Model):
     page_name_in_menu = models.CharField(max_length=100)
     language = models.ForeignKey(Language, null=True)
 
+
 class RetouchPage_Seo(SEO):
-    retouchpage = models.ForeignKey(RetouchPage,null=True)
+    retouchpage = models.ForeignKey(RetouchPage, null=True)
+
 
 class ComparisonPhoto(models.Model):
     before = models.ImageField(upload_to='retouch/')
@@ -506,8 +522,10 @@ class ComparisonPhoto(models.Model):
     def __str__(self):
         return self.name
 
+
 class IndexPage(models.Model):
     language = models.ForeignKey(Language, null=True)
 
+
 class IndexPage_Seo(SEO):
-    indexpage = models.ForeignKey(IndexPage,null=True)
+    indexpage = models.ForeignKey(IndexPage, null=True)
