@@ -126,7 +126,7 @@ class GalleryPhoto(models.Model):
     def save(self, *args, **kwargs):
         if self._state.adding:
             order_num = get_order_num(self.gallery.photos_order)
-            self.gallery.photos_order[order_num] = str(self.id)
+            self.gallery.photos_order[order_num] = str(self.photo.id)
             self.gallery.save()
         super(GalleryPhoto, self).save(*args, **kwargs)
 
