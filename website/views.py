@@ -116,13 +116,27 @@ class UploadView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(UploadView, self).get_context_data(**kwargs)
         context['galleries'] = Gallery.objects.all()
+        context['categories'] = Category.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
-        gallery_id = request.POST.get('gallery')
-        gallery = Gallery.objects.get(id=gallery_id)
-        for file in request.FILES.getlist('files'):
-            Photo.objects.create(name=file.name, image=file, gallery=gallery)
+        _type = request.POST.get('type')
+        _id = request.POST.get('id')
+        print(_type)
+        if _type == 'gallery':
+            gallery = Gallery.objects.get(id=_id)
+            for file in request.FILES.getlist('files'):
+                Photo.objects.create(name=file.name, image=file, gallery=gallery)
+
+        elif _type == 'category':
+            _category = Category.objects.get(id=_id)
+            for file in request.FILES.getlist('files'):
+                _photo = Photo.objects.create(name=file.name, image=file)
+                test = PhotoCategory.objects.create(category=_category, photo=_photo)
+                print(_category, _photo)
+                print(test)
+        else:
+            HttpResponse('No such type: {}'.format(_type))
 
         return HttpResponse('Done!')
 

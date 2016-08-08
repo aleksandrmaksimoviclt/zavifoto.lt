@@ -2,19 +2,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Photos Upload page</title>
+  <title>Photos Upload page</title>
 </head>
 <body>
+
 <section>
- 	<form target="invisible" action="/upload/" method="POST" enctype="multipart/form-data" id='upload'>{% csrf_token %}
- 		<input type="file" name="files" multiple/>
- 		<input type="submit" value="Submit"/>
-	</form>
-	<select name='gallery' form='upload'>
- 		{% for gallery in galleries %}
-  		<option value={{gallery.id}}>{{gallery.name}}</option>
- 		{% endfor %}
-	</select>
+  <form target="invisible" action="/upload/" method="POST" enctype="multipart/form-data" id='upload'>{% csrf_token %}
+    <input type="file" name="files" multiple/>
+    <input type="submit" value="Submit"/>
+  </form>
+
+  <select name='type' id='type' form='upload'>
+    <option disabled selected value>-----------</option>
+    <option class='type' value='gallery'>Gallery</option>
+    <option class='type' value='category'>Category</option>
+  </select>
+
+  <select name='id' form='upload'  style='display: None' id='gallery'>
+    {% for gallery in galleries %}
+    <option value={{gallery.id}}>{{gallery}}</option>
+    {% endfor %}
+  </select>
+
+  <select name='id' form='upload' style='display: None' id='category'>
+    {% for category in categories %}
+    <option value={{category.id}}>{{category}}</option>
+    {% endfor %}
+  </select>
 </section>
+
+<script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+
+<script>
+$( document ).ready(function(){
+  $("#type").click(function(){
+    var _type = $(this).val();
+  if (_type == 'category'){
+    $("#gallery").css('display', 'None');
+    $("#category").css('display', 'unset');
+  }
+  else {
+    $("#category").css('display', 'None');
+    $("#gallery").css('display', 'unset');
+  };
+
+});
+})
+
+</script>
 </body>
 </html>
