@@ -27,8 +27,9 @@
 
 
 <style>
-#sortable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
-#sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 1em; text-align: center; }
+#sortable { list-style-type: none; margin: 0; padding: 0; }
+#sortable li {float: left; font-size: 1em; text-align: center; }
+img.imgcover.grid{width:100%; height:100%; object-fit: cover;}
 </style>
  
 <script>
@@ -93,12 +94,12 @@ $( "#sortable" ).disableSelection();
         <div id="page-content-wrapper">
             {% block content %}
             {% endblock %}
-            <div class="container photos-wrapper" style="font-size:18px;">
+            <div class="photos-wrapper" style="font-size:18px;">
                 {% if photos %}<button id='save'>Save</button>{% endif %}
                 <ul id="sortable">
                     {% for photo in photos%}
                       <li class="col-xs-12 col-sm-4 col-md-3 grid nopadding ui-state-default" photo_id="{{ photo.id }}">
-                        <img style="imgcover grid" src="{{photo.src}}">
+                        <img class="imgcover grid" src="{{photo.src}}">
                       </li>
                     {% endfor %}
                 </ul>

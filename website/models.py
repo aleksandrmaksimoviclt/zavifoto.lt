@@ -311,7 +311,7 @@ class ContactsPagePhoto(models.Model):
             order_num = get_order_num(self.review.photos_order)
             self.review.photos_order[order_num] = str(self.photo.id)
             self.review.save()
-        super(ReviewPhoto, self).save(*args, **kwargs)
+        super(ContactsPagePhoto, self).save(*args, **kwargs)
 
 
 @receiver(
