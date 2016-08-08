@@ -18,7 +18,8 @@ def index(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
     try:
-        seo = IndexPage.objects.get(language=language).indexpage_seo_set.first()
+        seo = IndexPage.objects.get(
+            language=language).indexpage_seo_set.first()
     except:
         seo = []
     if pagesettings.layout == 0:
@@ -62,7 +63,8 @@ def retouch(request):
         comparisonphotos = []
 
     try:
-        seo = RetouchPage.objects.get(language=language).retouchpage_seo_set.first()
+        seo = RetouchPage.objects.get(
+            language=language).retouchpage_seo_set.first()
     except:
         seo = []
 
@@ -132,21 +134,29 @@ class UploadView(TemplateView):
     def post(self, request, *args, **kwargs):
         _type = request.POST.get('type')
         _id = request.POST.get('id')
-        print(_type)
+        files = request.FILES.getlist('files')
+        if not files:
+            return HttpResponse('No photos selected')
+
         if _type == 'gallery':
-            gallery = Gallery.objects.get(id=_id)
-            for file in request.FILES.getlist('files'):
-                Photo.objects.create(name=file.name, image=file, gallery=gallery)
+            _gallery = Gallery.objects.filter(id=_id)
+            if _gallery.exists():
+                _gallery = _gallery.first()
+                for file in files:
+                    _photo = Photo.objects.create(name=file.name, image=file)
+                    GalleryPhoto.objects.create(photo=_photo, gallery=_gallery)
 
         elif _type == 'category':
-            _category = Category.objects.get(id=_id)
-            for file in request.FILES.getlist('files'):
-                _photo = Photo.objects.create(name=file.name, image=file)
-                test = PhotoCategory.objects.create(category=_category, photo=_photo)
-                print(_category, _photo)
-                print(test)
+            _category = Category.objects.filter(id=_id)
+            if _category.exists():
+                _category = _category.first()
+                for file in files:
+                    _photo = Photo.objects.create(name=file.name, image=file)
+                    PhotoCategory.objects.create(
+                        category=_category, photo=_photo)
         else:
-            HttpResponse('No such type: {}'.format(_type))
+            for file in files:
+                Photo.objects.create(name=file.name, image=file)
 
         return HttpResponse('Done!')
 
@@ -234,6 +244,7 @@ def pricing(request):
             'seo': seo,
         })
     return response
+
 
 def about(request):
     available_languages = Language.objects.all()
