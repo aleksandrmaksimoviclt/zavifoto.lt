@@ -13,10 +13,12 @@ class AboutPagePhotos(admin.TabularInline):
         return mark_safe(obj.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
+
 class AboutPageSeo(admin.TabularInline):
     model = AboutPage_Seo
     extra = 1
     max_num = 1
+
 
 class AboutPageAdmin(admin.ModelAdmin):
     model = AboutPage
@@ -24,14 +26,16 @@ class AboutPageAdmin(admin.ModelAdmin):
     inlines = [AboutPagePhotos, AboutPageSeo]
     fields = (
         'heading', 'quote', 'quote_author', 'text', 'language')
-    
+
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 2 else True
+
 
 class CategoryByLanguageSeoInline(admin.TabularInline):
     model = CategoryByLanguage_Seo
     extra = 1
     max_num = 1
+
 
 class CategoryInline(admin.StackedInline):
     model = CategoryByLanguage
@@ -46,6 +50,7 @@ class CategoryInline(admin.StackedInline):
             return extra - obj.categorybylanguage_set.count()
         return extra
 
+
 class PhotoCategoryAdmin(admin.TabularInline):
     model = PhotoCategory
     raw_id_fields = ('photo',)
@@ -54,6 +59,7 @@ class PhotoCategoryAdmin(admin.TabularInline):
     def thumbnail(self, obj):
         return mark_safe(obj.photo.thumbnail)
     thumbnail.short_description = u"Thumbnail"
+
 
 class CategoryAdmin(admin.ModelAdmin):
     inlines = [
@@ -77,16 +83,18 @@ class PhotoAdmin(admin.ModelAdmin):
 
 
 class GalleryInline(admin.TabularInline):
-    model = Photo
+    model = GalleryPhoto
     readonly_fields = ('thumbnail',)
+    raw_id_fields = ('photo',)
 
     def thumbnail(self, obj):
-        return mark_safe(obj.thumbnail)
+        return mark_safe(obj.photo.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
 
 class GalleryByLanguageInline(admin.TabularInline):
     model = GalleryByLanguage
+
 
 class GalleryAdmin(admin.ModelAdmin):
     inlines = (
@@ -95,6 +103,7 @@ class GalleryAdmin(admin.ModelAdmin):
 
     exclude = ('photos_order', 'created')
     list_display = ('__str__', 'modified',)
+
 
 class FaqPhotosInline(admin.TabularInline):
     model = FAQPhoto
@@ -106,22 +115,27 @@ class FaqPhotosInline(admin.TabularInline):
         return mark_safe(obj.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
+
 class QuestionFAQInline(admin.StackedInline):
     model = Question_FaqPage
     extra = 1
+
 
 class FaqPageSeoInline(admin.TabularInline):
     model = FaqPage_Seo
     extra = 1
     max_num = 1
 
+
 class FaqPageAdmin(admin.ModelAdmin):
     inlines = [QuestionFAQInline, FaqPhotosInline, FaqPageSeoInline]
     exclude = ('modified',)
     list_display = ('__str__', 'language', 'modified')
 
+
 class QuestionInline(admin.StackedInline):
     model = Question
+
 
 class PricePhotosInline(admin.TabularInline):
     model = PricePagePhoto
@@ -133,10 +147,12 @@ class PricePhotosInline(admin.TabularInline):
         return mark_safe(obj.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
+
 class PricePageSeoInline(admin.TabularInline):
     model = PricePage_Seo
     extra = 1
     max_num = 1
+
 
 class PricePageAdmin(admin.ModelAdmin):
     inlines = [PricePhotosInline, QuestionInline, PricePageSeoInline]
@@ -153,10 +169,12 @@ class ContactsPhotosInline(admin.TabularInline):
         return mark_safe(obj.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
+
 class ContactsPageSeoInline(admin.TabularInline):
     model = ContactsPage_Seo
     extra = 1
     max_num = 1
+
 
 class ContactsPageAdmin(admin.ModelAdmin):
     inlines = [
@@ -210,14 +228,16 @@ class ComparisonPhotoAdmin(admin.ModelAdmin):
             '<img src="{}" width=60 height=60>'.format(obj.before.url))
     after_thumb.short_description = u"After"
 
+
 class IndexPageInline(admin.TabularInline):
     model = IndexPage_Seo
     extra = 1
     max_num = 1
 
+
 class IndexPageAdmin(admin.ModelAdmin):
     model = IndexPage
-    inlines = [IndexPageInline,]
+    inlines = [IndexPageInline]
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 2 else True
@@ -228,16 +248,17 @@ class RetouchPageInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
+
 class RetouchPageAdmin(admin.ModelAdmin):
     model = RetouchPage
-    inlines = [RetouchPageInline,]
+    inlines = [RetouchPageInline]
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 2 else True
 
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
-#no seo on top ------------------
+# no seo on top ------------------
 admin.site.register(AboutPage, AboutPageAdmin)
 admin.site.register(FaqPage, FaqPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)

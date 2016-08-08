@@ -18,7 +18,8 @@ def index(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
     try:
-        seo = IndexPage.objects.get(language=language).indexpage_seo_set.first()
+        seo = IndexPage.objects.get(
+            language=language).indexpage_seo_set.first()
     except:
         seo = []
     if pagesettings.layout == 0:
@@ -62,7 +63,8 @@ def retouch(request):
         comparisonphotos = []
 
     try:
-        seo = RetouchPage.objects.get(language=language).retouchpage_seo_set.first()
+        seo = RetouchPage.objects.get(
+            language=language).retouchpage_seo_set.first()
     except:
         seo = []
 
@@ -134,17 +136,17 @@ class UploadView(TemplateView):
         _id = request.POST.get('id')
         print(_type)
         if _type == 'gallery':
-            gallery = Gallery.objects.get(id=_id)
+            _gallery = Gallery.objects.get(id=_id)
             for file in request.FILES.getlist('files'):
-                Photo.objects.create(name=file.name, image=file, gallery=gallery)
+                _photo = Photo.objects.create(name=file.name, image=file)
+                GalleryPhoto.objects.create(photo=_photo, gallery=_gallery)
 
         elif _type == 'category':
             _category = Category.objects.get(id=_id)
             for file in request.FILES.getlist('files'):
                 _photo = Photo.objects.create(name=file.name, image=file)
-                test = PhotoCategory.objects.create(category=_category, photo=_photo)
-                print(_category, _photo)
-                print(test)
+                test = PhotoCategory.objects.create(
+                    category=_category, photo=_photo)
         else:
             HttpResponse('No such type: {}'.format(_type))
 

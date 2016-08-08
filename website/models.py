@@ -74,6 +74,7 @@ class Language(models.Model):
     def __str__(self):
         return self.language or None
 
+
 class VerificationCode(models.Model):
     google_site_verification = models.CharField(max_length=1000)
     google_analytics_verification = models.CharField(max_length=1000)
@@ -90,6 +91,7 @@ class PageSettings(models.Model):
 
     def __str__(self):
         return 'Default Settings'
+
 
 class Gallery(models.Model):
     created = models.DateTimeField(default=timezone.now)
@@ -117,6 +119,25 @@ class Gallery(models.Model):
         delete_from_order(self, id)
 
 
+class GalleryPhoto(models.Model):
+    gallery = models.ForeignKey('Gallery', related_name='photos')
+    photo = models.ForeignKey('Photo')
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            order_num = get_order_num(self.gallery.photos_order)
+            self.gallery.photos_order[order_num] = str(self.id)
+            self.gallery.save()
+        super(GalleryPhoto, self).save(*args, **kwargs)
+
+
+@receiver(
+    pre_delete, sender=GalleryPhoto,
+    dispatch_uid='photos_delete_from_gallery_order_signal')
+def delete_photos_from_gallery_order(sender, instance, using, **kwargs):
+    instance.gallery.remove_from_order(instance.photo.id)
+
+
 class GalleryByLanguage(models.Model):
     gallery = models.ForeignKey(Gallery)
     name = models.CharField(max_length=100)
@@ -134,9 +155,11 @@ class GalleryByLanguage(models.Model):
     def __str__(self):
         return self.name
 
+
 class GalleryByLanguage_Seo(SEO):
 
     gallerybylanguage = models.ForeignKey(GalleryByLanguage, null=True)
+
 
 class Category(models.Model):
 
@@ -182,7 +205,7 @@ class CategoryByLanguage(models.Model):
 
 
 class CategoryByLanguage_Seo(SEO):
-    categorybylanguage = models.ForeignKey(CategoryByLanguage ,null=True)
+    categorybylanguage = models.ForeignKey(CategoryByLanguage, null=True)
 
 
 def image_path(instance, filename):
@@ -193,7 +216,6 @@ class Photo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to=image_path)
-    gallery = models.ForeignKey(Gallery, null=True, blank=True)
     uploaded_at = models.DateTimeField(default=timezone.now)
 
     @property
@@ -208,23 +230,9 @@ class Photo(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.gallery.photos_order)
-            self.gallery.photos_order[order_num] = str(self.id)
-            self.gallery.save()
         if not self.name:
             self.name = self.image.name
         super(Photo, self).save(*args, **kwargs)
-
-
-@receiver(
-    pre_delete, sender=Photo,
-    dispatch_uid='photos_delete_from_order_signal')
-def delete_photos_from_order(sender, instance, using, **kwargs):
-    try:
-        instance.gallery.remove_from_order(instance.id)
-    except Gallery.DoesNotExist:
-        pass
 
 
 class PhotoCategory(models.Model):
