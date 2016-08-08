@@ -5,15 +5,15 @@ from django.contrib import admin
 from django.conf import settings
 
 
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('website.urls')),   
+    url(r'^sort/', include('sorting.urls')),
+    url(r'^', include('website.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
-	urlpatterns += patterns('',
-	  url(r'^plate/', include('django_spaghetti.urls')),
-	)
+    urlpatterns += patterns(
+        '', url(r'^plate/', include('django_spaghetti.urls')),
+    )

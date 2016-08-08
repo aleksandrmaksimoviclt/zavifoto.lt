@@ -1,10 +1,8 @@
-import ast
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 
@@ -90,8 +88,10 @@ def category(request, gallery_slug, category_slug):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
-    try: 
-        category = CategoryByLanguage.objects.filter(language=language, url=category_slug,).first().category.photos_order
+    try:
+        category = CategoryByLanguage.objects.filter(
+            language=language,
+            url=category_slug,).first().category.photos_order
     except:
         category = []
 
@@ -282,7 +282,7 @@ def reviews(request):
 
     response = render(
         request,
-            'website/reviews.html', {
+        'website/reviews.html', {
             'reviews': reviews,
             'current_language': language.language_code,
             'available_languages': available_languages,
@@ -338,78 +338,6 @@ def faq(request):
             'seo': seo,
         })
     return response
-
-
-@login_required(login_url='/')
-def photosorting(request):
-    categories = CategoryByLanguage.objects.filter(language__language='lt')
-    categories = [{
-        'name': cat.name,
-        'url': '/sort/{}/category/'.format(cat.id)} for cat in categories]
-
-    response = render(
-        request, 'sorting/base.html',
-        {'categories': categories})
-
-    return response
-
-@login_required(login_url='/')
-def categorysorting(request, category_id):
-
-    categories = CategoryByLanguage.objects.filter(
-        language__language='lt', id=category_id,).select_related('category')
-    category = categories.first()
-    galleries = Gallery.objects.filter(
-        category=category.category).prefetch_related('gallerybylanguage_set')
-    galleries = [
-        {
-            'name': gal.gallerybylanguage_set.first().name,
-            'url': '/sort/{}/category/{}/gallery/'.format(category.id, gal.id)
-        } for gal in galleries]
-
-    response = render(
-        request, 'sorting/category.html',
-        {
-            'back_url': '/sort/',
-            'galleries': galleries,
-            'category': category,
-            'photos': get_ordered_photos(category.category.photos_order),
-            'type': 'category',
-        })
-
-    return response
-
-@login_required(login_url='/')
-def galleriessorting(request, category_id, gallery_id):
-    gallery = Gallery.objects.get(id=gallery_id)
-    response = render(
-        request, 'sorting/gallery.html',
-        {
-            'back_url': '/sort/{}/category'.format(category_id),
-            'gallery': gallery,
-            'type': 'gallery',
-            'photos': get_ordered_photos(gallery.photos_order)}
-        )
-    return response
-
-
-@login_required(login_url='/')
-def change_order(request):
-    json = request.read()
-    data = ast.literal_eval(json.decode("utf-8"))
-    if data['type'] == 'gallery':
-        model = Gallery
-    elif data['type'] == 'category':
-        model = Category
-    else:
-        return HttpResponse('Something went wrong')
-    try:
-        obj = model.objects.get(id=data['id'])
-        obj.photos_order = data['order']
-        obj.save()
-        return HttpResponse('Successfully changed order.')
-    except Exception as e:
-        return HttpResponse(e)
 
 
 def get_language_obj(request):

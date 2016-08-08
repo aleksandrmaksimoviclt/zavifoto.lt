@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'website',
+    'sorting',
 
     # pypi packages
     'sortedm2m',
