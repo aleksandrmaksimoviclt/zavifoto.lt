@@ -134,21 +134,25 @@ class UploadView(TemplateView):
     def post(self, request, *args, **kwargs):
         _type = request.POST.get('type')
         _id = request.POST.get('id')
-        print(_type)
+        files = request.FILES.getlist('files')
+        if not files:
+            return HttpResponse('No photos selected')
+
         if _type == 'gallery':
             _gallery = Gallery.objects.get(id=_id)
-            for file in request.FILES.getlist('files'):
+            for file in files:
                 _photo = Photo.objects.create(name=file.name, image=file)
                 GalleryPhoto.objects.create(photo=_photo, gallery=_gallery)
 
         elif _type == 'category':
             _category = Category.objects.get(id=_id)
-            for file in request.FILES.getlist('files'):
+            for file in files:
                 _photo = Photo.objects.create(name=file.name, image=file)
-                test = PhotoCategory.objects.create(
+                PhotoCategory.objects.create(
                     category=_category, photo=_photo)
         else:
-            HttpResponse('No such type: {}'.format(_type))
+            for file in files:
+                Photo.objects.create(name=file.name, image=file)
 
         return HttpResponse('Done!')
 
@@ -236,6 +240,7 @@ def pricing(request):
             'seo': seo,
         })
     return response
+
 
 def about(request):
     available_languages = Language.objects.all()

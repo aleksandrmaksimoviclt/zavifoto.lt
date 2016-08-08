@@ -8,7 +8,7 @@
 <body>
 
 <section>
-  <form target="invisible" action="/upload/" method="POST" enctype="multipart/form-data" id='upload'>{% csrf_token %}
+  <form action="/upload/" method="POST" enctype="multipart/form-data" id='upload'>{% csrf_token %}
     <input type="file" name="files" multiple/>
     <input type="submit" value="Submit"/>
   </form>
