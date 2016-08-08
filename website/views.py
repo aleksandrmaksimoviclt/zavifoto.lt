@@ -17,7 +17,10 @@ def index(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
-
+    try:
+        seo = IndexPage.objects.get(language=language).indexpage_seo_set.first()
+    except:
+        seo = []
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
         try:
@@ -40,6 +43,7 @@ def index(request):
             'galleries': data,
             'pagesettings': pagesettings,
             'photos': photos,
+            'seo': seo,
         })
     return response
 
@@ -57,6 +61,11 @@ def retouch(request):
     except:
         comparisonphotos = []
 
+    try:
+        seo = RetouchPage.objects.get(language=language).retouchpage_seo_set.first()
+    except:
+        seo = []
+
     response = render(
         request,
         'website/retouch.html', {
@@ -65,6 +74,7 @@ def retouch(request):
             'galleries': data,
             'comparisonphotos': comparisonphotos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -150,6 +160,11 @@ def contact(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
+        seo = ContactsPage.objects.get(language=language).contactspage_seo_set.first()
+    except:
+        seo = []
+
+    try:
         contactspage = ContactsPage.objects.filter(language=language).first()
 
     except Exception:
@@ -170,6 +185,7 @@ def contact(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -181,6 +197,11 @@ def pricing(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = PricePage.objects.get(language=language).pricepage_seo_set.first()
+    except:
+        seo = []
 
     try:
         pricepage = PricePage.objects.filter(language=language).first()
@@ -210,9 +231,9 @@ def pricing(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
-
 
 def about(request):
     available_languages = Language.objects.all()
@@ -221,6 +242,11 @@ def about(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = AboutPage.objects.get(language=language).aboutpage_seo_set.first()
+    except:
+        seo = []
 
     try:
         aboutpage = AboutPage.objects.filter(language=language).first()
@@ -243,6 +269,7 @@ def about(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -254,6 +281,11 @@ def reviews(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = ReviewPage.objects.get(language=language).reviewpage_seo_set.first()
+    except:
+        seo = []
 
     reviews = Review.objects.all()
 
@@ -271,6 +303,7 @@ def reviews(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -282,6 +315,11 @@ def faq(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = FaqPage.objects.get(language=language).faqpage_seo_set.first()
+    except:
+        seo = []
 
     try:
         faqpage = FaqPage.objects.filter(language=language).first()
@@ -311,6 +349,7 @@ def faq(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 

@@ -234,7 +234,7 @@ def delete_photos_from_order(sender, instance, using, **kwargs):
 
 
 class PhotoCategory(models.Model):
-    photo = models.ForeignKey(Photo, related_name='photos')
+    photo = models.ForeignKey(Photo)
     category = models.ForeignKey(Category)
 
     class Meta:
@@ -276,8 +276,6 @@ class AbstractPage(models.Model):
 
 
 class ContactsPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
-    photos_order = JSONField(default={}, null=True, blank=True)
     page_title = models.CharField(max_length=100)
     heading = RedactorField(verbose_name=u'Heading')
     heading_text = RedactorField(verbose_name=u'Heading Text')
@@ -319,28 +317,12 @@ class ContactsPage_Seo(models.Model):
 
 
 class ContactsPagePhoto(models.Model):
-    contacts_page = models.ForeignKey(ContactsPage, related_name='photos')
+    contacts_page = models.ForeignKey(ContactsPage)
     photo = models.ForeignKey(Photo, unique=True)
     is_side_photo = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.review.photos_order)
-            self.review.photos_order[order_num] = str(self.photo.id)
-            self.review.save()
-        super(ReviewPhoto, self).save(*args, **kwargs)
-
-
-@receiver(
-    pre_delete, sender=ContactsPagePhoto,
-    dispatch_uid='photos_delete_from_contacts_order_signal')
-def delete_photos_from_contacts_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.contacts_page, instance.photo.id)
-
 
 class PricePage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
-    photos_order = JSONField(default={}, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True)
     heading = models.CharField(max_length=100, null=True, blank=True)
     language = models.ForeignKey(Language, null=True)
@@ -360,23 +342,9 @@ class PricePage_Seo(models.Model):
     pricepage = models.ForeignKey(PricePage ,null=True)
 
 class PricePagePhoto(models.Model):
-    price_page = models.ForeignKey(PricePage, related_name='photos')
+    price_page = models.ForeignKey(PricePage)
     photo = models.ForeignKey(Photo, unique=True)
     is_side_photo = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.price_page.photos_order)
-            self.price_page.photos_order[order_num] = str(self.photo.id)
-            self.price_page.save()
-        super(PricePagePhoto, self).save(*args, **kwargs)
-
-
-@receiver(
-    pre_delete, sender=PricePagePhoto,
-    dispatch_uid='photos_delete_from_prices_order_signal')
-def delete_photos_from_prices_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.price_page, instance.photo.id)
 
 
 class Question(models.Model):
@@ -402,8 +370,6 @@ class Message(models.Model):
 
 
 class AboutPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
-    photos_order = JSONField(default={}, null=True, blank=True)
     modified = models.DateTimeField(default=timezone.now)
     heading = models.CharField(max_length=100, null=True, blank=True)
     quote = RedactorField(verbose_name=u'Quote', null=True, blank=True)
@@ -428,30 +394,15 @@ class AboutPage_Seo(models.Model):
     aboutpage = models.ForeignKey(AboutPage ,null=True)
 
 class AboutPagePhoto(models.Model):
-    about = models.ForeignKey('AboutPage', related_name='photos')
+    about = models.ForeignKey(AboutPage)
     photo = models.ForeignKey(Photo, unique=True)
     is_side_photo = models.BooleanField(default=False)
 
     def __str__(self):
         return 'About page photo'
 
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.about.photos_order)
-            self.about.photos_order[order_num] = str(self.photo.id)
-            self.about.save()
-        super(AboutPagePhoto, self).save(*args, **kwargs)
-
-
-@receiver(
-    pre_delete, sender=AboutPagePhoto,
-    dispatch_uid='photos_delete_from_about_order_signal')
-def delete_photos_from_about_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.about, instance.photo.id)
-
 
 class Review(models.Model):
-    photos_order = JSONField(default={}, null=True, blank=True)
     review = RedactorField(verbose_name=u'Review')
     author = models.CharField(max_length=200)
     created_at = models.DateTimeField(default=timezone.now)
@@ -465,27 +416,15 @@ class Review(models.Model):
 
 
 class ReviewPhoto(models.Model):
-    review = models.ForeignKey('Review', related_name='photos')
+    review = models.ForeignKey('Review')
     photo = models.ForeignKey('Photo')
     is_side_photo = models.BooleanField(default=False)
 
-class ReviewPage(models.Model):
-    language = models.ForeignKey(Language, null=True)
-
-class ReviewPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
-    reviewpage = models.ForeignKey(ReviewPage, null=True)
-
 
 class FaqPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
-    photos_order = JSONField(default={}, null=True, blank=True)
     modified = models.DateTimeField(default=timezone.now)
     heading = models.CharField(max_length=100, null=True, blank=True)
+
     language = models.ForeignKey(Language, null=True)
 
     class Meta:
@@ -493,19 +432,6 @@ class FaqPage(models.Model):
 
     def __str__(self):
         return 'FAQ Page ' + self.language.language_code
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.review.photos_order)
-            self.review.photos_order[order_num] = str(self.photo.id)
-            self.review.save()
-        super(ReviewPhoto, self).save(*args, **kwargs)
-
-
-@receiver(
-    pre_delete, sender=ReviewPhoto,
-    dispatch_uid='photos_delete_from_review_order_signal')
-def delete_photos_from_review_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.review, instance.photo.id)
 
 class FaqPage_Seo(models.Model):
     page_title = models.CharField(max_length=70)
@@ -523,26 +449,14 @@ class Question_FaqPage(models.Model):
 
 
 class FAQPhoto(models.Model):
-    faq_page = models.ForeignKey(FaqPage, related_name='photos')
+    faq_page = models.ForeignKey(FaqPage)
     photo = models.ForeignKey(Photo, unique=True)
     is_side_photo = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.faq_page.photos_order)
-            self.faq_page.photos_order[order_num] = str(self.photo.id)
-            self.faq_page.save()
-        super(FAQPhoto, self).save(*args, **kwargs)
-
-@receiver(
-    pre_delete, sender=FAQPhoto,
-    dispatch_uid='photos_delete_from_faq_order_signal')
-def delete_photos_from_faq_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.faq_page, instance.photo.id)
-
+#new model
 class RetouchPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     language = models.ForeignKey(Language, null=True)
+#endnew model
 
 class RetouchPage_Seo(models.Model):
     page_title = models.CharField(max_length=70)
@@ -559,14 +473,3 @@ class ComparisonPhoto(models.Model):
 
     def __str__(self):
         return self.name
-
-class IndexPage(models.Model):
-    language = models.ForeignKey(Language, null=True)
-
-class IndexPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
-    indexpage = models.ForeignKey(IndexPage,null=True)
