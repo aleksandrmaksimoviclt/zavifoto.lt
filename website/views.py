@@ -139,17 +139,21 @@ class UploadView(TemplateView):
             return HttpResponse('No photos selected')
 
         if _type == 'gallery':
-            _gallery = Gallery.objects.get(id=_id)
-            for file in files:
-                _photo = Photo.objects.create(name=file.name, image=file)
-                GalleryPhoto.objects.create(photo=_photo, gallery=_gallery)
+            _gallery = Gallery.objects.filter(id=_id)
+            if _gallery.exists():
+                _gallery = _gallery.first()
+                for file in files:
+                    _photo = Photo.objects.create(name=file.name, image=file)
+                    GalleryPhoto.objects.create(photo=_photo, gallery=_gallery)
 
         elif _type == 'category':
-            _category = Category.objects.get(id=_id)
-            for file in files:
-                _photo = Photo.objects.create(name=file.name, image=file)
-                PhotoCategory.objects.create(
-                    category=_category, photo=_photo)
+            _category = Category.objects.filter(id=_id)
+            if _category.exists():
+                _category = _category.first()
+                for file in files:
+                    _photo = Photo.objects.create(name=file.name, image=file)
+                    PhotoCategory.objects.create(
+                        category=_category, photo=_photo)
         else:
             for file in files:
                 Photo.objects.create(name=file.name, image=file)
