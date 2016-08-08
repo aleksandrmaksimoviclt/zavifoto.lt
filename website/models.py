@@ -423,6 +423,17 @@ class ReviewPhoto(models.Model):
     photo = models.ForeignKey('Photo')
     is_side_photo = models.BooleanField(default=False)
 
+class ReviewPage(models.Model):
+    language = models.ForeignKey(Language, null=True)
+
+class ReviewPage_Seo(models.Model):
+    page_title = models.CharField(max_length=70)
+    meta_description = models.CharField(max_length=156)
+    title_for_facebook = models.CharField(max_length=27)
+    description_for_facebook = models.CharField(max_length=300)
+    image_for_facebook = models.ImageField(upload_to='seo/')
+    reviewpage = models.ForeignKey(ReviewPage, null=True)
+
 
 class FaqPage(models.Model):
     page_name_in_menu = models.CharField(max_length=100)
