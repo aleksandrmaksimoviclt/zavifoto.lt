@@ -1,12 +1,12 @@
 {% extends 'sorting/base.html' %}
 
-{% block content %}
+{% block galleries %}
 <div class="container">
-  <h3>{{ name }} category</h3>
-  <ul>
-	{% for category in categories %}
-		<li><a href="{{category.url}}">{{category.name}} category</a></li>
-	{% endfor %} </section> 
-  </ul>
+		{{ name }}
+		<ul>
+			{% for category in categories %}
+				<li><a href="{{category.url}}">{{category.name}} category</a></li>
+			{% endfor %} </section> 
+		</ul>
 </div>
-{% endblock %}
+{% endblock galleries %}
