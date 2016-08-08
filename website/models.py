@@ -55,10 +55,12 @@ def get_order_num(order):
     except (AttributeError, ValueError):
         return str(1)
 
-class Cms(models.Model):
-    top_text = models.TextField(blank=True, null=True)
-    main_text = models.TextField(blank=True, null=True)
-    bottom_text = models.TextField(blank=True, null=True)
+class SEO(models.Model):
+    page_title = models.CharField(max_length=70)
+    meta_description = models.CharField(max_length=156)
+    title_for_facebook = models.CharField(max_length=27)
+    description_for_facebook = models.CharField(max_length=300)
+    image_for_facebook = models.ImageField(upload_to='seo/')
 
     class Meta:
         abstract = True
@@ -67,7 +69,7 @@ class Cms(models.Model):
 class Language(models.Model):
     language_code = models.CharField(max_length=5)
     language = models.CharField(max_length=20)
-    # is_hidden = models.BooleanField(default=False)
+    is_hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return self.language or None
@@ -132,12 +134,8 @@ class GalleryByLanguage(models.Model):
     def __str__(self):
         return self.name
 
-class GalleryByLanguage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class GalleryByLanguage_Seo(SEO):
+
     gallerybylanguage = models.ForeignKey(GalleryByLanguage, null=True)
 
 class Category(models.Model):
@@ -182,14 +180,8 @@ class CategoryByLanguage(models.Model):
 
         super(CategoryByLanguage, self).save(*args, **kwargs)
 
-class CategoryByLanguage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class CategoryByLanguage_Seo(SEO):
     categorybylanguage = models.ForeignKey(CategoryByLanguage ,null=True)
-
 
 def image_path(instance, filename):
     return '/'.join([str(instance) + '_' + filename])
@@ -259,22 +251,6 @@ class PhotoCategory(models.Model):
 def delete_photos_from_category_order(sender, instance, using, **kwargs):
     instance.category.remove_from_order(instance.photo.id)
 
-
-class AbstractPage(models.Model):
-    heading = RedactorField()
-    heading_slug = RedactorField()
-    message = RedactorField()
-    e_mail = RedactorField()
-    phone_number = RedactorField()
-    top_text = RedactorField()
-    photo = RedactorField()
-    author = RedactorField()
-    text_with_icons_on_left = RedactorField()
-
-    class Meta:
-        abstract = True
-
-
 class ContactsPage(models.Model):
     page_name_in_menu = models.CharField(max_length=100)
     photos_order = JSONField(default={}, null=True, blank=True)
@@ -309,12 +285,7 @@ class ContactsPage(models.Model):
     def __str__(self):
         return 'Kontaktai ' + self.language.language_code + ' kalba'
 
-class ContactsPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class ContactsPage_Seo(SEO):
     contactspage = models.ForeignKey(ContactsPage ,null=True)
 
 
@@ -351,12 +322,7 @@ class PricePage(models.Model):
     class Meta:
         verbose_name_plural = 'Price Page'
 
-class PricePage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class PricePage_Seo(SEO):
     pricepage = models.ForeignKey(PricePage ,null=True)
 
 class PricePagePhoto(models.Model):
@@ -419,12 +385,7 @@ class AboutPage(models.Model):
     def __str__(self):
         return 'About page ' + self.language.language_code
 
-class AboutPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class AboutPage_Seo(SEO):
     aboutpage = models.ForeignKey(AboutPage ,null=True)
 
 class AboutPagePhoto(models.Model):
@@ -472,12 +433,7 @@ class ReviewPhoto(models.Model):
 class ReviewPage(models.Model):
     language = models.ForeignKey(Language, null=True)
 
-class ReviewPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class ReviewPage_Seo(SEO):
     reviewpage = models.ForeignKey(ReviewPage, null=True)
 
 
@@ -507,12 +463,7 @@ class FaqPage(models.Model):
 def delete_photos_from_review_order(sender, instance, using, **kwargs):
     delete_from_order(instance.review, instance.photo.id)
 
-class FaqPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class FaqPage_Seo(SEO):
     faqpage = models.ForeignKey(FaqPage ,null=True)
 
 
@@ -544,12 +495,7 @@ class RetouchPage(models.Model):
     page_name_in_menu = models.CharField(max_length=100)
     language = models.ForeignKey(Language, null=True)
 
-class RetouchPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class RetouchPage_Seo(SEO):
     retouchpage = models.ForeignKey(RetouchPage,null=True)
 
 class ComparisonPhoto(models.Model):
@@ -563,10 +509,5 @@ class ComparisonPhoto(models.Model):
 class IndexPage(models.Model):
     language = models.ForeignKey(Language, null=True)
 
-class IndexPage_Seo(models.Model):
-    page_title = models.CharField(max_length=70)
-    meta_description = models.CharField(max_length=156)
-    title_for_facebook = models.CharField(max_length=27)
-    description_for_facebook = models.CharField(max_length=300)
-    image_for_facebook = models.ImageField(upload_to='seo/')
+class IndexPage_Seo(SEO):
     indexpage = models.ForeignKey(IndexPage,null=True)

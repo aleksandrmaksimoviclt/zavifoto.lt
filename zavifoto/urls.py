@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.conf import settings
-
+from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -17,3 +17,6 @@ if settings.DEBUG:
     urlpatterns += patterns(
         '', url(r'^plate/', include('django_spaghetti.urls')),
     )
+# Change admin site title
+admin.site.site_header = _("zavifoto.lt administration")
+admin.site.site_title = _("Zavifoto.lt")
