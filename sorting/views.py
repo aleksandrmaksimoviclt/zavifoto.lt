@@ -79,11 +79,12 @@ class PagesSorting(SortingBaseView):
     def get_context_data(self, **kwargs):
         context = super(PagesSorting, self).get_context_data(**kwargs)
         page = self.page.objects.first()
-        photos = get_ordered_photos(page.photos_order)
-        context.update({
-            'name': page.__str__,
-            'photos': photos,
-            'type': self.type})
+        if page:
+            photos = get_ordered_photos(page.photos_order)
+            context.update({
+                'name': page.__str__,
+                'photos': photos,
+                'type': self.type})
         return context
 
 
