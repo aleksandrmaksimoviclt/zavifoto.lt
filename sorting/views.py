@@ -134,6 +134,8 @@ class ChangeOrder(SortingBaseView):
             qd = {'id': data['id']}
         try:
             obj = model.objects.filter(**qd).first()
+            ordered_dict = {}
+            #converting received order key value from string into integers
             obj.photos_order = data['order']
             obj.save()
             return HttpResponse('Successfully changed order.')
