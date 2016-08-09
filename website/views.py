@@ -17,6 +17,7 @@ def index(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+    
     try:
         seo = IndexPage.objects.get(
             language=language).indexpage_seo_set.first()

@@ -7,22 +7,29 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<!-- 	<link rel="stylesheet" type="text/css" href="{% static "website/css/sort.css" %}"> -->
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <!-- Material Design Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
-    <!-- Cuprum Regular font -->  
-    <link href='https://fonts.googleapis.com/css?family=Cuprum&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-    <!-- Roboto Regular font -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <!-- FontAwesome Icon Font -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-    <!-- Social Icons Font -->
-    <link href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css" rel="stylesheet">
+
+<!-- Bootstrap Core CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Material Design Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet">
+<!-- Cuprum Regular font -->  
+<link href='https://fonts.googleapis.com/css?family=Cuprum&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<!-- Roboto Regular font -->
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<!-- FontAwesome Icon Font -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+<!-- Social Icons Font -->
+<link href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css" rel="stylesheet">
+
+<link href="{% static "website/css/sidebar-white.css" %}" rel="stylesheet">
+<link href="{% static "website/css/white-theme.css" %}" rel="stylesheet">
+
+
 <style>
-#sortable { list-style-type: none; margin: 0; padding: 0; width: 450px; }
-#sortable li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 1em; text-align: center; }
+#sortable { list-style-type: none; margin: 0; padding: 0; }
+#sortable li {float: left; font-size: 1em; text-align: center; }
+img.imgcover.grid{width:100%; height:100%; object-fit: cover;}
 </style>
  
 <script>
@@ -35,92 +42,135 @@ $( "#sortable" ).disableSelection();
 
 <body>
 
+
+<body>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a class="logo-wrapper" href="/">
+                        <span class="logo">VILMANTAS ŽILINSKAS</span><br>
+                        <span class="logo sub">Photography</span>
+                    </a>
+                </li>
+                <div class="primary-menu">
+
+                    <div style="overflow-y: scroll; max-height: 100%;">
+
+                    {% block galleries%}
+                    {% endblock %}
+                    </div>
+                </div>
+
+                <div class="sidebar-bottom-group">
+                    <div class="btn-group flat" role="group">
+
+                    <div class="secondary-menu sub-category">             
+                        <li><a href="/sort/categories">Categories</a></li>
+                        <li><a href="/sort/contacts">Contacts</a></li>
+                        <li><a href="/sort/prices">Prices</a></li>
+                        <li><a href="/sort/reviews">Reviews</a></li>
+                        <li><a href="/sort/about">About</a></li>
+                        <li><a href="/sort/faq">FAQ</a></li>
+                    </div>
+                    <div class="btn-group flat" role="group">
+                        <button type="button" class="btn btn-default socicon-facebook"></button>
+                        <button type="button" class="btn btn-default socicon-pinterest"></button>
+                        <button type="button" class="btn btn-default socicon-instagram"></button>
+                        <button type="button" class="btn btn-default socicon-youtube"></button>
+                    </div>
+                    <div class="copyright wrapper">
+                        <span class="client">2016 &copy; Vilmantas Žilinskas.</span><br>
+                        <span class="author">Made with <i style="font-size:9.5px; color:red;" class="material-icons">&#xE87D;</i> by <a class="litebits" href="http://litebits.co">litebits</a></span>
+                    </div>
+                </div>
+                
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            {% block content %}
+            {% endblock %}
+            <div class="photos-wrapper" style="font-size:18px;">
+                {% if photos %}<button id='save'>Save</button>{% endif %}
+                <ul id="sortable">
+                    {% for photo in photos%}
+                      <li class="col-xs-12 col-sm-4 col-md-3 grid nopadding ui-state-default" photo_id="{{ photo.id }}">
+                        <img class="imgcover grid" src="{{photo.src}}">
+                      </li>
+                    {% endfor %}
+                </ul>
+            </div>                
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+
+
 {% if back_url %}
 <div class="container">
 <a href="{{ back_url }}">Go back</a>
 </div>
 {% endif %}
 
-{% block content %}
-<div class="container">
-    <ul>
-        <li><a href="/sort/categories">Categories</a></li>
-        <li><a href="/sort/contacts">Contacts</a></li>
-        <li><a href="/sort/prices">Prices</a></li>
-        <li><a href="/sort/reviews">Reviews</a></li>
-        <li><a href="/sort/about">About</a></li>
-        <li><a href="/sort/faq">FAQ</a></li>
-    </ul>
-</div>
-{% endblock %}
-
-<div class="container photos-wrapper" style="font-size:18px;">
-    {% if photos %}<button id='save'>Save</button>{% endif %}
-    <ul id="sortable">
-        {% for photo in photos%}
-          <li photo_id="{{ photo.id }}" class="ui-state-default">
-            <img style="width:100%; height:auto;" src="{{photo.src}}">
-          </li>
-        {% endfor %}
-    </ul>
-
 <script type="text/javascript">
-$( document ).ready(function(){
-    
-})
-// using jQuery
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
             }
         }
+        return cookieValue;
     }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
+    var csrftoken = getCookie('csrftoken');
 
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
-});
-
-$('#save').click(function(){
-    var photos = $('#sortable').find('.ui-state-default');
-    var new_order = {
-        "type": "{{ type }}",
-        "id": "{{ id }}"
-    };
-    var order = {};
-
-    for (i = 0; i < photos.length; i++) {
-        order[i + 1] = photos[i].getAttribute('photo_id');
-    };
-    new_order['order'] = order;
-    console.log(new_order);
-    $.ajax({
-            url: '/sort/change-order',
-            type: 'POST',
-            data: JSON.stringify(new_order),
-            contentType: "application/json",
-            success: function(response) {
-                console.log(response);
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
-        });
-});
+        }
+    });
+
+    $('#save').click(function(){
+        var photos = $('#sortable').find('.ui-state-default');
+        var new_order = {
+            "type": "{{ type }}",
+            "id": "{{ id }}"
+        };
+        var order = {};
+
+        for (i = 0; i < photos.length; i++) {
+            order[i + 1] = photos[i].getAttribute('photo_id');
+        };
+        new_order['order'] = order;
+        console.log(new_order);
+        $.ajax({
+                url: '/sort/change-order',
+                type: 'POST',
+                data: JSON.stringify(new_order),
+                contentType: "application/json",
+                success: function(response) {
+                    console.log(response);
+                    
+                }
+            });
+    });
 </script>
 </body>
 </html> 

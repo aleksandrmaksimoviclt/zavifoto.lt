@@ -1,12 +1,20 @@
 {% extends 'sorting/base.html' %}
 
-{% block content %}
-<div class="container">
-  <h3>{{ name }} category</h3>
-  <ul>
+{% block galleries %}
+
 	{% for category in categories %}
-		<li><a href="{{category.url}}">{{category.name}} category</a></li>
-	{% endfor %} </section> 
-  </ul>
-</div>
+
+	    <li>
+	        <a class="main-category" data-toggle="collapse" data-target="#{{category.name|slugify}}" href="#">{{category.name}}</a>
+	    </li>
+
+	    <div id="{{category.name}}" class="collapse">
+	        <ul class="sub-category">
+	            {% for gallery in  category.gal %}
+	                <li><a href="/{{category.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
+	            {% endfor %}
+	        </ul>
+	    </div>
+
+	{% endfor %}
 {% endblock %}

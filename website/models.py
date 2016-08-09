@@ -313,7 +313,7 @@ class ContactsPagePhoto(models.Model):
             order_num = get_order_num(self.review.photos_order)
             self.review.photos_order[order_num] = str(self.photo.id)
             self.review.save()
-        super(ReviewPhoto, self).save(*args, **kwargs)
+        super(ContactsPagePhoto, self).save(*args, **kwargs)
 
 
 @receiver(
@@ -448,6 +448,19 @@ class ReviewPhoto(models.Model):
     photo = models.ForeignKey('Photo')
     is_side_photo = models.BooleanField(default=False)
 
+def save(self, *args, **kwargs):
+        if self._state.adding:
+            order_num = get_order_num(self.review.photos_order)
+            self.review.photos_order[order_num] = str(self.photo.id)
+            self.review.save()
+        super(ReviewPhoto, self).save(*args, **kwargs)
+
+
+@receiver(
+    pre_delete, sender=ReviewPhoto,
+    dispatch_uid='photos_delete_from_review_order_signal')
+def delete_photos_from_review_order(sender, instance, using, **kwargs):
+    delete_from_order(instance.review, instance.photo.id)
 
 class ReviewPage(models.Model):
     language = models.ForeignKey(Language, null=True)
@@ -469,20 +482,6 @@ class FaqPage(models.Model):
 
     def __str__(self):
         return 'FAQ Page ' + self.language.language_code
-
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.review.photos_order)
-            self.review.photos_order[order_num] = str(self.photo.id)
-            self.review.save()
-        super(ReviewPhoto, self).save(*args, **kwargs)
-
-
-@receiver(
-    pre_delete, sender=ReviewPhoto,
-    dispatch_uid='photos_delete_from_review_order_signal')
-def delete_photos_from_review_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.review, instance.photo.id)
 
 
 class FaqPageSeo(SEO):
