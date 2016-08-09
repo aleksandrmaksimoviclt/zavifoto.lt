@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import uuid
+import os
 from collections import OrderedDict
 
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify, mark_safe
 from django.contrib.postgres.fields import JSONField
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_delete, post_delete, pre_save
 from django.dispatch import receiver
 
 from redactor.fields import RedactorField
@@ -235,6 +236,31 @@ class Photo(models.Model):
         if not self.name:
             self.name = self.image.name
         super(Photo, self).save(*args, **kwargs)
+
+
+@receiver(
+    post_delete, sender=Photo,
+    dispatch_uid='photos_delete')
+def photo_delete(sender, instance, using, **kwargs):
+    if instance.image:
+        if os.path.isfile(instance.image.path):
+            os.remove(instance.image.path)
+
+
+@receiver(pre_save, sender=Photo)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    if not instance.id:
+        return False
+
+    try:
+        old_file = Photo.objects.get(id=instance.id).image
+    except Photo.DoesNotExist:
+        return False
+
+    new_file = instance.image
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
 
 
 class PhotoCategory(models.Model):
