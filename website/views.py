@@ -1,15 +1,14 @@
-import ast
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 
 
 from .models import *
 from .utils import get_ordered_photos
+
 
 def index(request):
     available_languages = Language.objects.all()
@@ -18,7 +17,12 @@ def index(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
-
+    
+    try:
+        seo = IndexPage.objects.get(
+            language=language).indexpage_seo_set.first()
+    except:
+        seo = []
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
         try:
@@ -41,6 +45,7 @@ def index(request):
             'galleries': data,
             'pagesettings': pagesettings,
             'photos': photos,
+            'seo': seo,
         })
     return response
 
@@ -58,6 +63,12 @@ def retouch(request):
     except:
         comparisonphotos = []
 
+    try:
+        seo = RetouchPage.objects.get(
+            language=language).retouchpage_seo_set.first()
+    except:
+        seo = []
+
     response = render(
         request,
         'website/retouch.html', {
@@ -66,6 +77,7 @@ def retouch(request):
             'galleries': data,
             'comparisonphotos': comparisonphotos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -79,8 +91,10 @@ def category(request, gallery_slug, category_slug):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
-    try: 
-        category = CategoryByLanguage.objects.filter(language=language, url=category_slug,).first().category.photos_order
+    try:
+        category = CategoryByLanguage.objects.filter(
+            language=language,
+            url=category_slug,).first().category.photos_order
     except:
         category = []
 
@@ -108,20 +122,42 @@ class UploadView(TemplateView):
 
     template_name = 'website/upload.html'
 
-    @method_decorator(login_required)
+    @method_decorator(login_required(login_url='/'))
     def dispatch(self, *args, **kwargs):
         return super(UploadView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(UploadView, self).get_context_data(**kwargs)
         context['galleries'] = Gallery.objects.all()
+        context['categories'] = Category.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
-        gallery_id = request.POST.get('gallery')
-        gallery = Gallery.objects.get(id=gallery_id)
-        for file in request.FILES.getlist('files'):
-            Photo.objects.create(name=file.name, image=file, gallery=gallery)
+        _type = request.POST.get('type')
+        _id = request.POST.get('id')
+        files = request.FILES.getlist('files')
+        if not files:
+            return HttpResponse('No photos selected')
+
+        if _type == 'gallery':
+            _gallery = Gallery.objects.filter(id=_id)
+            if _gallery.exists():
+                _gallery = _gallery.first()
+                for file in files:
+                    _photo = Photo.objects.create(name=file.name, image=file)
+                    GalleryPhoto.objects.create(photo=_photo, gallery=_gallery)
+
+        elif _type == 'category':
+            _category = Category.objects.filter(id=_id)
+            if _category.exists():
+                _category = _category.first()
+                for file in files:
+                    _photo = Photo.objects.create(name=file.name, image=file)
+                    PhotoCategory.objects.create(
+                        category=_category, photo=_photo)
+        else:
+            for file in files:
+                Photo.objects.create(name=file.name, image=file)
 
         return HttpResponse('Done!')
 
@@ -133,6 +169,11 @@ def contact(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = ContactsPage.objects.get(language=language).contactspage_seo_set.first()
+    except:
+        seo = []
 
     try:
         contactspage = ContactsPage.objects.filter(language=language).first()
@@ -155,6 +196,7 @@ def contact(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -166,6 +208,11 @@ def pricing(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = PricePage.objects.get(language=language).pricepage_seo_set.first()
+    except:
+        seo = []
 
     try:
         pricepage = PricePage.objects.filter(language=language).first()
@@ -195,6 +242,7 @@ def pricing(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -206,6 +254,11 @@ def about(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = AboutPage.objects.get(language=language).aboutpage_seo_set.first()
+    except:
+        seo = []
 
     try:
         aboutpage = AboutPage.objects.filter(language=language).first()
@@ -228,6 +281,7 @@ def about(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -240,6 +294,11 @@ def reviews(request):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
+    try:
+        seo = ReviewPage.objects.get(language=language).reviewpage_seo_set.first()
+    except:
+        seo = []
+
     reviews = Review.objects.all()
 
     try:
@@ -250,12 +309,13 @@ def reviews(request):
     response = render(
         request,
         'website/reviews.html', {
-        'reviews': reviews,
-        'current_language': language.language_code,
-        'available_languages': available_languages,
-        'galleries': data,
-        'photos': photos,
-        'pagesettings': pagesettings,
+            'reviews': reviews,
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'galleries': data,
+            'photos': photos,
+            'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
 
@@ -267,6 +327,11 @@ def faq(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
+
+    try:
+        seo = FaqPage.objects.get(language=language).faqpage_seo_set.first()
+    except:
+        seo = []
 
     try:
         faqpage = FaqPage.objects.filter(language=language).first()
@@ -296,80 +361,9 @@ def faq(request):
             'galleries': data,
             'photos': photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
     return response
-
-@login_required(login_url='/')
-def photosorting(request):
-    categories = CategoryByLanguage.objects.filter(language__language='lt')
-    categories = [{
-        'name': cat.name,
-        'url': '/sort/{}/category/'.format(cat.id)} for cat in categories]
-
-    response = render(
-        request, 'sorting/base.html',
-        {'categories': categories})
-
-    return response
-
-
-def categorysorting(request, category_id):
-
-    categories = CategoryByLanguage.objects.filter(
-        language__language='lt', id=category_id,).select_related('category')
-    category = categories.first()
-    galleries = Gallery.objects.filter(
-        category=category.category).prefetch_related('gallerybylanguage_set')
-    galleries = [
-        {
-            'name': gal.gallerybylanguage_set.first().name,
-            'url': '/sort/{}/category/{}/gallery/'.format(category.id, gal.id)
-        } for gal in galleries]
-
-    response = render(
-        request, 'sorting/category.html',
-        {
-            'back_url': '/sort/',
-            'galleries': galleries,
-            'category': category,
-            'photos': get_ordered_photos(category.category.photos_order),
-            'type': 'category',
-        })
-
-    return response
-
-
-def galleriessorting(request, category_id, gallery_id):
-    gallery = Gallery.objects.get(id=gallery_id)
-    response = render(
-        request, 'sorting/gallery.html',
-        {
-            'back_url': '/sort/{}/category'.format(category_id),
-            'gallery': gallery,
-            'type': 'gallery',
-            'photos': get_ordered_photos(gallery.photos_order)}
-        )
-    return response
-
-
-@login_required(login_url='/')
-def change_order(request):
-    json = request.read()
-    data = ast.literal_eval(json.decode("utf-8"))
-    if data['type'] == 'gallery':
-        model = Gallery
-    elif data['type'] == 'category':
-        model = Category
-    else:
-        return HttpResponse('Something went wrong')
-    try:
-        obj = model.objects.get(id=data['id'])
-        obj.photos_order = data['order']
-        obj.save()
-        return HttpResponse('Successfully changed order.')
-    except Exception as e:
-        return HttpResponse(e)
-
 
 
 def get_language_obj(request):

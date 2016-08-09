@@ -14,16 +14,35 @@ class AboutPagePhotos(admin.TabularInline):
     thumbnail.short_description = u"Thumbnail"
 
 
+class AboutPageSeoInline(admin.TabularInline):
+    model = AboutPageSeo
+    extra = 1
+    max_num = 1
+
+
 class AboutPageAdmin(admin.ModelAdmin):
     model = AboutPage
     list_display = ('__str__', 'heading', 'language', 'modified',)
-    inlines = [AboutPagePhotos]
+    inlines = [AboutPagePhotos, AboutPageSeoInline]
     fields = (
         'heading', 'quote', 'quote_author', 'text', 'language')
+
+    def has_add_permission(self, request):
+        return False if self.model.objects.count() > 2 else True
+
+
+class CategoryByLanguageSeoInline(admin.TabularInline):
+    model = CategorySeo
+    extra = 1
+    max_num = 1
 
 
 class CategoryInline(admin.StackedInline):
     model = CategoryByLanguage
+
+    inlines = [
+        CategoryByLanguageSeoInline,
+    ]
 
     def get_extra(self, request, obj=None, **kwargs):
         extra = 3
@@ -64,11 +83,12 @@ class PhotoAdmin(admin.ModelAdmin):
 
 
 class GalleryInline(admin.TabularInline):
-    model = Photo
+    model = GalleryPhoto
     readonly_fields = ('thumbnail',)
+    raw_id_fields = ('photo',)
 
     def thumbnail(self, obj):
-        return mark_safe(obj.thumbnail)
+        return mark_safe(obj.photo.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
 
@@ -98,10 +118,17 @@ class FaqPhotosInline(admin.TabularInline):
 
 class QuestionFAQInline(admin.StackedInline):
     model = Question_FaqPage
+    extra = 1
+
+
+class FaqPageSeoInline(admin.TabularInline):
+    model = FaqPageSeo
+    extra = 1
+    max_num = 1
 
 
 class FaqPageAdmin(admin.ModelAdmin):
-    inlines = [QuestionFAQInline, FaqPhotosInline]
+    inlines = [QuestionFAQInline, FaqPhotosInline, FaqPageSeoInline]
     exclude = ('modified',)
     list_display = ('__str__', 'language', 'modified')
 
@@ -121,8 +148,14 @@ class PricePhotosInline(admin.TabularInline):
     thumbnail.short_description = u"Thumbnail"
 
 
+class PricePageSeoInline(admin.TabularInline):
+    model = PricePageSeo
+    extra = 1
+    max_num = 1
+
+
 class PricePageAdmin(admin.ModelAdmin):
-    inlines = [PricePhotosInline, QuestionInline]
+    inlines = [PricePhotosInline, QuestionInline, PricePageSeoInline]
     list_display = ('__str__', 'heading', 'language', 'modified',)
 
 
@@ -137,9 +170,16 @@ class ContactsPhotosInline(admin.TabularInline):
     thumbnail.short_description = u"Thumbnail"
 
 
+class ContactsPageSeoInline(admin.TabularInline):
+    model = ContactsPageSeo
+    extra = 1
+    max_num = 1
+
+
 class ContactsPageAdmin(admin.ModelAdmin):
     inlines = [
         ContactsPhotosInline,
+        ContactsPageSeoInline
     ]
     list_display = ('__str__', 'language')
 
@@ -189,8 +229,47 @@ class ComparisonPhotoAdmin(admin.ModelAdmin):
     after_thumb.short_description = u"After"
 
 
+class IndexPageInline(admin.TabularInline):
+    model = IndexPageSeo
+    extra = 1
+    max_num = 1
+
+
+class IndexPhotosInline(admin.TabularInline):
+    model = IndexPagePhoto
+    raw_id_fields = ('photo',)
+    fields = ('photo', 'thumbnail')
+    readonly_fields = ('thumbnail',)
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.photo.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
+
+
+class IndexPageAdmin(admin.ModelAdmin):
+    model = IndexPage
+    inlines = [IndexPageInline, IndexPhotosInline]
+
+    def has_add_permission(self, request):
+        return False if self.model.objects.count() > 2 else True
+
+
+class RetouchPageInline(admin.TabularInline):
+    model = RetouchPageSeo
+    extra = 1
+    max_num = 1
+
+
+class RetouchPageAdmin(admin.ModelAdmin):
+    model = RetouchPage
+    inlines = [RetouchPageInline]
+
+    def has_add_permission(self, request):
+        return False if self.model.objects.count() > 2 else True
+
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
+# no seo on top ------------------
 admin.site.register(AboutPage, AboutPageAdmin)
 admin.site.register(FaqPage, FaqPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
@@ -200,3 +279,5 @@ admin.site.register(Language)
 admin.site.register(PageSettings, PageSettingsAdmin)
 admin.site.register(Review, ReviewAdmin)
 admin.site.register(ComparisonPhoto, ComparisonPhotoAdmin)
+admin.site.register(IndexPage, IndexPageAdmin)
+admin.site.register(RetouchPage, RetouchPageAdmin)

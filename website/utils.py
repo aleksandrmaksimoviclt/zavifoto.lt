@@ -18,9 +18,9 @@ def get_ordered_photos(photos_order):
         src_to_photo(photo)
 
     ordered = []
-    for photo in sorted(photos_order.keys()):
+    for key in sorted([int(key) for key in photos_order.keys()]):
         ordered.append({
-                'id': photos_order[photo],
-                'src': photo_src[photos_order[photo]],
-                'order': photo})
+                'id': photos_order[str(key)],
+                'src': photo_src[photos_order[str(key)]],
+                'order': str(key)})
     return ordered
