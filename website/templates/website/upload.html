@@ -3,39 +3,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Photos Upload page</title>
+<title>Photos Upload page</title>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+ <style type="text/css">
+   .modal {
+text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+@media screen and (min-width: 768px) { 
+.modal:before {
+  display: inline-block;
+  vertical-align: middle;
+  content: " ";
+  height: 100%;
+}
+}
+
+.modal-dialog {
+display: inline-block;
+text-align: left;
+vertical-align: middle;
+
+.black-background {background-color:#000000;}
+.white {color:#ffffff;}
+}
+ </style>
 </head>
-<body>
+<body background="https://source.unsplash.com/random" style="background-size: cover;">
+{% if success %}
+<div class="col-xs-4 col-xs-offset-4 center">
+  <strong style="font-size: 52px; color: white;">{{ success }}</strong>
+</div>
+{% endif %}
+{% if danger %}
+<div class="col-xs-4 col-xs-offset-4 center">
+  <strong style="font-size: 52px; color: red;">{{ danger }}</strong>
+</div>
+{% endif %}
+<div class="modal fade" tabindex="-1" role="dialog" id='test' style="opacity: 1; display: unset;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" style='text-align: center'>Upload Photos</h4>
+      </div>
+      <div class="modal-body">        
+        <select name='type' id='type' form='upload' class="form-control">
+          <option disabled selected value>-----------</option>
+          <option class='type' value='gallery'>Gallery</option>
+          <option class='type' value='category'>Category</option>
+        </select>
 
-<section>
-  <form action="/upload/" method="POST" enctype="multipart/form-data" id='upload'>{% csrf_token %}
-    <input type="file" name="files" multiple/>
-    <input type="submit" value="Submit"/>
-  </form>
+        <select name='id' form='upload'  style='display: None' id='gallery' class="form-control">
+          {% for gallery in galleries %}
+          <option value={{gallery.id}}>{{gallery}}</option>
+          {% endfor %}
+        </select>
 
-  <select name='type' id='type' form='upload'>
-    <option disabled selected value>-----------</option>
-    <option class='type' value='gallery'>Gallery</option>
-    <option class='type' value='category'>Category</option>
-  </select>
-
-  <select name='id' form='upload'  style='display: None' id='gallery'>
-    {% for gallery in galleries %}
-    <option value={{gallery.id}}>{{gallery}}</option>
-    {% endfor %}
-  </select>
-
-  <select name='id' form='upload' style='display: None' id='category'>
-    {% for category in categories %}
-    <option value={{category.id}}>{{category}}</option>
-    {% endfor %}
-  </select>
-</section>
-
+        <select name='id' form='upload' style='display: None' id='category' class="form-control">
+          {% for category in categories %}
+          <option value={{category.id}}>{{category}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="modal-footer">
+        <form action="/upload/" method="POST" enctype="multipart/form-data" id='upload' class='form-horizontal' style="float:left">{% csrf_token %}
+        <label class="btn btn-default btn-file">
+            Browse <input type="file" name='files' style="display: none;" id='files-to-upload' multiple>
+        </label>
+        <span class='label label-info' id="upload-file-info"></span>
+        </form>
+        <input value="Upload" type="submit" class="btn btn-default" form='upload'></input>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
 
 <script>
 $( document ).ready(function(){
+  $('#files-to-upload').on('change', function(){
+        var files_display = '';
+        var files = $(this).prop('files');
+        if (files.length > 1){
+          files_display = files.length + ' photos selected';
+        }
+        else {
+          files_display = files[0].name
+        };
+        $('#upload-file-info').html(files_display);
+    })
   $("#type").click(function(){
     var _type = $(this).val();
   if (_type == 'category'){
