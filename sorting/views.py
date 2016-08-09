@@ -51,7 +51,8 @@ class CategorySorting(SortingBaseView):
             'galleries': galleries,
             'photos': category_photos,
             'name': category.__str__(),
-            'type': self.type})
+            'type': self.type,
+            'id': category.id})
         return context
 
 
