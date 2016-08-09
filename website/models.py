@@ -474,7 +474,7 @@ class ReviewPhoto(models.Model):
     photo = models.ForeignKey('Photo')
     is_side_photo = models.BooleanField(default=False)
 
-def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
         if self._state.adding:
             order_num = get_order_num(self.review.photos_order)
             self.review.photos_order[order_num] = str(self.photo.id)
