@@ -95,7 +95,11 @@ $( "#sortable" ).disableSelection();
             {% block content %}
             {% endblock %}
             <div class="photos-wrapper" style="font-size:18px;">
-                {% if photos %}<button id='save'>Save</button>{% endif %}
+                {% if photos %}
+                    <a class="save-button" id='save'>
+                        <i class="fa fa-floppy-o floppy" aria-hidden="true"></i>
+                    </a>
+                {% endif %}
                 <ul id="sortable">
                     {% for photo in photos%}
                       <li class="col-xs-12 col-sm-4 col-md-3 grid nopadding ui-state-default" photo_id="{{ photo.id }}">
