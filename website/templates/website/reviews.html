@@ -3,22 +3,22 @@
 {% block content %}
 <div id="page-content-wrapper">
     <div class="row nomargin" id="content">
-        <div class="col-md-9 nopadding" id="left">
+        <div class="col-md-9 col-sm-12 col-xs-12 nopadding" id="left">
             <div class="faq">
                 <div class="heading-wrapper">
-                    <h1 class="page-heading" style="font-size:24px; text-align:center; color:#d7c356;" class="nomargin">ATSILIEPIMAI</h1> 
+                    <h1 class="page-heading" style="font-size:24px; text-align:center;" class="nomargin">{{reviewpage.heading}}</h1> 
                     <hr class="page-heading" style="width:100px; margin-top:8px; margin-bottom:8px;">
                 </div>
                 
                 {% for review in reviews %}
                 <div class="review">
                     <div class="row">
-                        <img class="col-lg-3 col-md-9 col-sm-12 col-xs-12" src="{{review.photo.url}}">
+                        <img class="col-lg-3 col-md-9 col-sm-12 col-xs-12" src="{{review.review.photo.image.url}}">
                         
                         <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
 
                             <span class="review-text">
-                                {{review.text}}
+                                {{review.review_text|safe}}
                             </span>
 
                             <span class="review-author">
