@@ -9,26 +9,29 @@ register = template.library.Library()
 def translated_menu(COOKIES):
     translations = {
         'lt': [
-            {'url': reverse_lazy('contacts-lt'), 'name': 'Kontaktai'},
-            {'url': reverse_lazy('retouch-lt'), 'name': 'Retušavimas'},
-            {'url': reverse_lazy('pricing-lt'), 'name': 'Kainos'},
             {'url': reverse_lazy('about-lt'), 'name': 'Apie mus'},
             {'url': reverse_lazy('reviews-lt'),'name': 'Atsiliepimai'},
-            {'url': reverse_lazy('faq-lt'), 'name': 'DUK'}],
+            {'url': reverse_lazy('pricing-lt'), 'name': 'Kainos'},
+            {'url': reverse_lazy('retouch-lt'), 'name': 'Retušavimas'},
+            {'url': reverse_lazy('faq-lt'), 'name': 'DUK'},
+            {'url': reverse_lazy('contacts-lt'), 'name': 'Kontaktai'},
+            ],
         'en': [
-            {'url': reverse_lazy('contacts-en'), 'name': 'Contacts'},
-            {'url': reverse_lazy('retouch-en'), 'name': 'Retouch'},
-            {'url': reverse_lazy('pricing-en'), 'name': 'Prices'},
             {'url': reverse_lazy('about-en'), 'name': 'About us'},
             {'url': reverse_lazy('reviews-en'),'name': 'Reviews'},
-            {'url': reverse_lazy('faq-en'), 'name': 'FAQ'}],
+            {'url': reverse_lazy('pricing-en'), 'name': 'Prices'},
+            {'url': reverse_lazy('retouch-en'), 'name': 'Retouch'},
+            {'url': reverse_lazy('faq-en'), 'name': 'FAQ'},
+            {'url': reverse_lazy('contacts-en'), 'name': 'Contacts'},           
+            ],
         'ru': [
-            {'url': reverse_lazy('contacts-ru'), 'name': 'Контакты'},
-            {'url': reverse_lazy('retouch-ru'), 'name': 'Ретуширование'},
-            {'url': reverse_lazy('pricing-ru'), 'name': 'Цены'},
             {'url': reverse_lazy('about-ru'), 'name': 'О нас'},
             {'url': reverse_lazy('reviews-ru'),'name': 'Отзывы'},
-            {'url': reverse_lazy('faq-ru'), 'name': 'ЧАВО'}]
+            {'url': reverse_lazy('pricing-ru'), 'name': 'Цены'},
+            {'url': reverse_lazy('retouch-ru'), 'name': 'Ретуширование'},
+            {'url': reverse_lazy('faq-ru'), 'name': 'ЧАВО'},
+            {'url': reverse_lazy('contacts-ru'), 'name': 'Контакты'},
+            ]
     }
     
     try:
