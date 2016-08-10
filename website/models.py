@@ -293,6 +293,19 @@ def delete_photos_from_category_order(sender, instance, using, **kwargs):
 class ContactsPage(models.Model):
     page_name_in_menu = models.CharField(max_length=100)
     photos_order = JSONField(default={}, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Contacts Page'
+
+    def description(self):
+        if self.description_editor or self.adasd or self.sodasdasd:
+            return mark_safe(self.description_editor)
+
+    def __str__(self):
+        return 'Kontaktai ' + self.language.language_code + ' kalba'
+
+
+class ContactsPageByLanguage(models.Model):
     page_title = models.CharField(max_length=100)
     heading = RedactorField(verbose_name=u'Heading')
     heading_text = RedactorField(verbose_name=u'Heading Text')
@@ -313,20 +326,12 @@ class ContactsPage(models.Model):
     contact_form_send_button_text = models.CharField(
         max_length=50, blank=True, null=True)
     language = models.ForeignKey(Language, null=True)
-
-    class Meta:
-        verbose_name_plural = 'Contacts Page'
-
-    def description(self):
-        if self.description_editor or self.adasd or self.sodasdasd:
-            return mark_safe(self.description_editor)
-
-    def __str__(self):
-        return 'Kontaktai ' + self.language.language_code + ' kalba'
+    contactspage = models.ForeignKey(ContactsPage)
 
 
 class ContactsPageSeo(SEO):
     contactspage = models.ForeignKey(ContactsPage, null=True)
+    language = models.ForeignKey('Language', null=True, blank=True)
 
 
 class ContactsPagePhoto(models.Model):
@@ -336,9 +341,9 @@ class ContactsPagePhoto(models.Model):
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            order_num = get_order_num(self.review.photos_order)
-            self.review.photos_order[order_num] = str(self.photo.id)
-            self.review.save()
+            order_num = get_order_num(self.contacts_page.photos_order)
+            self.contacts_page.photos_order[order_num] = str(self.photo.id)
+            self.contacts_page.save()
         super(ContactsPagePhoto, self).save(*args, **kwargs)
 
 
@@ -350,11 +355,8 @@ def delete_photos_from_contacts_order(sender, instance, using, **kwargs):
 
 
 class PricePage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     photos_order = JSONField(default={}, null=True, blank=True)
     modified = models.DateTimeField(auto_now=True)
-    heading = models.CharField(max_length=100, null=True, blank=True)
-    language = models.ForeignKey(Language, null=True)
 
     def __str__(self):
         return 'Pricepage ' + self.language.language_code
@@ -363,8 +365,16 @@ class PricePage(models.Model):
         verbose_name_plural = 'Price Page'
 
 
+class PricePageByLanguage(models.Model):
+    heading = models.CharField(max_length=100, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
+    page_name_in_menu = models.CharField(max_length=100)
+    pricepage = models.ForeignKey(PricePage, null=True)
+
+
 class PricePageSeo(SEO):
     pricepage = models.ForeignKey(PricePage, null=True)
+    language = models.ForeignKey('Language', null=True)
 
 
 class PricePagePhoto(models.Model):
@@ -410,26 +420,30 @@ class Message(models.Model):
 
 
 class AboutPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     photos_order = JSONField(default={}, null=True, blank=True)
     modified = models.DateTimeField(default=timezone.now)
-    heading = models.CharField(max_length=100, null=True, blank=True)
-    quote = RedactorField(verbose_name=u'Quote', null=True, blank=True)
-    quote_author = RedactorField(
-        verbose_name=u'Quote author', null=True, blank=True)
-    text = RedactorField(verbose_name=u'Text', null=True, blank=True)
-
-    language = models.ForeignKey(Language, null=True, unique=True)
 
     class Meta:
         verbose_name_plural = 'About Page'
 
     def __str__(self):
-        return 'About page ' + self.language.language_code
+        return 'About page'
+
+
+class AboutPageByLanguage(models.Model):
+    page_name_in_menu = models.CharField(max_length=100)
+    heading = models.CharField(max_length=100, null=True, blank=True)
+    quote = RedactorField(verbose_name=u'Quote', null=True, blank=True)
+    quote_author = RedactorField(
+        verbose_name=u'Quote author', null=True, blank=True)
+    text = RedactorField(verbose_name=u'Text', null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
+    aboutpage = models.ForeignKey(AboutPage)
 
 
 class AboutPageSeo(SEO):
     aboutpage = models.ForeignKey(AboutPage, null=True)
+    language = models.ForeignKey(Language, null=True)
 
 
 class AboutPagePhoto(models.Model):
@@ -455,53 +469,69 @@ def delete_photos_from_about_order(sender, instance, using, **kwargs):
     delete_from_order(instance.about, instance.photo.id)
 
 
-class Review(models.Model):
+class ReviewPage(models.Model):
+    modified = models.DateTimeField(auto_now=True)
     photos_order = JSONField(default={}, null=True, blank=True)
-    review = RedactorField(verbose_name=u'Review')
-    author = models.CharField(max_length=200)
+
+
+
+class ReviewPagePhoto(models.Model):
+    review_page = models.ForeignKey('ReviewPage', related_name='photos')
+    photo = models.ForeignKey('Photo', null=True)
+    is_side_photo = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self._state.adding:
+            order_num = get_order_num(self.review.photos_order)
+            self.review_page.photos_order[order_num] = str(self.photo.id)
+            self.review_page.save()
+        super(ReviewPhoto, self).save(*args, **kwargs)
+
+
+@receiver(
+    pre_delete, sender=ReviewPagePhoto,
+    dispatch_uid='photos_delete_from_review_order_signal')
+def delete_photos_from_review_order(sender, instance, using, **kwargs):
+    delete_from_order(instance.review, instance.photo.id)
+
+
+class ReviewPageByLanguage(models.Model):
+    language = models.ForeignKey(Language, null=True)
+    heading = models.CharField(max_length=100, null=True, blank=True)
+    review_page = models.ForeignKey('ReviewPage', null=True)
+
+
+class ReviewPageSeo(SEO):
+    reviewpage = models.ForeignKey(ReviewPage, null=True)
+    language = models.ForeignKey(Language, null=True)
+
+
+class Review(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
+    photo = models.ForeignKey('Photo', null=True)
 
     def text(self):
         if self.review:
             return mark_safe(self.review)
 
     def __str__(self):
-        return self.author
+        try:
+            author = self.reviewbylanguage_set.first().author
+        except:
+            author = 'No author provided'
+
+        return author
 
 
-class ReviewPhoto(models.Model):
-    review = models.ForeignKey('Review', related_name='photos')
-    photo = models.ForeignKey('Photo')
-    is_side_photo = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        if self._state.adding:
-            order_num = get_order_num(self.review.photos_order)
-            self.review.photos_order[order_num] = str(self.photo.id)
-            self.review.save()
-        super(ReviewPhoto, self).save(*args, **kwargs)
-
-
-@receiver(
-    pre_delete, sender=ReviewPhoto,
-    dispatch_uid='photos_delete_from_review_order_signal')
-def delete_photos_from_review_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.review, instance.photo.id)
-
-class ReviewPage(models.Model):
+class ReviewByLanguage(models.Model):
     language = models.ForeignKey(Language, null=True)
-
-
-class ReviewPageSeo(SEO):
-    reviewpage = models.ForeignKey(ReviewPage, null=True)
-
+    review = models.ForeignKey('Review', null=True)
+    review_text = RedactorField(verbose_name=u'Review')
+    author = models.CharField(max_length=200)
 
 class FaqPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     photos_order = JSONField(default={}, null=True, blank=True)
     modified = models.DateTimeField(default=timezone.now)
-    heading = models.CharField(max_length=100, null=True, blank=True)
-    language = models.ForeignKey(Language, null=True)
 
     class Meta:
         verbose_name_plural = 'FAQ Page'
@@ -510,14 +540,23 @@ class FaqPage(models.Model):
         return 'FAQ Page ' + self.language.language_code
 
 
+class FaqPageByLanguage(models.Model):
+    heading = models.CharField(max_length=100, null=True, blank=True)
+    language = models.ForeignKey(Language, null=True)
+    page_name_in_menu = models.CharField(max_length=100)
+    faqpage = models.ForeignKey(FaqPage)
+
+
 class FaqPageSeo(SEO):
     faqpage = models.ForeignKey(FaqPage, null=True)
+    language = models.ForeignKey(Language, null=True)
 
 
 class Question_FaqPage(models.Model):
     heading = models.CharField(max_length=100, null=True, blank=True)
     body = RedactorField(verbose_name=u'Question Body', null=True, blank=True)
     faqpage = models.ForeignKey(FaqPage, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, null=True)
 
 
 class FAQPhoto(models.Model):
@@ -541,12 +580,18 @@ def delete_photos_from_faq_order(sender, instance, using, **kwargs):
 
 
 class RetouchPage(models.Model):
+    modified = models.DateTimeField(auto_now=True)
+
+
+class RetouchPageByLanguage(models.Model):
     page_name_in_menu = models.CharField(max_length=100)
     language = models.ForeignKey(Language, null=True)
+    retouchpage = models.ForeignKey(RetouchPage)
 
 
 class RetouchPageSeo(SEO):
     retouchpage = models.ForeignKey(RetouchPage, null=True)
+    language = models.ForeignKey(Language, null=True)
 
 
 class ComparisonPhoto(models.Model):
@@ -560,7 +605,11 @@ class ComparisonPhoto(models.Model):
 
 class IndexPage(models.Model):
     photos_order = JSONField(default={}, null=True, blank=True)
+
+
+class IndexPageByLanguage(models.Model):
     language = models.ForeignKey(Language, null=True)
+    indexpage = models.ForeignKey(IndexPage, null=True)
 
 
 class IndexPagePhoto(models.Model):
@@ -584,3 +633,4 @@ def delete_photos_from_index_order(sender, instance, using, **kwargs):
 
 class IndexPageSeo(SEO):
     indexpage = models.ForeignKey(IndexPage, null=True)
+    language = models.ForeignKey(Language, null=True)
