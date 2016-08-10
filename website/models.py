@@ -291,7 +291,6 @@ def delete_photos_from_category_order(sender, instance, using, **kwargs):
 
 
 class ContactsPage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     photos_order = JSONField(default={}, null=True, blank=True)
 
     class Meta:
@@ -368,7 +367,6 @@ class PricePage(models.Model):
 class PricePageByLanguage(models.Model):
     heading = models.CharField(max_length=100, null=True, blank=True)
     language = models.ForeignKey(Language, null=True)
-    page_name_in_menu = models.CharField(max_length=100)
     pricepage = models.ForeignKey(PricePage, null=True)
 
 
@@ -431,7 +429,6 @@ class AboutPage(models.Model):
 
 
 class AboutPageByLanguage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     heading = models.CharField(max_length=100, null=True, blank=True)
     quote = RedactorField(verbose_name=u'Quote', null=True, blank=True)
     quote_author = RedactorField(
@@ -543,7 +540,6 @@ class FaqPage(models.Model):
 class FaqPageByLanguage(models.Model):
     heading = models.CharField(max_length=100, null=True, blank=True)
     language = models.ForeignKey(Language, null=True)
-    page_name_in_menu = models.CharField(max_length=100)
     faqpage = models.ForeignKey(FaqPage)
 
 
@@ -584,7 +580,6 @@ class RetouchPage(models.Model):
 
 
 class RetouchPageByLanguage(models.Model):
-    page_name_in_menu = models.CharField(max_length=100)
     language = models.ForeignKey(Language, null=True)
     retouchpage = models.ForeignKey(RetouchPage)
 
