@@ -17,12 +17,15 @@ def index(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
-    
+
+    # make queries for every created page object to get menu name field and show it in menu
+    # use as example retrieve sidemenu galeries function
+
     try:
-        seo = IndexPage.objects.get(
-            language=language).indexpage_seo_set.first()
+        seo = IndexPageSeo.get(language=language).first()
     except:
         seo = []
+
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
         try:
@@ -137,7 +140,7 @@ class UploadView(TemplateView):
         _id = request.POST.get('id')
         files = request.FILES.getlist('files')
         if not files:
-            return HttpResponse('No photos selected')
+            return render(request, 'website/upload.html', {'danger': 'No photos selected!'})
 
         if _type == 'gallery':
             _gallery = Gallery.objects.filter(id=_id)
@@ -159,7 +162,7 @@ class UploadView(TemplateView):
             for file in files:
                 Photo.objects.create(name=file.name, image=file)
 
-        return HttpResponse('Done!')
+        return render(request, 'website/upload.html', {'success': 'Done!'})
 
 
 def contact(request):
@@ -171,12 +174,12 @@ def contact(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
-        seo = ContactsPage.objects.get(language=language).contactspage_seo_set.first()
+        seo = ContactsPageSeo.objects.get(language=language).first()
     except:
         seo = []
 
     try:
-        contactspage = ContactsPage.objects.filter(language=language).first()
+        contactspage = ContactsPageByLanguage.objects.filter(language=language).first()
 
     except Exception:
         contactspage = []
@@ -210,12 +213,12 @@ def pricing(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
-        seo = PricePage.objects.get(language=language).pricepage_seo_set.first()
+        seo = PricePageSeo.objects.get(language=language).first()
     except:
         seo = []
 
     try:
-        pricepage = PricePage.objects.filter(language=language).first()
+        pricepage = PricePageByLanguage.objects.filter(language=language).first()
 
     except Exception:
         pricepage = []
@@ -256,12 +259,12 @@ def about(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
-        seo = AboutPage.objects.get(language=language).aboutpage_seo_set.first()
+        seo = AboutPageSeo.objects.get(language=language).first()
     except:
         seo = []
 
     try:
-        aboutpage = AboutPage.objects.filter(language=language).first()
+        aboutpage = AboutPageByLanguage.objects.filter(language=language).first()
 
     except Exception:
         aboutpage = []
@@ -295,14 +298,20 @@ def reviews(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
-        seo = ReviewPage.objects.get(language=language).reviewpage_seo_set.first()
+        reviewpage = ReviewPageByLanguage.objects.get(language=language)
+    except:
+        reviewpage = []
+    try:
+        seo = ReviewPageSeo.objects.get(language=language).first()
     except:
         seo = []
 
-    reviews = Review.objects.all()
-
     try:
-        photos = Photo.objects.filter(is_for_review_page_side=True)
+        reviews = ReviewByLanguage.objects.filter(language=language)
+    except:
+        reviews = []
+    try:
+        photos = ReviewPagePhoto.objects.filter(is_side_photo=True)
     except:
         photos = []
 
@@ -310,6 +319,7 @@ def reviews(request):
         request,
         'website/reviews.html', {
             'reviews': reviews,
+            'reviewpage': reviewpage,
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
@@ -329,12 +339,12 @@ def faq(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
-        seo = FaqPage.objects.get(language=language).faqpage_seo_set.first()
+        seo = FaqPageSeo.objects.get(language=language).first()
     except:
         seo = []
 
     try:
-        faqpage = FaqPage.objects.filter(language=language).first()
+        faqpage = FaqPageByLanguage.objects.filter(language=language).first()
 
     except Exception:
         faqpage = []

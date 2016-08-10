@@ -1,3 +1,4 @@
+{% load website_tags %}
 {% load staticfiles %}
 <!DOCTYPE html>
 <html lang="{{current_language}}">
@@ -116,25 +117,8 @@
                         {% endfor %}
                     </div>
                     <hr style="width:40%;">
-                    <div class="secondary-menu sub-category">                 
-                        <li>
-                            <a href={% url 'contact-us' %}>Kontaktai</a>
-                        </li>
-                        <li>
-                            <a href={% url 'retouch' %}>Retušavimas</a>
-                        </li>
-                        <li>
-                            <a href={% url 'pricing' %}>Kainos</a>
-                        </li>
-                        <li>
-                            <a href={% url 'about' %}>Apie mus</a>
-                        </li>
-                        <li>
-                            <a href={% url 'reviews' %}>Atsiliepimai</a>
-                        </li>
-                        <li>
-                            <a href={% url 'faq' %}>DUK</a>
-                        </li>
+                    <div class="secondary-menu sub-category">
+                        {% translated_menu request.COOKIES %}               
                     </div>
                     <div class="btn-group flat" role="group">
                         <button type="button" class="btn btn-default socicon-facebook"></button>
