@@ -301,7 +301,7 @@ class ContactsPage(models.Model):
             return mark_safe(self.description_editor)
 
     def __str__(self):
-        return 'Kontaktai ' + self.language.language_code + ' kalba'
+        return 'Contacts'
 
 
 class ContactsPageByLanguage(models.Model):
@@ -358,7 +358,7 @@ class PricePage(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return 'Pricepage ' + self.language.language_code
+        return 'Pricepage'
 
     class Meta:
         verbose_name_plural = 'Price Page'
@@ -534,7 +534,7 @@ class FaqPage(models.Model):
         verbose_name_plural = 'FAQ Page'
 
     def __str__(self):
-        return 'FAQ Page ' + self.language.language_code
+        return 'FAQ Page'
 
 
 class FaqPageByLanguage(models.Model):
