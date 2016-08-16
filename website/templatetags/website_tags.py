@@ -1,19 +1,49 @@
-# from django import template
-# from django.core.urlresolvers import reverse
-# from django.utils.safestring import mark_safe
-# from website.models import *
+from django import template
+from django.utils.safestring import mark_safe
+from django.core.urlresolvers import reverse_lazy
 
-# @register.simple_tag
-# def get_category_name(project_id, language):
-# 	try:
-# 		return ProjectByLanguage.objects.get(project__id=project_id, language__language_code=language).slug
-# 	except Exception as e:
-# 		logger.error(e)
-# 		return ''
+# reverse_lazy = lambda x: x
+register = template.library.Library()
 
-# def get_category_slug(project_id, language):
-# 	try:
-# 		return ProjectByLanguage.objects.get(project__id=project_id, language__language_code=language).slug
-# 	except Exception as e:
-# 		logger.error(e)
-# 		return ''
+@register.simple_tag
+def translated_menu(COOKIES):
+    translations = {
+        'lt': [
+            {'url': reverse_lazy('about-lt'), 'name': 'Apie mus'},
+            {'url': reverse_lazy('reviews-lt'),'name': 'Atsiliepimai'},
+            {'url': reverse_lazy('pricing-lt'), 'name': 'Kainos'},
+            {'url': reverse_lazy('retouch-lt'), 'name': 'Retušavimas'},
+            {'url': reverse_lazy('faq-lt'), 'name': 'DUK'},
+            {'url': reverse_lazy('contacts-lt'), 'name': 'Kontaktai'},
+            ],
+        'en': [
+            {'url': reverse_lazy('about-en'), 'name': 'About us'},
+            {'url': reverse_lazy('reviews-en'),'name': 'Reviews'},
+            {'url': reverse_lazy('pricing-en'), 'name': 'Prices'},
+            {'url': reverse_lazy('retouch-en'), 'name': 'Retouch'},
+            {'url': reverse_lazy('faq-en'), 'name': 'FAQ'},
+            {'url': reverse_lazy('contacts-en'), 'name': 'Contacts'},           
+            ],
+        'ru': [
+            {'url': reverse_lazy('about-ru'), 'name': 'О нас'},
+            {'url': reverse_lazy('reviews-ru'),'name': 'Отзывы'},
+            {'url': reverse_lazy('pricing-ru'), 'name': 'Цены'},
+            {'url': reverse_lazy('retouch-ru'), 'name': 'Ретуширование'},
+            {'url': reverse_lazy('faq-ru'), 'name': 'ЧАВО'},
+            {'url': reverse_lazy('contacts-ru'), 'name': 'Контакты'},
+            ]
+    }
+    
+    try:
+        language = COOKIES['language']
+    except KeyError:
+        language = 'lt'
+
+    translated = translations[language]
+
+    menu_html = ''
+
+    for item in translated:
+        menu_html += '<li><a href="{}">{}</a></li>'.format(item['url'], item['name'])
+
+    return mark_safe(menu_html)

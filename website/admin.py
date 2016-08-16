@@ -16,16 +16,18 @@ class AboutPagePhotos(admin.TabularInline):
 
 class AboutPageSeoInline(admin.TabularInline):
     model = AboutPageSeo
-    extra = 1
-    max_num = 1
+    extra = 3
+    max_num = 3
 
+class AboutPageByLanguageInline(admin.TabularInline):
+    model = AboutPageByLanguage
+    extra = 3
+    max_num = 3
 
 class AboutPageAdmin(admin.ModelAdmin):
     model = AboutPage
-    list_display = ('__str__', 'heading', 'language', 'modified',)
-    inlines = [AboutPagePhotos, AboutPageSeoInline]
-    fields = (
-        'heading', 'quote', 'quote_author', 'text', 'language')
+    inlines = [AboutPagePhotos, AboutPageSeoInline, AboutPageByLanguageInline]
+    list_display = ('__str__',)
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 2 else True
@@ -33,16 +35,12 @@ class AboutPageAdmin(admin.ModelAdmin):
 
 class CategoryByLanguageSeoInline(admin.TabularInline):
     model = CategorySeo
-    extra = 1
-    max_num = 1
+    extra = 3
+    max_num = 3
 
 
 class CategoryInline(admin.StackedInline):
     model = CategoryByLanguage
-
-    inlines = [
-        CategoryByLanguageSeoInline,
-    ]
 
     def get_extra(self, request, obj=None, **kwargs):
         extra = 3
@@ -130,7 +128,7 @@ class FaqPageSeoInline(admin.TabularInline):
 class FaqPageAdmin(admin.ModelAdmin):
     inlines = [QuestionFAQInline, FaqPhotosInline, FaqPageSeoInline]
     exclude = ('modified',)
-    list_display = ('__str__', 'language', 'modified')
+    list_display = ('__str__', 'modified')
 
 
 class QuestionInline(admin.StackedInline):
@@ -153,10 +151,12 @@ class PricePageSeoInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
+class PricePageByLanguageInline(admin.TabularInline):
+    model = PricePageByLanguage
 
 class PricePageAdmin(admin.ModelAdmin):
-    inlines = [PricePhotosInline, QuestionInline, PricePageSeoInline]
-    list_display = ('__str__', 'heading', 'language', 'modified',)
+    inlines = [PricePhotosInline, QuestionInline, PricePageSeoInline, PricePageByLanguageInline]
+    list_display = ('__str__',)
 
 
 class ContactsPhotosInline(admin.TabularInline):
@@ -172,8 +172,11 @@ class ContactsPhotosInline(admin.TabularInline):
 
 class ContactsPageSeoInline(admin.TabularInline):
     model = ContactsPageSeo
-    extra = 1
-    max_num = 1
+    extra = 3
+    max_num = 3
+
+class ContactsPageByLanguageInline(admin.TabularInline):
+    model = ContactsPageByLanguage
 
 
 class ContactsPageAdmin(admin.ModelAdmin):
@@ -181,7 +184,7 @@ class ContactsPageAdmin(admin.ModelAdmin):
         ContactsPhotosInline,
         ContactsPageSeoInline
     ]
-    list_display = ('__str__', 'language')
+    list_display = ('__str__',)
 
     def has_add_permission(self, request):
         return False if self.model.objects.count() > 2 else True
@@ -194,24 +197,37 @@ class PageSettingsAdmin(admin.ModelAdmin):
         return False if self.model.objects.count() > 0 else True
 
 
-class ReviewAdminInline(admin.TabularInline):
-    model = ReviewPhoto
+class ReviewByLanguageInline(admin.TabularInline):
+    model = ReviewByLanguage
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    model = Review
+    inlines = (ReviewByLanguageInline,)
     raw_id_fields = ('photo',)
     fields = ('photo', 'thumbnail')
     readonly_fields = ('thumbnail',)
+    list_display = ('__str__', 'created_at',)
 
     def thumbnail(self, obj):
         return mark_safe(obj.photo.thumbnail)
     thumbnail.short_description = u"Thumbnail"
 
 
-class ReviewAdmin(admin.ModelAdmin):
-    model = Review
-    inlines = (ReviewAdminInline,)
-    fields = ('author', 'review',)
-    list_display = ('__str__', 'author', 'created_at')
-    exclude = ('created_at',)
+class ReviewPagePhotosInline(admin.TabularInline):
+    model = ReviewPagePhoto
 
+
+class ReviewPageByLanguageInline(admin.TabularInline):
+    model = ReviewPageByLanguage
+    max_num = 3
+
+
+class ReviewPageAdmin(admin.ModelAdmin):
+    model = ReviewPage
+    inlines = (ReviewPageByLanguageInline,)
+    list_display = ('__str__',)
+    exclude =('photos_order',)
 
 class ComparisonPhotoAdmin(admin.ModelAdmin):
     model = ComparisonPhoto
@@ -231,8 +247,8 @@ class ComparisonPhotoAdmin(admin.ModelAdmin):
 
 class IndexPageInline(admin.TabularInline):
     model = IndexPageSeo
-    extra = 1
-    max_num = 1
+    extra = 3
+    max_num = 3
 
 
 class IndexPhotosInline(admin.TabularInline):
@@ -281,3 +297,4 @@ admin.site.register(Review, ReviewAdmin)
 admin.site.register(ComparisonPhoto, ComparisonPhotoAdmin)
 admin.site.register(IndexPage, IndexPageAdmin)
 admin.site.register(RetouchPage, RetouchPageAdmin)
+admin.site.register(ReviewPage, ReviewPageAdmin)
