@@ -32,6 +32,8 @@ def index(request):
     elif pagesettings.layout == 1:
         template = 'website/index_slider.html'
 
+    photos = get_ordered_photos(IndexPage.objects.first().photos_order)
+
     response = render(
         request,
         template,
@@ -40,7 +42,7 @@ def index(request):
             'available_languages': available_languages,
             'galleries': data,
             'pagesettings': pagesettings,
-            'photos': IndexPage.objects.first().photos_order,
+            'photos': photos,
             'seo': seo,
         })
     return response
@@ -64,7 +66,7 @@ def retouch(request):
             language=language).retouchpage_seo_set.first()
     except:
         seo = []
-
+    photos = get_ordered_photos()
     response = render(
         request,
         'website/retouch.html', {
@@ -79,7 +81,6 @@ def retouch(request):
 
 
 def category(request, gallery_slug, category_slug):
-
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
@@ -99,6 +100,7 @@ def category(request, gallery_slug, category_slug):
     except:
         category_photos = []
 
+    photos = get_ordered_photos()
     response = render(
         request,
         'website/category.html',
@@ -115,7 +117,6 @@ def category(request, gallery_slug, category_slug):
 
 
 class UploadView(TemplateView):
-
     template_name = 'website/upload.html'
 
     @method_decorator(login_required(login_url='/'))
@@ -262,10 +263,7 @@ def about(request):
     except Exception:
         aboutpage = []
 
-    try:
-        photos = Photo.objects.filter(is_for_about_us_page_side=True)
-    except:
-        photos = []
+    photos = get_ordered_photos(AboutPage.objects.first().photos_order)
 
     response = render(
         request,
