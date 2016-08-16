@@ -186,9 +186,9 @@ class Category(models.Model):
             return self.categorybylanguage_set.filter(
                 language__language_code='lt').first().name
         except IndexError:
-            return 'Untitled gallery '
+            return 'Untitled category '
         except Exception:
-            return 'Untitled gallery '
+            return 'Untitled category '
 
 
 class CategoryByLanguage(models.Model):
