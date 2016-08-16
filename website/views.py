@@ -53,7 +53,6 @@ def retouch(request):
     language = get_language_obj(request)
 
     pagesettings = PageSettings.objects.first()
-
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
@@ -66,7 +65,6 @@ def retouch(request):
             language=language).retouchpage_seo_set.first()
     except:
         seo = []
-    photos = get_ordered_photos()
     response = render(
         request,
         'website/retouch.html', {
@@ -100,7 +98,6 @@ def category(request, gallery_slug, category_slug):
     except:
         category_photos = []
 
-    photos = get_ordered_photos()
     response = render(
         request,
         'website/category.html',
@@ -173,16 +170,13 @@ def contact(request):
         seo = []
 
     try:
-        contactspage = ContactsPageByLanguage.objects.filter(language=language).first()
+        contactspage = ContactsPageByLanguage.objects.filter(
+            language=language).first()
 
     except Exception:
         contactspage = []
 
-    try:
-        photos = Photo.objects.filter(is_for_price_page_side=True)
-    except:
-        photos = []
-
+    photos = get_ordered_photos(ContactsPage.objects.first().photos_order)
     response = render(
         request,
         'website/contact-us.html',
@@ -212,7 +206,8 @@ def pricing(request):
         seo = []
 
     try:
-        pricepage = PricePageByLanguage.objects.filter(language=language).first()
+        pricepage = PricePageByLanguage.objects.filter(
+            language=language).first()
 
     except Exception:
         pricepage = []
@@ -223,10 +218,7 @@ def pricing(request):
     except Exception:
         questions = []
 
-    try:
-        photos = Photo.objects.filter(is_for_price_page_side=True)
-    except:
-        photos = []
+    photos = get_ordered_photos(PricePage.objects.first().photos_order)
 
     response = render(
         request,
@@ -258,7 +250,8 @@ def about(request):
         seo = []
 
     try:
-        aboutpage = AboutPageByLanguage.objects.filter(language=language).first()
+        aboutpage = AboutPageByLanguage.objects.filter(
+            language=language).first()
 
     except Exception:
         aboutpage = []
@@ -301,10 +294,8 @@ def reviews(request):
         reviews = ReviewByLanguage.objects.filter(language=language)
     except:
         reviews = []
-    try:
-        photos = ReviewPagePhoto.objects.filter(is_side_photo=True)
-    except:
-        photos = []
+
+    photos = get_ordered_photos(ReviewPage.objects.first().photos_order)
 
     response = render(
         request,
@@ -341,15 +332,11 @@ def faq(request):
         faqpage = []
 
     try:
-        questions = Question_FaqPage.objects.filter(faqpage=faqpage.id).first()
-
+        questions = Question_FaqPage.objects.filter(faqpage=faqpage.id)
     except Exception:
         questions = []
 
-    try:
-        photos = Photo.objects.filter(is_for_faq_page_side=True)
-    except:
-        photos = []
+    photos = get_ordered_photos(FaqPage.objects.first().photos_order)
 
     response = render(
         request,

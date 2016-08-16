@@ -19,10 +19,12 @@ class AboutPageSeoInline(admin.TabularInline):
     extra = 3
     max_num = 3
 
+
 class AboutPageByLanguageInline(admin.TabularInline):
     model = AboutPageByLanguage
     extra = 3
     max_num = 3
+
 
 class AboutPageAdmin(admin.ModelAdmin):
     model = AboutPage
@@ -151,8 +153,10 @@ class PricePageSeoInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
+
 class PricePageByLanguageInline(admin.TabularInline):
     model = PricePageByLanguage
+
 
 class PricePageAdmin(admin.ModelAdmin):
     inlines = [PricePhotosInline, QuestionInline, PricePageSeoInline, PricePageByLanguageInline]
@@ -175,6 +179,7 @@ class ContactsPageSeoInline(admin.TabularInline):
     extra = 3
     max_num = 3
 
+
 class ContactsPageByLanguageInline(admin.TabularInline):
     model = ContactsPageByLanguage
 
@@ -182,7 +187,8 @@ class ContactsPageByLanguageInline(admin.TabularInline):
 class ContactsPageAdmin(admin.ModelAdmin):
     inlines = [
         ContactsPhotosInline,
-        ContactsPageSeoInline
+        ContactsPageSeoInline,
+        ContactsPageByLanguageInline,
     ]
     list_display = ('__str__',)
 
@@ -228,6 +234,7 @@ class ReviewPageAdmin(admin.ModelAdmin):
     inlines = (ReviewPageByLanguageInline,)
     list_display = ('__str__',)
     exclude =('photos_order',)
+
 
 class ComparisonPhotoAdmin(admin.ModelAdmin):
     model = ComparisonPhoto
