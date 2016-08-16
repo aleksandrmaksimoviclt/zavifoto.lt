@@ -471,7 +471,6 @@ class ReviewPage(models.Model):
     photos_order = JSONField(default={}, null=True, blank=True)
 
 
-
 class ReviewPagePhoto(models.Model):
     review_page = models.ForeignKey('ReviewPage', related_name='photos')
     photo = models.ForeignKey('Photo', null=True)
@@ -525,6 +524,7 @@ class ReviewByLanguage(models.Model):
     review = models.ForeignKey('Review', null=True)
     review_text = RedactorField(verbose_name=u'Review')
     author = models.CharField(max_length=200)
+
 
 class FaqPage(models.Model):
     photos_order = JSONField(default={}, null=True, blank=True)
@@ -600,6 +600,9 @@ class ComparisonPhoto(models.Model):
 
 class IndexPage(models.Model):
     photos_order = JSONField(default={}, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Index Page'
 
 
 class IndexPageByLanguage(models.Model):

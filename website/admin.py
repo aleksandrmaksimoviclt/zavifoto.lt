@@ -28,6 +28,8 @@ class AboutPageByLanguageInline(admin.TabularInline):
 
 class AboutPageAdmin(admin.ModelAdmin):
     model = AboutPage
+    readonly_fields = ('modified',)
+    exclude = ('photos_order',)
     inlines = [AboutPagePhotos, AboutPageSeoInline, AboutPageByLanguageInline]
     list_display = ('__str__',)
 
@@ -129,7 +131,8 @@ class FaqPageSeoInline(admin.TabularInline):
 
 class FaqPageAdmin(admin.ModelAdmin):
     inlines = [QuestionFAQInline, FaqPhotosInline, FaqPageSeoInline]
-    exclude = ('modified',)
+    exclude = ('photos_order',)
+    readonly_fields = ('modified',)
     list_display = ('__str__', 'modified')
 
 
@@ -160,6 +163,7 @@ class PricePageByLanguageInline(admin.TabularInline):
 
 class PricePageAdmin(admin.ModelAdmin):
     inlines = [PricePhotosInline, QuestionInline, PricePageSeoInline, PricePageByLanguageInline]
+    exclude = ('photos_order',)
     list_display = ('__str__',)
 
 
@@ -190,6 +194,7 @@ class ContactsPageAdmin(admin.ModelAdmin):
         ContactsPageSeoInline,
         ContactsPageByLanguageInline,
     ]
+    exclude = ('photos_order',)
     list_display = ('__str__',)
 
     def has_add_permission(self, request):
@@ -271,6 +276,7 @@ class IndexPhotosInline(admin.TabularInline):
 
 class IndexPageAdmin(admin.ModelAdmin):
     model = IndexPage
+    exclude = ('photos_order',)
     inlines = [IndexPageInline, IndexPhotosInline]
 
     def has_add_permission(self, request):
