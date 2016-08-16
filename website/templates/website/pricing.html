@@ -32,9 +32,9 @@
         <div class="demo-gallery">
             <ul id="lightgallery" class="list-unstyled marginbottom0">
                 {% for photo in photos %}
-                    <li class="col-xs-12 grid nopadding" data-src="{{photo.image.url}}">
+                    <li class="col-xs-12 grid nopadding" data-src="{{photo.src}}">
                         <a href="">
-                            <img class="imgcover grid" src="{{photo.image.url}}">
+                            <img class="imgcover grid" src="{{photo.src}}">
                         </a>
                     </li>
                 {% endfor %}
