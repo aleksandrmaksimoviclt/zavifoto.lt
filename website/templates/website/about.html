@@ -28,9 +28,9 @@
         </div>
         <div class="col-md-3 hidden-xs hidden-sm nopadding" id="right">
             {% for photo in photos %}
-                <li class="col-xs-12 grid nopadding" data-src="{{photo.url}}">
+                <li class="col-xs-12 grid nopadding" data-src="{{photo.src}}">
                     <a href="">
-                        <img class="imgcover grid" src="{{photo.url}}">
+                        <img class="imgcover grid" src="{{photo.src}}">
                     </a>
                 </li>
             {% endfor %}
