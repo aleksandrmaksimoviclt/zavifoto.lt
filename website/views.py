@@ -28,11 +28,9 @@ def index(request):
 
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
-        photos = Photo.objects.filter(is_for_index_grid=True)
 
-    if pagesettings.layout == 1:
+    elif pagesettings.layout == 1:
         template = 'website/index_slider.html'
-        photos = Photo.objects.filter(is_for_index_slider=True)
 
     response = render(
         request,
@@ -42,7 +40,7 @@ def index(request):
             'available_languages': available_languages,
             'galleries': data,
             'pagesettings': pagesettings,
-            'photos': photos,
+            'photos': IndexPage.objects.first().photos_order,
             'seo': seo,
         })
     return response
