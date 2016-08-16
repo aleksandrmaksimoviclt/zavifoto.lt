@@ -217,7 +217,7 @@ def pricing(request):
         pricepage = []
 
     try:
-        questions = Question.objects.filter(pricepage=pricepage.id).first()
+        questions = Question.objects.filter(pricepage=pricepage.id)
 
     except Exception:
         questions = []
