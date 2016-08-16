@@ -17,24 +17,19 @@ def index(request):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
-    
+
     try:
         seo = IndexPage.objects.get(
             language=language).indexpage_seo_set.first()
-    except:
+    except IndexPage.DoesNotExist:
         seo = []
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
-        try:
-            photos = Photo.objects.filter(is_for_index_grid=True)
-        except:
-            photos = []
+        photos = Photo.objects.filter(is_for_index_grid=True)
+
     if pagesettings.layout == 1:
         template = 'website/index_slider.html'
-        try:
-            photos = Photo.objects.filter(is_for_index_slider=True)
-        except:
-            photos = []
+        photos = Photo.objects.filter(is_for_index_slider=True)
 
     response = render(
         request,
