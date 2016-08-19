@@ -110,8 +110,7 @@ class Gallery(models.Model):
     @property
     def name(self):
         try:
-            return self.gallerybylanguage_set.all().get(
-                language__language='lt').name
+            return self.gallerybylanguage_set.first().name
         except IndexError:
             return 'Untitled gallery '
         except Exception:
@@ -171,20 +170,12 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-    def __str__(self):
-        _categories = self.categorybylanguage_set
-        if _categories.exists():
-            return _categories.first().name
-        else:
-            return 'Category by language is not attached'
-
     def remove_from_order(self, id):
         delete_from_order(self, id)
 
     def __str__(self):
         try:
-            return self.categorybylanguage_set.filter(
-                language__language_code='lt').first().name
+            return self.categorybylanguage_set.first().name
         except IndexError:
             return 'Untitled category '
         except Exception:

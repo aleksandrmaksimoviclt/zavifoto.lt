@@ -31,9 +31,11 @@ def index(request):
 
     elif pagesettings.layout == 1:
         template = 'website/index_slider.html'
-
-    photos = get_ordered_photos(IndexPage.objects.first().photos_order)
-
+    page = IndexPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
+        photos = []
     response = render(
         request,
         template,
@@ -176,7 +178,11 @@ def contact(request):
     except Exception:
         contactspage = []
 
-    photos = get_ordered_photos(ContactsPage.objects.first().photos_order)
+    page = ContactsPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
+        photos = []
     response = render(
         request,
         'website/contact-us.html',
@@ -218,7 +224,11 @@ def pricing(request):
     except Exception:
         questions = []
 
-    photos = get_ordered_photos(PricePage.objects.first().photos_order)
+    page = PricePage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
+        photos = []
 
     response = render(
         request,
@@ -256,7 +266,11 @@ def about(request):
     except Exception:
         aboutpage = []
 
-    photos = get_ordered_photos(AboutPage.objects.first().photos_order)
+    page = AboutPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
+        photos = []
 
     response = render(
         request,
@@ -295,7 +309,11 @@ def reviews(request):
     except:
         reviews = []
 
-    photos = get_ordered_photos(ReviewPage.objects.first().photos_order)
+    page = ReviewPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
+        photos = []
 
     response = render(
         request,
@@ -335,8 +353,11 @@ def faq(request):
         questions = Question_FaqPage.objects.filter(faqpage=faqpage.id)
     except Exception:
         questions = []
-
-    photos = get_ordered_photos(FaqPage.objects.first().photos_order)
+    page = FaqPage.objects.first()
+    if page.exists():
+        photos = get_ordered_photos(page.photos_order)
+    else:
+        photos = []
 
     response = render(
         request,
