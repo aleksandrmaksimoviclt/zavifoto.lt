@@ -353,9 +353,9 @@ def faq(request):
         questions = Question_FaqPage.objects.filter(faqpage=faqpage.id)
     except Exception:
         questions = []
-    page = FaqPage.objects.first()
+    page = FaqPage.objects.filter()
     if page.exists():
-        photos = get_ordered_photos(page.photos_order)
+        photos = get_ordered_photos(page.first().photos_order)
     else:
         photos = []
 
