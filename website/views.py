@@ -28,17 +28,14 @@ def index(request):
 
     if pagesettings.layout == 0:
         template = 'website/index_grid.html'
-        try:
-            photos = Photo.objects.filter(is_for_index_grid=True)
-        except:
-            photos = []
-    if pagesettings.layout == 1:
-        template = 'website/index_slider.html'
-        try:
-            photos = Photo.objects.filter(is_for_index_slider=True)
-        except:
-            photos = []
 
+    elif pagesettings.layout == 1:
+        template = 'website/index_slider.html'
+    page = IndexPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
+        photos = []
     response = render(
         request,
         template,
@@ -58,7 +55,6 @@ def retouch(request):
     language = get_language_obj(request)
 
     pagesettings = PageSettings.objects.first()
-
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
@@ -71,7 +67,6 @@ def retouch(request):
             language=language).retouchpage_seo_set.first()
     except:
         seo = []
-
     response = render(
         request,
         'website/retouch.html', {
@@ -86,7 +81,6 @@ def retouch(request):
 
 
 def category(request, gallery_slug, category_slug):
-
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
@@ -122,7 +116,6 @@ def category(request, gallery_slug, category_slug):
 
 
 class UploadView(TemplateView):
-
     template_name = 'website/upload.html'
 
     @method_decorator(login_required(login_url='/'))
@@ -179,16 +172,17 @@ def contact(request):
         seo = []
 
     try:
-        contactspage = ContactsPageByLanguage.objects.filter(language=language).first()
+        contactspage = ContactsPageByLanguage.objects.filter(
+            language=language).first()
 
     except Exception:
         contactspage = []
 
-    try:
-        photos = Photo.objects.filter(is_for_price_page_side=True)
-    except:
+    page = ContactsPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
         photos = []
-
     response = render(
         request,
         'website/contact-us.html',
@@ -218,20 +212,22 @@ def pricing(request):
         seo = []
 
     try:
-        pricepage = PricePageByLanguage.objects.filter(language=language).first()
+        pricepage = PricePageByLanguage.objects.filter(
+            language=language).first()
 
     except Exception:
         pricepage = []
 
     try:
-        questions = Question.objects.filter(pricepage=pricepage.id).first()
+        questions = Question.objects.filter(pricepage=pricepage.id)
 
     except Exception:
         questions = []
 
-    try:
-        photos = Photo.objects.filter(is_for_price_page_side=True)
-    except:
+    page = PricePage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
         photos = []
 
     response = render(
@@ -264,14 +260,16 @@ def about(request):
         seo = []
 
     try:
-        aboutpage = AboutPageByLanguage.objects.filter(language=language).first()
+        aboutpage = AboutPageByLanguage.objects.filter(
+            language=language).first()
 
     except Exception:
         aboutpage = []
 
-    try:
-        photos = Photo.objects.filter(is_for_about_us_page_side=True)
-    except:
+    page = AboutPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
         photos = []
 
     response = render(
@@ -310,9 +308,11 @@ def reviews(request):
         reviews = ReviewByLanguage.objects.filter(language=language)
     except:
         reviews = []
-    try:
-        photos = ReviewPagePhoto.objects.filter(is_side_photo=True)
-    except:
+
+    page = ReviewPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
         photos = []
 
     response = render(
@@ -350,14 +350,13 @@ def faq(request):
         faqpage = []
 
     try:
-        questions = Question_FaqPage.objects.filter(faqpage=faqpage.id).first()
-
+        questions = Question_FaqPage.objects.filter(faqpage=faqpage.id)
     except Exception:
         questions = []
-
-    try:
-        photos = Photo.objects.filter(is_for_faq_page_side=True)
-    except:
+    page = FaqPage.objects.filter()
+    if page.exists():
+        photos = get_ordered_photos(page.first().photos_order)
+    else:
         photos = []
 
     response = render(

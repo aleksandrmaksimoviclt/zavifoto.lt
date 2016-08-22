@@ -110,8 +110,7 @@ class Gallery(models.Model):
     @property
     def name(self):
         try:
-            return self.gallerybylanguage_set.all().get(
-                language__language='lt').name
+            return self.gallerybylanguage_set.first().name
         except IndexError:
             return 'Untitled gallery '
         except Exception:
@@ -171,24 +170,16 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
-    def __str__(self):
-        _categories = self.categorybylanguage_set
-        if _categories.exists():
-            return _categories.first().name
-        else:
-            return 'Category by language is not attached'
-
     def remove_from_order(self, id):
         delete_from_order(self, id)
 
     def __str__(self):
         try:
-            return self.categorybylanguage_set.filter(
-                language__language_code='lt').first().name
+            return self.categorybylanguage_set.first().name
         except IndexError:
-            return 'Untitled gallery '
+            return 'Untitled category '
         except Exception:
-            return 'Untitled gallery '
+            return 'Untitled category '
 
 
 class CategoryByLanguage(models.Model):
@@ -471,7 +462,6 @@ class ReviewPage(models.Model):
     photos_order = JSONField(default={}, null=True, blank=True)
 
 
-
 class ReviewPagePhoto(models.Model):
     review_page = models.ForeignKey('ReviewPage', related_name='photos')
     photo = models.ForeignKey('Photo', null=True)
@@ -525,6 +515,7 @@ class ReviewByLanguage(models.Model):
     review = models.ForeignKey('Review', null=True)
     review_text = RedactorField(verbose_name=u'Review')
     author = models.CharField(max_length=200)
+
 
 class FaqPage(models.Model):
     photos_order = JSONField(default={}, null=True, blank=True)
@@ -600,6 +591,9 @@ class ComparisonPhoto(models.Model):
 
 class IndexPage(models.Model):
     photos_order = JSONField(default={}, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = 'Index Page'
 
 
 class IndexPageByLanguage(models.Model):

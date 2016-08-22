@@ -7,18 +7,20 @@
 
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" 
       xmlns:fb="https://www.facebook.com/2008/fbml">
-    <meta name="google-site-verification" content="{{seo.google_site_verification_code}}" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if seo %}
+    <meta name="google-site-verification" content="{{seo.google_site_verification_code}}" />
     <title>{{seo.page_title}}</title>
     <meta name="description" content="{{seo.meta_description}}">
     <link rel="icon" href="{{seo.favicon.url}}" type="image/x-icon">
     <meta property="og:title" content="{{seo.title_for_facebook}}" />
-    <meta property="og:description" content="{{seo.description_for_facebook}}" />
+    <meta property="og:description" content="{{seo.description_for_facebook}}"/>
+    <meta property="og:image" content="{{seo.image_for_facebook}}" />
+    {% endif %}
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://www.zavifoto.lt{{ request.path }}"/>
-    <meta property="og:image" content="{{seo.image_for_facebook}}" />
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">

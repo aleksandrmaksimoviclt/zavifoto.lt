@@ -19,13 +19,17 @@ class AboutPageSeoInline(admin.TabularInline):
     extra = 3
     max_num = 3
 
+
 class AboutPageByLanguageInline(admin.TabularInline):
     model = AboutPageByLanguage
     extra = 3
     max_num = 3
 
+
 class AboutPageAdmin(admin.ModelAdmin):
     model = AboutPage
+    readonly_fields = ('modified',)
+    exclude = ('photos_order',)
     inlines = [AboutPagePhotos, AboutPageSeoInline, AboutPageByLanguageInline]
     list_display = ('__str__',)
 
@@ -127,7 +131,8 @@ class FaqPageSeoInline(admin.TabularInline):
 
 class FaqPageAdmin(admin.ModelAdmin):
     inlines = [QuestionFAQInline, FaqPhotosInline, FaqPageSeoInline]
-    exclude = ('modified',)
+    exclude = ('photos_order',)
+    readonly_fields = ('modified',)
     list_display = ('__str__', 'modified')
 
 
@@ -151,11 +156,14 @@ class PricePageSeoInline(admin.TabularInline):
     extra = 1
     max_num = 1
 
+
 class PricePageByLanguageInline(admin.TabularInline):
     model = PricePageByLanguage
 
+
 class PricePageAdmin(admin.ModelAdmin):
     inlines = [PricePhotosInline, QuestionInline, PricePageSeoInline, PricePageByLanguageInline]
+    exclude = ('photos_order',)
     list_display = ('__str__',)
 
 
@@ -175,6 +183,7 @@ class ContactsPageSeoInline(admin.TabularInline):
     extra = 3
     max_num = 3
 
+
 class ContactsPageByLanguageInline(admin.TabularInline):
     model = ContactsPageByLanguage
 
@@ -182,8 +191,10 @@ class ContactsPageByLanguageInline(admin.TabularInline):
 class ContactsPageAdmin(admin.ModelAdmin):
     inlines = [
         ContactsPhotosInline,
-        ContactsPageSeoInline
+        ContactsPageSeoInline,
+        ContactsPageByLanguageInline,
     ]
+    exclude = ('photos_order',)
     list_display = ('__str__',)
 
     def has_add_permission(self, request):
@@ -229,6 +240,7 @@ class ReviewPageAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
     exclude =('photos_order',)
 
+
 class ComparisonPhotoAdmin(admin.ModelAdmin):
     model = ComparisonPhoto
 
@@ -264,6 +276,7 @@ class IndexPhotosInline(admin.TabularInline):
 
 class IndexPageAdmin(admin.ModelAdmin):
     model = IndexPage
+    exclude = ('photos_order',)
     inlines = [IndexPageInline, IndexPhotosInline]
 
     def has_add_permission(self, request):
