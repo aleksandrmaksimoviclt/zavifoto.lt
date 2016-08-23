@@ -1,33 +1,29 @@
 {% extends "website/index.html" %}
-{% include "website/seo_block.html" %}
 {% load staticfiles %}
+
+
 {% block content %}
     <div class="demo-gallery">
-        <ul id="lightgallery" class="list-unstyled marginbottom0">
-        	{% for photo in photos %}
-	        	<li class="col-xs-12 col-sm-4 col-md-3 grid nopadding" data-src="{{photo.src}}">
-                    <a class="source-image-pin-it" href="">
-                        <img class="imgcover grid" src="{{photo.src}}">
-                    </a>
-	            </li>
-			{% endfor %}
-        </ul>
-    </div> 
+        <div class="row nomargin nopadding">
+            <ul id="lightgallery" class="list-unstyled marginbottom0">
+                {% for photo in photos %}
+                    <li class="col-xs-4 grid nopadding" data-src="{{photo.src}}">
+                        <a href="">
+                            <img class="imgcover grid" src="{{photo.src}}">
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock content %}
+
 
 {% block pin_it_code %}
     <script async defer data-pin-hover="true" data-pin-tall="true" data-pin-lang="en" data-pin-save="true" src="//assets.pinterest.com/js/pinit.js"></script>
 {% endblock pin_it_code %}
 
+
 {% block extra_javascript %}
-    <script src="{% static "website/js/gridGalleryInit.js" %}" type="text/javascript"></script>
-    <script src="{% static "website/js/lightgallery.js" %}"></script>
-    <script src="{% static "website/js/lg-fullscreen.js" %}"></script>
-    <script src="{% static "website/js/lg-thumbnail.js" %}"></script>
-    <script src="{% static "website/js/lg-video.js" %} "></script>
-    <script src="{% static "website/js/lg-autoplay.js" %} "></script>
-    <script src="{% static "website/js/lg-zoom.js" %} "></script>
-    <script src="{% static "website/js/lg-hash.js" %} "></script>
-    <script src="{% static "website/js/lg-pager.js" %} "></script>
-    <script src="{% static "website/js/jquery.mousewheel.min.js" %} "></script>
+    {% include "website/side_photos_scripts.html" %}
 {% endblock extra_javascript %}

@@ -469,10 +469,10 @@ class ReviewPagePhoto(models.Model):
 
     def save(self, *args, **kwargs):
         if self._state.adding:
-            order_num = get_order_num(self.review.photos_order)
+            order_num = get_order_num(self.review_page.photos_order)
             self.review_page.photos_order[order_num] = str(self.photo.id)
             self.review_page.save()
-        super(ReviewPhoto, self).save(*args, **kwargs)
+        super(ReviewPagePhoto, self).save(*args, **kwargs)
 
 
 @receiver(

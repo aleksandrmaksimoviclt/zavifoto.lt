@@ -100,7 +100,7 @@
                             <a class="main-category" data-toggle="collapse" data-target="#{{gallery.name|slugify}}" href="#">{{gallery.name}}</a>
                         </li>
 
-                        <div id="{{gallery.name}}" class="collapse">
+                        <div id="{{gallery.name|slugify}}" class="collapse">
                             <ul class="sub-category">
                                 {% for category in  gallery.categories %}
                                     <li><a href="/{{gallery.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
@@ -123,10 +123,10 @@
                         {% translated_menu request.COOKIES %}               
                     </div>
                     <div class="btn-group flat" role="group">
-                        <button type="button" class="btn btn-default socicon-facebook"></button>
-                        <button type="button" class="btn btn-default socicon-pinterest"></button>
-                        <button type="button" class="btn btn-default socicon-instagram"></button>
-                        <button type="button" class="btn btn-default socicon-youtube"></button>
+                        <a type="button" class="btn btn-default socicon-facebook" href="https://www.facebook.com/Zavifoto"></a>
+                        <a type="button" class="btn btn-default socicon-pinterest" href="https://www.pinterest.com/Zilinskasphoto/"></a>
+                        <a type="button" class="btn btn-default socicon-instagram" href="https://www.instagram.com/zilinskasphoto/"></a>
+                        <a type="button" class="btn btn-default socicon-youtube" href="https://www.youtube.com/user/WiLMiZ"></a>
                     </div>
                     <div class="copyright wrapper">
                         <span class="client">2016 &copy; Vilmantas Žilinskas.</span><br>

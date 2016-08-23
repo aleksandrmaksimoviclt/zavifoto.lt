@@ -227,6 +227,13 @@ class ReviewAdmin(admin.ModelAdmin):
 
 class ReviewPagePhotosInline(admin.TabularInline):
     model = ReviewPagePhoto
+    raw_id_fields = ("photo",)
+    readonly_fields = ('thumbnail',)
+    fields = ('photo', 'thumbnail', 'is_side_photo')
+
+    def thumbnail(self, obj):
+        return mark_safe(obj.thumbnail)
+    thumbnail.short_description = u"Thumbnail"
 
 
 class ReviewPageByLanguageInline(admin.TabularInline):
@@ -236,7 +243,7 @@ class ReviewPageByLanguageInline(admin.TabularInline):
 
 class ReviewPageAdmin(admin.ModelAdmin):
     model = ReviewPage
-    inlines = (ReviewPageByLanguageInline,)
+    inlines = (ReviewPageByLanguageInline, ReviewPagePhotosInline,)
     list_display = ('__str__',)
     exclude =('photos_order',)
 

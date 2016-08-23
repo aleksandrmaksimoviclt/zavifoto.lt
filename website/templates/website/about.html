@@ -1,5 +1,7 @@
 {% extends "website/index.html" %}
 {% load staticfiles %}
+
+
 {% block content %}
 <div id="page-content-wrapper">
     <div class="row nomargin" id="content">
@@ -26,15 +28,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 hidden-xs hidden-sm nopadding" id="right">
-            {% for photo in photos %}
-                <li class="col-xs-12 grid nopadding" data-src="{{photo.src}}">
-                    <a href="">
-                        <img class="imgcover grid" src="{{photo.src}}">
-                    </a>
-                </li>
-            {% endfor %}
-        </div>
+
+        {% include "website/side_photos.html" %}
+
     </div>                    
 </div>
 {% endblock content %}
+
+
+{% block extra_javascript %}
+    {% include "website/side_photos_scripts.html" %}
+{% endblock extra_javascript %}
