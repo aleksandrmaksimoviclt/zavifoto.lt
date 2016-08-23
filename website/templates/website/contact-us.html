@@ -2,78 +2,73 @@
 {% load staticfiles %}
 {% block content %}
 <div class="row nomargin" id="content">
-<div class="col-md-9 col-sm-12 col-xs-12 nopadding" id="left">
-    <div class="faq">
-        <div class="heading-wrapper">
-            <h1 class="page-heading" style="font-size:24px; text-align:center;" class="nomargin">KONTAKTAI</h1> 
-            <hr class="page-heading" style="width:100px; margin-top:8px; margin-bottom:8px;">
-        </div>
-    
-        <div class="faq-content-wrapper">
-            <div class="contact-aboutself">
-                {{contactspage.heading|safe}}
-                <br>
-                {{contactspage.heading_text|safe}}
-                <br>
-                 <span class="email-wrapper">
-                    <i class="material-icons vallign">&#xE0BE;</i>
-                    <a class="email" href="mailto:{{contactspage.email}}">{{contactspage.email}}</a></span>        
-                </span>
-                
-                <br><br>
-                <span class="tel-wrapper">
-                    <i class="material-icons vallign">&#xE0CD;</i>
-                    <a class="tel" href="tel:{{contactspage.phone_number_call}}">{{contactspage.phone_number_display}}</a>
-                </span>
+    <div class="col-md-9 col-sm-12 col-xs-12 nopadding" id="left">
+        <div class="faq">
+            <div class="heading-wrapper">
+                <h1 class="page-heading" style="font-size:24px; text-align:center;" class="nomargin">KONTAKTAI</h1> 
+                <hr class="page-heading" style="width:100px; margin-top:8px; margin-bottom:8px;">
             </div>
-            <div class="heading-wrapper contact">
-                <h1 style="font-size:24px; text-align:center;" class="nomargin">{{contactspage.contact_form_heading}}</h1> 
-                <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
-            </div>
-            <div class="contact-form-wrapper ">
-                <div class="row">
-                    <div class="col-xs-6 form-group">
-                        <label>{{contactspage.contact_form_name}}</label>
-                        <input class="form-control" type="text"/>
-                    </div>
-                    <div class="col-xs-6 form-group">
-                        <label>{{contactspage.contact_form_email}}</label>
-                        <input class="form-control" type="text"/>
-                    </div>
-
-                    <div class="col-xs-6 form-group">
-                        <label>{{contactspage.contact_form_phone_number}}</label>
-                        <input class="form-control" type="text"/>
-                    </div>
+        
+            <div class="faq-content-wrapper">
+                <div class="contact-aboutself">
+                    {{contactspage.heading|safe}}
+                    <br>
+                    {{contactspage.heading_text|safe}}
+                    <br>
+                     <span class="email-wrapper">
+                        <i class="material-icons vallign">&#xE0BE;</i>
+                        <a class="email" href="mailto:{{contactspage.email}}">{{contactspage.email}}</a></span>        
+                    </span>
                     
-                    <div class="col-xs-6 form-group">
-                        <label>{{contactspage.contact_form_question}}</label>
-                        <input class="form-control" type="text"/>
-                    </div>
-                    <div class="col-xs-12 form-group">
-                      <label for="comment">{{contactspage.contact_form_message}}</label>
-                      <textarea class="form-control" rows="5" id="comment"></textarea>
-                    </div>
-                    <div class="col-xs-12 form-group center-block">
-                        <button type="submit" class="btn btn-default">{{contactspage.contact_form_send_button_text}}</button>
+                    <br><br>
+                    <span class="tel-wrapper">
+                        <i class="material-icons vallign">&#xE0CD;</i>
+                        <a class="tel" href="tel:{{contactspage.phone_number_call}}">{{contactspage.phone_number_display}}</a>
+                    </span>
+                </div>
+                <div class="heading-wrapper contact">
+                    <h1 style="font-size:24px; text-align:center;" class="nomargin">{{contactspage.contact_form_heading}}</h1> 
+                    <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
+                </div>
+                <div class="contact-form-wrapper ">
+                    <div class="row">
+                        <div class="col-xs-6 form-group">
+                            <label>{{contactspage.contact_form_name}}</label>
+                            <input class="form-control" type="text"/>
+                        </div>
+                        <div class="col-xs-6 form-group">
+                            <label>{{contactspage.contact_form_email}}</label>
+                            <input class="form-control" type="text"/>
+                        </div>
+
+                        <div class="col-xs-6 form-group">
+                            <label>{{contactspage.contact_form_phone_number}}</label>
+                            <input class="form-control" type="text"/>
+                        </div>
+                        
+                        <div class="col-xs-6 form-group">
+                            <label>{{contactspage.contact_form_question}}</label>
+                            <input class="form-control" type="text"/>
+                        </div>
+                        <div class="col-xs-12 form-group">
+                          <label for="comment">{{contactspage.contact_form_message}}</label>
+                          <textarea class="form-control" rows="5" id="comment"></textarea>
+                        </div>
+                        <div class="col-xs-12 form-group center-block">
+                            <button type="submit" class="btn btn-default">{{contactspage.contact_form_send_button_text}}</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="col-md-3 hidden-xs hidden-sm nopadding" id="right">
-    <div class="demo-gallery">
-        <ul id="lightgallery" class="list-unstyled marginbottom0">
-            {% for photo in photos %}
-                <li class="col-xs-12 grid nopadding" data-src="{{photo.image.url}}">
-                    <a href="">
-                        <img class="imgcover grid" src="{{photo.image.url}}">
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+
+    {% include "website/side_photos.html" %}
+
 </div>                    
 {% endblock content %}
+
+
+{% block extra_javascript %}
+    {% include "website/side_photos_scripts.html" %}
+{% endblock extra_javascript %}

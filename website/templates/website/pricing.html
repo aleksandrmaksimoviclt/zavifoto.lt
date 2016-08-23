@@ -28,19 +28,12 @@
         </div>
     </div>
 
-    <div class="col-md-3 hidden-xs hidden-sm nopadding" id="right">
-        <div class="demo-gallery">
-            <ul id="lightgallery" class="list-unstyled marginbottom0">
-                {% for photo in photos %}
-                    <li class="col-xs-12 grid nopadding" data-src="{{photo.src}}">
-                        <a href="">
-                            <img class="imgcover grid" src="{{photo.src}}">
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-    
+    {% include "website/side_photos.html" %}
+
 </div>
 {% endblock content %}
+
+
+{% block extra_javascript %}
+    {% include "website/side_photos_scripts.html" %}
+{% endblock extra_javascript %}

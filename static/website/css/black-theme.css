@@ -231,6 +231,7 @@ iframe.width-changed {
 
 .grid {
     height: 180px;
+    list-style: none;
 }
 
 /* Grid End */
