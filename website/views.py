@@ -89,9 +89,9 @@ def category(request, gallery_slug, category_slug):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
-        category = CategoryByLanguage.objects.filter(
+        category = GalleryByLanguage.objects.filter(
             language=language,
-            url=category_slug,).first().category.photos_order
+            url=gallery_slug,).first().gallery.photos_order
     except:
         category = []
 
