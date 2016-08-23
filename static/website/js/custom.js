@@ -18,10 +18,10 @@ $(document).ready(function () {
         });
     }
 
-    $("img").on("contextmenu", function () {
+    // $("img").on("contextmenu", function () {
 
-        return false;
-    });
+    //     return false;
+    // });
 
     setNavigation();
 
