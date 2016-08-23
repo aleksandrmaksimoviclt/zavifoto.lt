@@ -75,7 +75,7 @@
     top: 0;
     width: 360px;
     margin: 0;
-    padding: 80px;
+    padding: 60px 80px;
     list-style: none;
     height: 100%
 
@@ -108,7 +108,7 @@
 
 .sidebar-nav > .sidebar-brand {
     text-transform: uppercase;
-    padding-bottom: 50px;
+    padding-bottom: 30px;
     position: absolute;
     width: 200px;
     background: white;

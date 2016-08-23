@@ -107,7 +107,7 @@ ul{
 }
 .sidebar-bottom-group{
 	position: absolute;
-    bottom: 80px;
+    bottom: 60px;
     width: 200px;
     background: #1a1a1a;
     z-index: 3;
