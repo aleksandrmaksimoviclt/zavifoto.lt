@@ -243,7 +243,7 @@ class ReviewPageByLanguageInline(admin.TabularInline):
 
 class ReviewPageAdmin(admin.ModelAdmin):
     model = ReviewPage
-    inlines = (ReviewPageByLanguageInline,ReviewPagePhotosInline,)
+    inlines = (ReviewPageByLanguageInline, ReviewPagePhotosInline,)
     list_display = ('__str__',)
     exclude =('photos_order',)
 
