@@ -160,7 +160,7 @@ if not DEBUG:
             'file': {
                 'level': 'DEBUG',
                 'class': 'logging.FileHandler',
-                'filename': BASE_DIR + '/logs/app.log',
+                'filename': BASE_DIR + '/../logs/app.log',
                 'formatter': 'verbose'
             },
         },
