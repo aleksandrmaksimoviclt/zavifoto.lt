@@ -393,26 +393,23 @@ def change_language(request, language):
 
 
 def retrieve_sidemenu_galleries(request, language):
-    try:
+    categories = CategoryByLanguage.objects.filter(
+        language=language).prefetch_related(
+        'category__gallery_set__gallerybylanguage_set').select_related('category')
 
-        galleries = GalleryByLanguage.objects.filter(
-            language=language).select_related(
-            'gallery__category').prefetch_related(
-            'gallery__category__categorybylanguage_set')
+    data = []
+    for category in categories:
+        _cat = {'name': category.name}
+        _galleries = category.category.gallery_set.all()
+        _gals = []           
+        for gallery in _galleries:
+            _gal = gallery.gallerybylanguage_set.filter(language=language)
+            if not _gal.exists():
+                continue
 
-        data = []
-
-        for gallery in galleries:
-            data.append(
-                {
-                    'name': gallery.name,
-                    'categories': [{
-                        'name': cat.name,
-                        'url': cat.url} for cat in gallery.gallery.category.categorybylanguage_set.filter(language=language)]
-                })
-    except:
-
-        data = []
-        galleries = []
-
+            _gal = _gal.first()
+            
+            _gals.append({'name': _gal.name, 'url': _gal.url})
+        _cat.update({'categories': _gals})
+        data.append(_cat)
     return data
