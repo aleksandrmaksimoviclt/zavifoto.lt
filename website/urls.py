@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^chavo$', views.faq, name='faq-ru'),
     url(r'^retushirovanie$', views.retouch, name='retouch-ru'),
 
-    url(r'^(?P<gallery_slug>[-\w]+)/(?P<category_slug>[-\w]+)$', views.category),
+    url(r'^(?P<category_slug>[-\w]+)/(?P<gallery_slug>[-\w]+)$', views.category),
 
     url(r'upload/', views.UploadView.as_view()),
 
