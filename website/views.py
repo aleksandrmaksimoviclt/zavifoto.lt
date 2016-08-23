@@ -87,7 +87,7 @@ def category(request, gallery_slug, category_slug):
     pagesettings = PageSettings.objects.first()
 
     data = retrieve_sidemenu_galleries(request, language=language)
-    import ipdb; ipdb.set_trace()
+    
     try:
         category = GalleryByLanguage.objects.filter(
             language=language,
