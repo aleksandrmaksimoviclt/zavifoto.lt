@@ -28,7 +28,7 @@ $(document).ready(function () {
     var ww = window.innerWidth;
     var wh = window.innerHeight;
 
-    if (!(ww > 768)) {
+    if (!(ww > 992)) {
         $('#wrapper').toggleClass("toggled");
         $('#hambrger').removeClass("is-active");
     }
@@ -40,7 +40,7 @@ $(document).ready(function () {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
 
-        if (wh < 768) {
+        if (wh < 992) {
             $('body').toggleClass("noscroll");
             $('.overlay').toggleClass("activated");
         }
@@ -63,31 +63,26 @@ $(document).ready(function () {
     //     return check;
     // }
 
-    // var rtime;
-    // var timeout = false;
-    // var delta = 200;
+    var rtime;
+    var timeout = false;
+    var delta = 200;
 
-    // function resizeend() {
-    //     if (new Date() - rtime < delta) {
-    //         setTimeout(resizeend, delta);
-    //     } else {
-    //         timeout = false;
-    //         alert('Done resizing');
-    //     }
-    // }
+    function resizeend() {
+        if (new Date() - rtime < delta) {
+            setTimeout(resizeend, delta);
+        } else {
+            timeout = false;
+            alert('Done resizing');
+            wh = window.innerHeight;
+        }
+    }
 
-    // $(window).resize(function () {
-    //     rtime = new Date();
-    //     if (timeout === false) {
-    //         timeout = true;
-    //         setTimeout(resizeend, delta);
-    //         wh = window.innerHeight;
-    //         if (wh < 768) {
-    //             //TODO togleClass handling
-    //             $('body').toggleClass("noscroll");
-    //             $('.overlay').toggleClass("activated");
-    //         }
-    //     }
-    // });
+    $(window).resize(function () {
+        rtime = new Date();
+        if (timeout === false) {
+            timeout = true;
+            setTimeout(resizeend, delta);
+        }
+    });
 
 });
