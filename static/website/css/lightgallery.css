@@ -713,10 +713,16 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
   width: 1px;
   margin-right: -1px;
 }
-.lg-outer .lg-img-wrap {
+/*.lg-outer .lg-img-wrap {
   position: static;
   padding: 0 5px;
+}*/
+
+.lg-outer .lg-img-wrap {
+  position: static;
+  padding: 65px 0px;
 }
+
 .lg-outer .lg-item.lg-complete {
   background-image: none;
 }
