@@ -98,10 +98,15 @@ class GalleryByLanguageInline(admin.TabularInline):
     model = GalleryByLanguage
 
 
+class GallerySeoInLine(admin.TabularInline):
+    model = GallerySeo
+
+
 class GalleryAdmin(admin.ModelAdmin):
     inlines = (
         GalleryByLanguageInline,
-        GalleryInline,)
+        GalleryInline,
+        GallerySeoInLine,)
 
     exclude = ('photos_order', 'created')
     list_display = ('__str__', 'modified',)

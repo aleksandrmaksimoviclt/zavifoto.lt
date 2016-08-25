@@ -124,13 +124,17 @@ def category(request, gallery_slug, category_slug):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
+
     try:
         photos_order = GalleryByLanguage.objects.filter(
             language=language,
             url=gallery_slug,).first().gallery.photos_order
         category_photos = get_ordered_photos(photos_order)
+        gallery = GalleryByLanguage.objects.filter(language=language, url=gallery_slug,).first().gallery
+        seo = GallerySeo.objects.filter(language=language, gallery=gallery).first()
     except:
         category_photos = []
+        seo = []
 
     print(category_photos)
     response = render(
@@ -142,6 +146,7 @@ def category(request, gallery_slug, category_slug):
             'galleries': data,
             'photos': category_photos,
             'pagesettings': pagesettings,
+            'seo': seo,
         })
 
     return response
