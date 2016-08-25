@@ -28,7 +28,7 @@ class EmailSend(object):
     def send(self, conn, send_to, subject, message):
         msg = MIMEText(message, 'html')
         msg['Subject'] = subject
-        msg['From'] = settings.EMAIL_HOST_USER
+        msg['From'] = '{} <{}>'.format('Zavifoto.lt', settings.EMAIL_HOST_USER)
         msg['To'] = send_to
         try:
             conn.send_message(msg)
@@ -56,11 +56,10 @@ class EmailSend(object):
             connection, self.client_email,
             self.subject, self.message)
         
-        # self.send(
-        #   connection, 'info@zavifoto.lt',
-        #   'Nauja žinutė nuo {} ({})'.format(self.client_name, self.client_email),
-        #   self.client_message)
-        # atkomentink kai i masteri pushinsi
+        self.send(
+          connection, 'aleksandr.maksimoviclt@gmail.com',
+          'Nauja žinutė nuo {} ({})'.format(self.client_name, self.client_email),
+          self.client_message)
 
         connection.quit()
         return 'Message sent'

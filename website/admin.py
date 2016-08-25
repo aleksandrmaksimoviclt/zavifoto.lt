@@ -184,8 +184,10 @@ class ContactsPageSeoInline(admin.TabularInline):
     max_num = 3
 
 
-class ContactsPageByLanguageInline(admin.TabularInline):
+class ContactsPageByLanguageInline(admin.StackedInline):
     model = ContactsPageByLanguage
+    extra = 1
+    max_num = 3
 
 
 class ContactsPageAdmin(admin.ModelAdmin):
