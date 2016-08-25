@@ -13,9 +13,9 @@
                 <ul class="faq-list">
                     {% for question in questions %}
                         <li class="faq-title">
-                            <a class="faq-titlea collapsed" data-toggle="collapse" data-target="#{{question.heading|slugify}}" href="#">{{question.heading|safe}}</a>
+                            <a class="faq-titlea collapsed" data-toggle="collapse" data-target="#{{question.heading|slugify}}-question" href="#">{{question.heading|safe}}</a>
                         </li>
-                        <div id="{{question.heading|slugify}}" class="collapse">
+                        <div id="{{question.heading|slugify}}-question" class="collapse">
                             <div class="post">
                                 <div class="faq-post">
                                     {{question.body|safe}}

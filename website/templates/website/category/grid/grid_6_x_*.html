@@ -1,0 +1,24 @@
+{% extends "website/category/category_base.html" %}
+{% load staticfiles %}
+
+
+{% block content %}
+    <div class="demo-gallery">
+        <div class="row nomargin nopadding">
+            <ul id="lightgallery" class="list-unstyled marginbottom0">
+                {% for photo in photos %}
+                    <li class="col-xs-2 grid nopadding" data-src="{{photo.src}}">
+                        <a href="">
+                            <img class="imgcover grid" src="{{photo.src}}">
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/lightgallery.css" %}">
+{% endblock extra_css %}

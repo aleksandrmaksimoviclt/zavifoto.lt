@@ -1,0 +1,31 @@
+{% extends "website/category/category_base.html" %}
+{% load staticfiles %}
+
+
+{% block content %}
+    <div class="slider-wrapper">
+        <div id="slider" class="flexslider">
+            <ul class="slides">
+              {% for photo in photos %}
+                <li class="slide-image-wrapper">
+                    <img class="imgcover" src="{{photo.src}}"/>
+                </li>
+              {% endfor %}
+            </ul>
+        </div>
+        <div id="carousel" class="flexslider">
+            <ul class="slides">
+              {% for photo in photos %}
+                <li class="slide-image-wrapper">
+                  <img class="imgcover" src="{{photo.src}}"/>
+                </li>
+              {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block extra_javascript %}
+    <script src="{% static "website/js/sliderInit.js" %}" type="text/javascript"></script>
+{% endblock extra_javascript %}

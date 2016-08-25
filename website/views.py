@@ -26,11 +26,25 @@ def index(request):
     except:
         seo = []
 
-    if pagesettings.layout == 0:
-        template = 'website/index_grid.html'
+    if pagesettings.layout == 1:
+        template = 'website/index/slider/slider.html'
 
-    elif pagesettings.layout == 1:
-        template = 'website/index_slider.html'
+    elif pagesettings.layout == 2:
+        template = 'website/index/grid/grid_2_x_*.html'
+
+    elif pagesettings.layout == 3:
+        template = 'website/index/grid/grid_3_x_*.html'
+
+    elif pagesettings.layout == 4:
+        template = 'website/index/grid/grid_4_x_*.html'
+
+    elif pagesettings.layout == 5:
+        template = 'website/index/grid/grid_5_x_*.html'
+
+    elif pagesettings.layout == 6:
+        template = 'website/index/grid/grid_6_x_*.html'
+
+
     page = IndexPage.objects.filter()
     if page.exists():
         photos = get_ordered_photos(page.first().photos_order)
@@ -86,12 +100,30 @@ def category(request, gallery_slug, category_slug):
 
     pagesettings = PageSettings.objects.first()
 
+    if pagesettings.layout == 1:
+        template = 'website/category/slider/slider.html'
+
+    elif pagesettings.layout == 2:
+        template = 'website/category/grid/grid_2_x_*.html'
+
+    elif pagesettings.layout == 3:
+        template = 'website/category/grid/grid_3_x_*.html'
+
+    elif pagesettings.layout == 4:
+        template = 'website/category/grid/grid_4_x_*.html'
+
+    elif pagesettings.layout == 5:
+        template = 'website/category/grid/grid_5_x_*.html'
+
+    elif pagesettings.layout == 6:
+        template = 'website/category/grid/grid_6_x_*.html'
+
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
         category = CategoryByLanguage.objects.filter(
             language=language,
-            url=category_slug,).first().category.photos_order
+            url=gallery_slug,).first().category.photos_order
     except:
         category = []
 
@@ -102,7 +134,7 @@ def category(request, gallery_slug, category_slug):
 
     response = render(
         request,
-        'website/category.html',
+        template,
         {
             'current_language': language.language_code,
             'available_languages': available_languages,
