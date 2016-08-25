@@ -132,8 +132,13 @@ class UploadView(TemplateView):
         _type = request.POST.get('type')
         _id = request.POST.get('id')
         files = request.FILES.getlist('files')
+        data = {
+            'galleries': Gallery.objects.all(),
+            'categories': Category.objects.all(),
+        }
         if not files:
-            return render(request, 'website/upload.html', {'danger': 'No photos selected!'})
+            data['danger'] = 'No photos selected!'
+            return render(request, 'website/upload.html', data)
 
         if _type == 'gallery':
             _gallery = Gallery.objects.filter(id=_id)
@@ -154,8 +159,8 @@ class UploadView(TemplateView):
         else:
             for file in files:
                 Photo.objects.create(name=file.name, image=file)
-
-        return render(request, 'website/upload.html', {'success': 'Done!'})
+        data['success'] = 'Done!'
+        return render(request, 'website/upload.html', data)
 
 
 def contact(request):
