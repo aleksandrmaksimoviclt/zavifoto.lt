@@ -10,7 +10,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% if seo %}
     <meta name="google-site-verification" content="{{seo.google_site_verification_code}}" />
     <title>{{seo.page_title}}</title>
     <meta name="description" content="{{seo.meta_description}}">
@@ -18,7 +17,6 @@
     <meta property="og:title" content="{{seo.title_for_facebook}}" />
     <meta property="og:description" content="{{seo.description_for_facebook}}"/>
     <meta property="og:image" content="{{seo.image_for_facebook}}" />
-    {% endif %}
     <meta property="og:type" content="website" />
     <meta property="og:url" content="http://www.zavifoto.lt{{ request.path }}"/>
 

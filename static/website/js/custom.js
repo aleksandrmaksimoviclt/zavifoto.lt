@@ -33,14 +33,12 @@ $(document).ready(function () {
     }
 
     $("img").on("contextmenu", function () {
-
         return false;
     });
 
     setNavigation();
     setaspectratio();
     var ww = window.innerWidth;
-    var wh = window.innerHeight;
 
     if (!(ww > 992)) {
         $('#wrapper').toggleClass("toggled");
@@ -54,7 +52,7 @@ $(document).ready(function () {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
 
-        if (wh < 992) {
+        if (ww < 992) {
             $('body').toggleClass("noscroll");
             $('.overlay').toggleClass("activated");
         }
@@ -86,7 +84,7 @@ $(document).ready(function () {
             setTimeout(resizeend, delta);
         } else {
             timeout = false;
-            wh = window.innerHeight;
+            ww = window.innerWidth;
             setaspectratio();
         }
     }

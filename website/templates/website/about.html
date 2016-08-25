@@ -33,9 +33,12 @@
 
     </div>                    
 </div>
-{% endblock content %}
+{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static "website/css/lightgallery.css" %}">
+{% endblock %}
 
 {% block extra_javascript %}
     {% include "website/side_photos_scripts.html" %}
-{% endblock extra_javascript %}
+{% endblock %}

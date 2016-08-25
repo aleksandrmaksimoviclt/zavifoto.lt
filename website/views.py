@@ -28,6 +28,8 @@ def index(request):
     except:
         seo = []
 
+    print(seo)
+
     if pagesettings.layout == 1:
         template = 'website/index/slider/slider.html'
 
@@ -122,15 +124,15 @@ def category(request, gallery_slug, category_slug):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
-
     try:
-        photos_order = CategoryByLanguage.objects.filter(
+        photos_order = GalleryByLanguage.objects.filter(
             language=language,
-            url=gallery_slug,).first().category.photos_order
+            url=gallery_slug,).first().gallery.photos_order
         category_photos = get_ordered_photos(photos_order)
     except:
         category_photos = []
 
+    print(category_photos)
     response = render(
         request,
         template,
@@ -140,7 +142,6 @@ def category(request, gallery_slug, category_slug):
             'galleries': data,
             'photos': category_photos,
             'pagesettings': pagesettings,
-
         })
 
     return response
