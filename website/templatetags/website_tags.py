@@ -2,7 +2,7 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse_lazy
 
-# reverse_lazy = lambda x: x
+
 register = template.library.Library()
 
 
@@ -26,13 +26,13 @@ TRANSLATIONS = {
         {'url': 'faq', 'name': 'FAQ'},
         {'url': 'contacts', 'name': 'Contacts'},           
         ],
-    'ru': [
-        {'url': 'about', 'name': 'О нас'},
-        {'url': 'reviews', 'name': 'Отзывы'},
-        {'url': 'pricing', 'name': 'Цены'},
-        {'url': 'retouch', 'name': 'Ретуширование'},
-        {'url': 'faq', 'name': 'ЧАВО'},
-        {'url': 'contacts', 'name': 'Контакты'},
+    'it': [
+        {'url': 'about', 'name': 'Chi siamo'},
+        {'url': 'reviews', 'name': 'Referenze'},
+        {'url': 'pricing', 'name': 'Prezzi'},
+        {'url': 'retouch', 'name': 'Fotoritocco'},
+        {'url': 'faq', 'name': 'FAQ'},
+        {'url': 'contacts', 'name': 'Contatti'},
         ]
 }
 

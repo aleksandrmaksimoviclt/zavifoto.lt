@@ -307,7 +307,6 @@ class RetouchPageAdmin(admin.ModelAdmin):
 
 admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Category, CategoryAdmin)
-# no seo on top ------------------
 admin.site.register(AboutPage, AboutPageAdmin)
 admin.site.register(FaqPage, FaqPageAdmin)
 admin.site.register(PricePage, PricePageAdmin)
