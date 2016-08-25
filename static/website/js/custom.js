@@ -18,10 +18,10 @@ $(document).ready(function () {
         });
     }
 
-    // $("img").on("contextmenu", function () {
+    $("img").on("contextmenu", function () {
 
-    //     return false;
-    // });
+        return false;
+    });
 
     setNavigation();
 
@@ -72,7 +72,6 @@ $(document).ready(function () {
             setTimeout(resizeend, delta);
         } else {
             timeout = false;
-            alert('Done resizing');
             wh = window.innerHeight;
         }
     }

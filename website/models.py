@@ -24,13 +24,20 @@ STYLES = (
     (BLACK, 'Black page style'),
 )
 
-
-GRID = 0
 SLIDE = 1
+GRID_2 = 2
+GRID_3 = 3
+GRID_4 = 4
+GRID_5 = 5
+GRID_6 = 6
 
 LAYOUTS = (
-    (GRID, 'Grid landing'),
-    (SLIDE, 'Full screen sliding'),
+    (SLIDE, 'Slider layout'),
+    (GRID_2, 'Grid layout 2x*'),
+    (GRID_3, 'Grid layout 3x*'),
+    (GRID_4, 'Grid layout 4x*'),
+    (GRID_5, 'Grid layout 5x*'),
+    (GRID_6, 'Grid layout 6x*'),
 )
 
 
@@ -85,7 +92,7 @@ class VerificationCode(models.Model):
 class PageSettings(models.Model):
     style = models.IntegerField(choices=STYLES, default=WHITE)
     language = models.ForeignKey(Language)
-    layout = models.IntegerField(choices=LAYOUTS, default=GRID)
+    layout = models.IntegerField(choices=LAYOUTS, default=GRID_4)
 
     class Meta:
         verbose_name_plural = 'Default Settings'

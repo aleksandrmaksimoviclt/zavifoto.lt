@@ -1,20 +1,16 @@
 {% extends "website/index.html" %}
 {% load staticfiles %}
 
-
+{% block category_content %}
+    
+{% endblock %}
 {% block content %}
-            <div class="demo-gallery">
-                <ul id="lightgallery" class="list-unstyled marginbottom0">
-                    {% for photo in photos %}
-                        <li class="col-xs-12 col-sm-4 col-md-3 grid nopadding" data-src="{{photo.src}}">
-                        <a href="">
-                            <img class="imgcover grid" src="{{photo.src}}">
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
 {% endblock content %}
+
+
+{% block pin_it_code %}
+    <script async defer data-pin-hover="true" data-pin-tall="true" data-pin-lang="en" data-pin-save="true" src="//assets.pinterest.com/js/pinit.js"></script>
+{% endblock pin_it_code %}
 
 
 {% block extra_javascript %}
