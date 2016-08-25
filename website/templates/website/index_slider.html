@@ -6,7 +6,7 @@
         <ul class="slides">
           {% for photo in photos %}
             <li class="slide-image-wrapper">
-                <img class="imgcover" src="{{photo.image.url}}"/>
+                <img class="imgcover" src="{{photo.src}}"/>
             </li>
           {% endfor %}
         </ul>
@@ -15,7 +15,7 @@
         <ul class="slides">
           {% for photo in photos %}
             <li class="slide-image-wrapper">
-              <img class="imgcover" src="{{photo.image.url}}"/>
+              <img class="imgcover" src="{{photo.src}}"/>
             </li>
           {% endfor %}
         </ul>
