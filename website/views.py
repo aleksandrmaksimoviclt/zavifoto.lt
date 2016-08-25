@@ -122,15 +122,12 @@ def category(request, gallery_slug, category_slug):
 
     data = retrieve_sidemenu_galleries(request, language=language)
 
-    try:
-        category = CategoryByLanguage.objects.filter(
-            language=language,
-            url=gallery_slug,).first().category.photos_order
-    except:
-        category = []
 
     try:
-        category_photos = get_ordered_photos(photos_order=category)
+        photos_order = CategoryByLanguage.objects.filter(
+            language=language,
+            url=gallery_slug,).first().category.photos_order
+        category_photos = get_ordered_photos(photos_order)
     except:
         category_photos = []
 
