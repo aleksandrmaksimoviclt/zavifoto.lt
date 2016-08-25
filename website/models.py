@@ -486,7 +486,7 @@ class ReviewPagePhoto(models.Model):
     pre_delete, sender=ReviewPagePhoto,
     dispatch_uid='photos_delete_from_review_order_signal')
 def delete_photos_from_review_order(sender, instance, using, **kwargs):
-    delete_from_order(instance.review, instance.photo.id)
+    delete_from_order(instance.review_page, instance.photo.id)
 
 
 class ReviewPageByLanguage(models.Model):
