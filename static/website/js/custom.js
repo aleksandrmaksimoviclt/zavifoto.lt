@@ -5,6 +5,20 @@
 $(document).ready(function () {
     "use strict";
 
+    // aspect ration 16/9
+    var aspectratio = 1.77;
+    var gridWidth = $('.grid:first').width();
+    var gridHeight = Math.round(gridWidth / aspectratio);
+
+    function setaspectratio() {
+        gridWidth = $('.grid:first').width();
+        gridHeight = Math.round(gridWidth / aspectratio);
+
+        $('.grid').each(function () {
+            $(this).css('height', gridHeight);
+        });
+    }
+
     function setNavigation() {
         var path = window.location.pathname;
         path = path.replace(/\/$/, "");
@@ -24,7 +38,7 @@ $(document).ready(function () {
     });
 
     setNavigation();
-
+    setaspectratio();
     var ww = window.innerWidth;
     var wh = window.innerHeight;
 
@@ -81,6 +95,7 @@ $(document).ready(function () {
         if (timeout === false) {
             timeout = true;
             setTimeout(resizeend, delta);
+            setaspectratio();
         }
     });
 

@@ -1,9 +1,7 @@
 {% extends "website/index.html" %}
 {% load staticfiles %}
 
-{% block category_content %}
-    
-{% endblock %}
+
 {% block content %}
 {% endblock content %}
 
@@ -14,6 +12,7 @@
 
 
 {% block extra_javascript %}
+    <script src="{% static "website/js/gridGalleryInit.js" %}" type="text/javascript"></script>
     <script src="{% static "website/js/lightgallery.js" %}"></script>
     <script src="{% static "website/js/lg-fullscreen.js" %}"></script>
     <script src="{% static "website/js/lg-thumbnail.js" %}"></script>
@@ -22,5 +21,7 @@
     <script src="{% static "website/js/lg-hash.js" %} "></script>
     <script src="{% static "website/js/lg-pager.js" %} "></script>
     <script src="{% static "website/js/jquery.mousewheel.min.js" %} "></script>
-    <script src="{% static "website/js/gridGalleryInit.js" %}" type="text/javascript"></script>
 {% endblock extra_javascript %}
+
+{% block extra_css %}
+{% endblock %}

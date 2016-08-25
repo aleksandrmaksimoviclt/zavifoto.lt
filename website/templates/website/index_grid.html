@@ -3,17 +3,17 @@
 
 
 {% block content %}
-            <div class="demo-gallery">
-                <ul id="lightgallery" class="list-unstyled marginbottom0">
-                    {% for photo in photos %}
-                        <li class="col-xs-12 col-sm-4 col-md-3 grid nopadding" data-src="{{photo.src}}">
-                        <a href="">
-                            <img class="imgcover grid" src="{{photo.src}}">
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+    <div class="demo-gallery">
+        <ul id="lightgallery" class="list-unstyled marginbottom0">
+            {% for photo in photos %}
+                <li class="col-xs-12 col-sm-4 col-md-3 grid nopadding" data-src="{{photo.src}}">
+                <a href="">
+                    <img class="imgcover grid" src="{{photo.src}}">
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock content %}
 
 
