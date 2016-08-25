@@ -232,6 +232,7 @@ iframe.width-changed {
 .grid {
     height: 180px;
     list-style: none;
+    transition: 0.5s all;
 }
 
 /* Grid End */
@@ -414,4 +415,8 @@ div.faq-post:last-child {
 	transition: 3s all;
 	text-decoration: none;
 	color:#d7c356;
+}
+.col-xs-12_5{
+    width: 20%;
+    float: left;
 }

@@ -5,6 +5,20 @@
 $(document).ready(function () {
     "use strict";
 
+    // aspect ration 16/9
+    var aspectratio = 1.77;
+    var gridWidth = $('.grid:first').width();
+    var gridHeight = Math.round(gridWidth / aspectratio);
+
+    function setaspectratio() {
+        gridWidth = $('.grid:first').width();
+        gridHeight = Math.round(gridWidth / aspectratio);
+
+        $('.grid').each(function () {
+            $(this).css('height', gridHeight);
+        });
+    }
+
     function setNavigation() {
         var path = window.location.pathname;
         path = path.replace(/\/$/, "");
@@ -18,13 +32,13 @@ $(document).ready(function () {
         });
     }
 
-    // $("img").on("contextmenu", function () {
+    $("img").on("contextmenu", function () {
 
-    //     return false;
-    // });
+        return false;
+    });
 
     setNavigation();
-
+    setaspectratio();
     var ww = window.innerWidth;
     var wh = window.innerHeight;
 
@@ -72,8 +86,8 @@ $(document).ready(function () {
             setTimeout(resizeend, delta);
         } else {
             timeout = false;
-            alert('Done resizing');
             wh = window.innerHeight;
+            setaspectratio();
         }
     }
 
