@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .utils import get_ordered_photos
+from .forms import ContactForm
+from mail.email import EmailSend
 
 
 def index(request):
@@ -26,11 +28,25 @@ def index(request):
     except:
         seo = []
 
-    if pagesettings.layout == 0:
-        template = 'website/index_grid.html'
+    if pagesettings.layout == 1:
+        template = 'website/index/slider/slider.html'
 
-    elif pagesettings.layout == 1:
-        template = 'website/index_slider.html'
+    elif pagesettings.layout == 2:
+        template = 'website/index/grid/grid_2_x_*.html'
+
+    elif pagesettings.layout == 3:
+        template = 'website/index/grid/grid_3_x_*.html'
+
+    elif pagesettings.layout == 4:
+        template = 'website/index/grid/grid_4_x_*.html'
+
+    elif pagesettings.layout == 5:
+        template = 'website/index/grid/grid_5_x_*.html'
+
+    elif pagesettings.layout == 6:
+        template = 'website/index/grid/grid_6_x_*.html'
+
+
     page = IndexPage.objects.filter()
     if page.exists():
         photos = get_ordered_photos(page.first().photos_order)
@@ -86,12 +102,30 @@ def category(request, gallery_slug, category_slug):
 
     pagesettings = PageSettings.objects.first()
 
+    if pagesettings.layout == 1:
+        template = 'website/category/slider/slider.html'
+
+    elif pagesettings.layout == 2:
+        template = 'website/category/grid/grid_2_x_*.html'
+
+    elif pagesettings.layout == 3:
+        template = 'website/category/grid/grid_3_x_*.html'
+
+    elif pagesettings.layout == 4:
+        template = 'website/category/grid/grid_4_x_*.html'
+
+    elif pagesettings.layout == 5:
+        template = 'website/category/grid/grid_5_x_*.html'
+
+    elif pagesettings.layout == 6:
+        template = 'website/category/grid/grid_6_x_*.html'
+
     data = retrieve_sidemenu_galleries(request, language=language)
-    
+
     try:
-        category = GalleryByLanguage.objects.filter(
+        category = CategoryByLanguage.objects.filter(
             language=language,
-            url=gallery_slug,).first().gallery.photos_order
+            url=gallery_slug,).first().category.photos_order
     except:
         category = []
 
@@ -102,7 +136,7 @@ def category(request, gallery_slug, category_slug):
 
     response = render(
         request,
-        'website/category.html',
+        template,
         {
             'current_language': language.language_code,
             'available_languages': available_languages,
@@ -132,8 +166,13 @@ class UploadView(TemplateView):
         _type = request.POST.get('type')
         _id = request.POST.get('id')
         files = request.FILES.getlist('files')
+        data = {
+            'galleries': Gallery.objects.all(),
+            'categories': Category.objects.all(),
+        }
         if not files:
-            return render(request, 'website/upload.html', {'danger': 'No photos selected!'})
+            data['danger'] = 'No photos selected!'
+            return render(request, 'website/upload.html', data)
 
         if _type == 'gallery':
             _gallery = Gallery.objects.filter(id=_id)
@@ -154,8 +193,8 @@ class UploadView(TemplateView):
         else:
             for file in files:
                 Photo.objects.create(name=file.name, image=file)
-
-        return render(request, 'website/upload.html', {'success': 'Done!'})
+        data['success'] = 'Done!'
+        return render(request, 'website/upload.html', data)
 
 
 def contact(request):
@@ -183,6 +222,21 @@ def contact(request):
         photos = get_ordered_photos(page.first().photos_order)
     else:
         photos = []
+    
+    success = ''
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            auto_reply = EmailSend(
+                form.cleaned_data['name'],
+                form.cleaned_data['message'],
+                form.cleaned_data['email'])
+            # kitus fieldus kur man sisut nes neprase jis to siust jam mailu
+            auto_reply.execute()
+            success = 'Sugalvok kaip cia messagas turi atrodyt ir is kur paimamas aka Success'
+        else:
+            success = False # arba pisk message koki
+
     response = render(
         request,
         'website/contact-us.html',
@@ -194,7 +248,9 @@ def contact(request):
             'photos': photos,
             'pagesettings': pagesettings,
             'seo': seo,
+            'success': success,
         })
+
     return response
 
 

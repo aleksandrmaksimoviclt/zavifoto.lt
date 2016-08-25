@@ -415,3 +415,7 @@ div.faq-post:last-child {
 	text-decoration: none;
 	color:#d7c356;
 }
+.col-xs-12_5{
+    width: 20%;
+    float: left;
+}

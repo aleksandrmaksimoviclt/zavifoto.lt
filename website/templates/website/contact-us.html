@@ -1,4 +1,5 @@
 {% extends "website/index.html" %}
+{% load website_tags %}
 {% load staticfiles %}
 {% block content %}
 <div class="row nomargin" id="content">
@@ -30,35 +31,41 @@
                     <h1 style="font-size:24px; text-align:center;" class="nomargin">{{contactspage.contact_form_heading}}</h1> 
                     <hr style="width:100px; margin-top:8px; margin-bottom:8px;">
                 </div>
+                {% if success%}
+                <h1>Success<h1>
+                {% endif %}
+                <form action='{% translate_url request.COOKIES "contacts" %}' method='POST'>
+                {% csrf_token %}
                 <div class="contact-form-wrapper ">
                     <div class="row">
                         <div class="col-xs-6 form-group">
                             <label>{{contactspage.contact_form_name}}</label>
-                            <input class="form-control" type="text"/>
+                            <input class="form-control" type="text" name='name' required/>
                         </div>
                         <div class="col-xs-6 form-group">
                             <label>{{contactspage.contact_form_email}}</label>
-                            <input class="form-control" type="text"/>
+                            <input class="form-control" type="text" name='email' required/>
                         </div>
 
                         <div class="col-xs-6 form-group">
                             <label>{{contactspage.contact_form_phone_number}}</label>
-                            <input class="form-control" type="text"/>
+                            <input class="form-control" type="text" name='number'/>
                         </div>
                         
                         <div class="col-xs-6 form-group">
                             <label>{{contactspage.contact_form_question}}</label>
-                            <input class="form-control" type="text"/>
+                            <input class="form-control" type="text" name='question'/>
                         </div>
                         <div class="col-xs-12 form-group">
                           <label for="comment">{{contactspage.contact_form_message}}</label>
-                          <textarea class="form-control" rows="5" id="comment"></textarea>
+                          <textarea class="form-control" rows="5" id="comment" name='message' required></textarea>
                         </div>
                         <div class="col-xs-12 form-group center-block">
                             <button type="submit" style="float: right;" class="btn btn-default">{{contactspage.contact_form_send_button_text}}</button>
                         </div>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </div>

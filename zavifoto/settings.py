@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 
     'website',
     'sorting',
+    'mail',
 
     # pypi packages
     'sortedm2m',
@@ -179,3 +180,9 @@ if not DEBUG:
 FIXTURE_DIRS = (
    os.path.join(BASE_DIR, 'fixtures'),
 )
+
+EMAIL_HOST = 'slyva.serveriai.lt'
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'noreply@zilinskasphoto.com'
+EMAIL_HOST_PASSWORD = 'Papai3000'

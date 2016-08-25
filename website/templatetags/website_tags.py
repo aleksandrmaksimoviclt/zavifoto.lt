@@ -5,45 +5,67 @@ from django.core.urlresolvers import reverse_lazy
 # reverse_lazy = lambda x: x
 register = template.library.Library()
 
+
+def get_url(url, lang):
+    return reverse_lazy(url + '-' + lang)
+
+TRANSLATIONS = {
+    'lt': [
+        {'url': 'about', 'name': 'Apie mus'},
+        {'url': 'reviews','name': 'Atsiliepimai'},
+        {'url': 'pricing', 'name': 'Kainos'},
+        {'url': 'retouch', 'name': 'Retušavimas'},
+        {'url': 'faq', 'name': 'DUK'},
+        {'url': 'contacts', 'name': 'Kontaktai'},
+        ],
+    'en': [
+        {'url': 'about', 'name': 'About us'},
+        {'url': 'reviews', 'name': 'Reviews'},
+        {'url': 'pricing', 'name': 'Prices'},
+        {'url': 'retouch', 'name': 'Retouch'},
+        {'url': 'faq', 'name': 'FAQ'},
+        {'url': 'contacts', 'name': 'Contacts'},           
+        ],
+    'ru': [
+        {'url': 'about', 'name': 'О нас'},
+        {'url': 'reviews', 'name': 'Отзывы'},
+        {'url': 'pricing', 'name': 'Цены'},
+        {'url': 'retouch', 'name': 'Ретуширование'},
+        {'url': 'faq', 'name': 'ЧАВО'},
+        {'url': 'contacts', 'name': 'Контакты'},
+        ]
+}
+
+
 @register.simple_tag
 def translated_menu(COOKIES):
-    translations = {
-        'lt': [
-            {'url': reverse_lazy('about-lt'), 'name': 'Apie mus'},
-            {'url': reverse_lazy('reviews-lt'),'name': 'Atsiliepimai'},
-            {'url': reverse_lazy('pricing-lt'), 'name': 'Kainos'},
-            {'url': reverse_lazy('retouch-lt'), 'name': 'Retušavimas'},
-            {'url': reverse_lazy('faq-lt'), 'name': 'DUK'},
-            {'url': reverse_lazy('contacts-lt'), 'name': 'Kontaktai'},
-            ],
-        'en': [
-            {'url': reverse_lazy('about-en'), 'name': 'About us'},
-            {'url': reverse_lazy('reviews-en'),'name': 'Reviews'},
-            {'url': reverse_lazy('pricing-en'), 'name': 'Prices'},
-            {'url': reverse_lazy('retouch-en'), 'name': 'Retouch'},
-            {'url': reverse_lazy('faq-en'), 'name': 'FAQ'},
-            {'url': reverse_lazy('contacts-en'), 'name': 'Contacts'},           
-            ],
-        'ru': [
-            {'url': reverse_lazy('about-ru'), 'name': 'О нас'},
-            {'url': reverse_lazy('reviews-ru'),'name': 'Отзывы'},
-            {'url': reverse_lazy('pricing-ru'), 'name': 'Цены'},
-            {'url': reverse_lazy('retouch-ru'), 'name': 'Ретуширование'},
-            {'url': reverse_lazy('faq-ru'), 'name': 'ЧАВО'},
-            {'url': reverse_lazy('contacts-ru'), 'name': 'Контакты'},
-            ]
-    }
-    
     try:
         language = COOKIES['language']
     except KeyError:
         language = 'lt'
 
-    translated = translations[language]
+    translated = TRANSLATIONS[language]
 
     menu_html = ''
 
     for item in translated:
-        menu_html += '<li><a href="{}">{}</a></li>'.format(item['url'], item['name'])
+        menu_html += '<li><a href="{}">{}</a></li>'.format(
+            get_url(item['url'], language), item['name'])
 
     return mark_safe(menu_html)
+
+
+@register.simple_tag
+def translate_url(COOKIES, url):
+    try:
+        language = COOKIES['language']
+    except KeyError:
+        language = 'lt'
+
+    translated = TRANSLATIONS[language]
+    for item in translated:
+        if url in item.values():
+            return get_url(item['url'], language)
+        else:
+            return '#'
+
