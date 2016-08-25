@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 
 from .models import *
 from .utils import get_ordered_photos
+from .forms import ContactForm
+from mail.email import EmailSend
 
 
 def index(request):
@@ -188,6 +190,21 @@ def contact(request):
         photos = get_ordered_photos(page.first().photos_order)
     else:
         photos = []
+    
+    success = ''
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            auto_reply = EmailSend(
+                form.cleaned_data['name'],
+                form.cleaned_data['message'],
+                form.cleaned_data['email'])
+            # kitus fieldus kur man sisut nes neprase jis to siust jam mailu
+            auto_reply.execute()
+            success = 'Sugalvok kaip cia messagas turi atrodyt ir is kur paimamas aka Success'
+        else:
+            success = False # arba pisk message koki
+
     response = render(
         request,
         'website/contact-us.html',
@@ -199,7 +216,9 @@ def contact(request):
             'photos': photos,
             'pagesettings': pagesettings,
             'seo': seo,
+            'success': success,
         })
+
     return response
 
 

@@ -56,11 +56,10 @@ class EmailSend(object):
             connection, self.client_email,
             self.subject, self.message)
         
-        # self.send(
-        #   connection, 'info@zavifoto.lt',
-        #   'Nauja žinutė nuo {} ({})'.format(self.client_name, self.client_email),
-        #   self.client_message)
-        # atkomentink kai i masteri pushinsi
+        self.send(
+          connection, 'aleksandr.maksimoviclt@gmail.com',
+          'Nauja žinutė nuo {} ({})'.format(self.client_name, self.client_email),
+          self.client_message)
 
         connection.quit()
         return 'Message sent'
