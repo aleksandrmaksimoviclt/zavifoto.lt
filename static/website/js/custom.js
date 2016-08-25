@@ -87,6 +87,7 @@ $(document).ready(function () {
         } else {
             timeout = false;
             wh = window.innerHeight;
+            setaspectratio();
         }
     }
 
@@ -95,7 +96,6 @@ $(document).ready(function () {
         if (timeout === false) {
             timeout = true;
             setTimeout(resizeend, delta);
-            setaspectratio();
         }
     });
 
