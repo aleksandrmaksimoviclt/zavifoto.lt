@@ -24,15 +24,20 @@ urlpatterns = [
     url(r'^faq$', views.faq, name='faq-en'),
     url(r'^retouch$', views.retouch, name='retouch-en'),
 
-    # ru URLS
-    url(r'^kontakty$', views.contact, name='contacts-ru'),
-    url(r'^ceny$', views.pricing, name='pricing-ru'),
-    url(r'^o-nas$', views.about, name='about-ru'),
-    url(r'^otzyvy$', views.reviews, name='reviews-ru'),
-    url(r'^chavo$', views.faq, name='faq-ru'),
-    url(r'^retushirovanie$', views.retouch, name='retouch-ru'),
+    # it URLS
+    url(r'^contatti$', views.contact, name='contacts-it'),
+    url(r'^prezzi$', views.pricing, name='pricing-it'),
+    url(r'^chi-siamo$', views.about, name='about-it'),
+    url(r'^referenze$', views.reviews, name='reviews-it'),
+    url(r'^faq-it$', views.faq, name='faq-it'),
+    url(r'^fotoritocco$', views.retouch, name='retouch-it'),
 
-    url(r'^(?P<category_slug>[-\w]+)/(?P<gallery_slug>[-\w]+)$', views.category),
+
+    # Category
+    url(r'^(?P<category_slug>[-\w]+)$', views.category),
+
+    # Gallery
+    url(r'^(?P<category_slug>[-\w]+)/(?P<gallery_slug>[-\w]+)$', views.gallery),
 
     url(r'upload/', views.UploadView.as_view()),
 

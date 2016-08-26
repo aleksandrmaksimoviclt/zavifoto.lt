@@ -95,13 +95,13 @@
                     {% for gallery in galleries %}
 
                         <li>
-                            <a class="main-category" data-toggle="collapse" data-target="#{{gallery.name|slugify}}-gallery" href="#">{{gallery.name}}</a>
+                            <a class="main-category category" data-toggle="collapse" data-target="#{{gallery.name|slugify}}-gallery" href="#">{{gallery.name}}</a>
                         </li>
 
                         <div id="{{gallery.name|slugify}}-gallery" class="collapse">
                             <ul class="sub-category">
                                 {% for category in  gallery.categories %}
-                                    <li><a href="/{{gallery.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
+                                    <li class="category"><a href="/{{gallery.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -139,8 +139,10 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="overlay"></div>
-            {% block content %}
-            {% endblock %}                     
+            <div id="content">
+                {% block content %}
+                {% endblock %} 
+            </div>                    
         </div>
         <!-- /#page-content-wrapper -->
 

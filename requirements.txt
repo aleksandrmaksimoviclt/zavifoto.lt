@@ -2,7 +2,7 @@ backports.shutil-get-terminal-size==1.0.0
 decorator==4.0.10
 dj-database-url==0.4.1
 Django==1.9.5
-django-admin-sortable2==0.6.4
+django-admin-sortable2==0.6.3
 django-sortedm2m==1.2.2
 django-spaghetti-and-meatballs==0.2.1
 django-wysiwyg-redactor==0.4.9

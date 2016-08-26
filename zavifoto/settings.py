@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # pypi packages
     'sortedm2m',
     'redactor',
+    'adminsortable2',
 ]
 
 if DEBUG:
@@ -70,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.static',
             ],
             'loaders':[
                     'django.template.loaders.filesystem.Loader',

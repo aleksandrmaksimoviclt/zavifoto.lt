@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.utils.safestring import mark_safe
 
 
 from .models import *
@@ -98,7 +99,7 @@ def retouch(request):
     return response
 
 
-def category(request, gallery_slug, category_slug):
+def gallery(request, gallery_slug, category_slug):
     available_languages = Language.objects.all()
     language = get_language_obj(request)
 
@@ -129,14 +130,13 @@ def category(request, gallery_slug, category_slug):
         photos_order = GalleryByLanguage.objects.filter(
             language=language,
             url=gallery_slug,).first().gallery.photos_order
-        category_photos = get_ordered_photos(photos_order)
+        gallery_photos = get_ordered_photos(photos_order)
         gallery = GalleryByLanguage.objects.filter(language=language, url=gallery_slug,).first().gallery
         seo = GallerySeo.objects.filter(language=language, gallery=gallery).first()
     except:
         category_photos = []
         seo = []
 
-    print(category_photos)
     response = render(
         request,
         template,
@@ -144,12 +144,74 @@ def category(request, gallery_slug, category_slug):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
-            'photos': category_photos,
+            'photos': gallery_photos,
             'pagesettings': pagesettings,
             'seo': seo,
         })
 
     return response
+
+
+def category(request, category_slug):
+    available_languages = Language.objects.all()
+    language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
+
+    if pagesettings.layout == 1:
+        template = 'website/category/slider/slider.html'
+
+    elif pagesettings.layout == 2:
+        column_size = 'col-xs-6'
+
+    elif pagesettings.layout == 3:
+        column_size = 'col-xs-4'
+
+    elif pagesettings.layout == 4:
+        column_size = 'col-xs-3'
+
+    elif pagesettings.layout == 5:
+        column_size = 'col-xs-12_5'
+
+    elif pagesettings.layout == 6:
+        column_size = 'col-xs-2'
+
+    data = retrieve_sidemenu_galleries(request, language=language)
+
+    categoriesbylanguage = CategoryByLanguage.objects.filter(language=language)
+    category_photos = []
+
+    try:
+        for categorybylanguage in categoriesbylanguage:
+            _galleriesbylanguage = categorybylanguage.category.gallery_set.all()
+            for _gallerybylanguage in _galleriesbylanguage:
+                gallery_photo_order = _gallerybylanguage.photos_order
+                category_photos += (get_ordered_photos(gallery_photo_order))
+        html = """
+        <div class="demo-gallery">
+            <ul id="lightgallery" class="list-unstyled marginbottom0">
+            """
+        for photo in category_photos:
+            html += """<li class={0} grid nopadding" data-src="{1}">
+                <a href="">
+                    <img class="imgcover grid" src="{1}">
+                </a>
+            </li>
+            """.format(column_size, photo["src"])
+        html += """
+                </ul>
+            </div>
+        """
+
+        seo = CategorySeo.objects.filter(language=language, category=category).first()
+
+    except:
+        category_photos = []
+        seo = []
+
+
+    return HttpResponse(mark_safe(html))
+
 
 
 class UploadView(TemplateView):
@@ -457,6 +519,7 @@ def retrieve_sidemenu_galleries(request, language):
         'category__gallery_set__gallerybylanguage_set').select_related('category')
 
     data = []
+
     for category in categories:
         _cat = {'name': category.name}
         _galleries = category.category.gallery_set.all()

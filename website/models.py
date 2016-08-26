@@ -107,9 +107,11 @@ class Gallery(models.Model):
     modified = models.DateTimeField(auto_now=True)
     photos_order = JSONField(default={}, blank=True, null=True)
     category = models.ForeignKey('Category', null=True)
+    my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
-    class Meta(object):
+    class Meta:
         verbose_name_plural = 'Galleries'
+        ordering = ['my_order',]
 
     def __str__(self):
         return self.name
@@ -630,3 +632,4 @@ def delete_photos_from_index_order(sender, instance, using, **kwargs):
 class IndexPageSeo(SEO):
     indexpage = models.ForeignKey(IndexPage, null=True)
     language = models.ForeignKey(Language, null=True)
+

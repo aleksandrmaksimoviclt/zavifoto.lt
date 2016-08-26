@@ -1,5 +1,6 @@
 
 from django.contrib import admin
+from adminsortable2.admin import SortableAdminMixin
 from .models import *
 
 
@@ -102,13 +103,13 @@ class GallerySeoInLine(admin.TabularInline):
     model = GallerySeo
 
 
-class GalleryAdmin(admin.ModelAdmin):
+class GalleryAdmin(SortableAdminMixin, admin.ModelAdmin):
     inlines = (
         GalleryByLanguageInline,
         GalleryInline,
         GallerySeoInLine,)
 
-    exclude = ('photos_order', 'created')
+    exclude = ['photos_order', 'created']
     list_display = ('__str__', 'modified',)
 
 
