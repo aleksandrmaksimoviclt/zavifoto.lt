@@ -32,14 +32,14 @@ urlpatterns = [
     url(r'^fotoritocco$', views.retouch, name='retouch-it'),
 
 
+    url(r'upload/', views.UploadView.as_view()),
+
+    # URL FOR WYSIWYG REDACTOR
+    url(r'^redactor/', include('redactor.urls')),
     # Category
     url(r'^(?P<category_slug>[-\w]+)/$', views.category),
 
     # Gallery
     url(r'^(?P<category_slug>[-\w]+)/(?P<gallery_slug>[-\w]+)/$', views.gallery),
 
-    url(r'upload/', views.UploadView.as_view()),
-
-    # URL FOR WYSIWYG REDACTOR
-    url(r'^redactor/', include('redactor.urls')),
 ]
