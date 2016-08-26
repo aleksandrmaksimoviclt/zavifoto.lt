@@ -1,4 +1,3 @@
-
 from django.conf.urls import url, include
 
 from . import views
@@ -34,10 +33,10 @@ urlpatterns = [
 
 
     # Category
-    url(r'^(?P<category_slug>[-\w]+)$', views.category),
+    url(r'^(?P<category_slug>[-\w]+)/$', views.category),
 
     # Gallery
-    url(r'^(?P<category_slug>[-\w]+)/(?P<gallery_slug>[-\w]+)$', views.gallery),
+    url(r'^(?P<category_slug>[-\w]+)/(?P<gallery_slug>[-\w]+)/$', views.gallery),
 
     url(r'upload/', views.UploadView.as_view()),
 
