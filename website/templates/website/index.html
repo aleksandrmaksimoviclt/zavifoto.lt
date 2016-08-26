@@ -97,13 +97,13 @@
                     {% for gallery in galleries %}
 
                         <li>
-                            <a class="main-category" data-toggle="collapse" data-target="#{{gallery.name|slugify}}-gallery" href="#">{{gallery.name}}</a>
+                            <a class="main-category get-photos" data-toggle="collapse" data-target="#{{gallery.name|slugify}}-gallery" slug="/{{gallery.name|slugify}}" href="#">{{gallery.name}}</a>
                         </li>
 
                         <div id="{{gallery.name|slugify}}-gallery" class="collapse">
                             <ul class="sub-category">
                                 {% for category in  gallery.categories %}
-                                    <li><a href="/{{gallery.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
+                                    <li><a class="get-photos" href="#" slug="/{{gallery.name|slugify}}/{{category.url}}">{{category.name}}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -141,8 +141,10 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="overlay"></div>
+            <div id='content'>
             {% block content %}
-            {% endblock %}                     
+            {% endblock %}
+            </div>                 
         </div>
         <!-- /#page-content-wrapper -->
 
@@ -153,6 +155,23 @@
     <!-- jQuery -->
     {% block pin_it_code %}
     {% endblock %}
+    <script type="text/javascript">
+    $('.get-photos').click(function(){
+        var url = $(this).attr('slug');
+        $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    window.history.pushState();
+                    console.log(response);
+                    $('#content').html('some loading html');
+                    $('#content').remove();
+                    $('#content').html(response);                    
+                }
+            }); 
+
+    })
+    </script>
     <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
