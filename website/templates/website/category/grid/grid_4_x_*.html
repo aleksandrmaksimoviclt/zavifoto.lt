@@ -5,12 +5,10 @@
 {% block content %}
     <div class="demo-gallery">
         <div class="row nomargin nopadding">
-            <ul id="lightgallery" class="list-unstyled marginbottom0">
+            <ul id="lightgallery" class="list-unstyled filtr-container marginbottom0">
                 {% for photo in photos %}
-                    <li class="col-xs-3 grid nopadding" data-src="{{photo.src}}">
-                        <a href="">
-                            <img class="imgcover grid" src="{{photo.src}}">
-                        </a>
+                    <li class="col-xs-3 grid nopadding filtr-item" data-src="{{photo.src}}">
+                        <img href="" class="imgcover grid" src="{{photo.src}}">
                     </li>
                 {% endfor %}
             </ul>

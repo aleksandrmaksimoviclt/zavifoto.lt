@@ -37,8 +37,6 @@ $(document).ready(function () {
         return false;
     });
 
-    setNavigation();
-    setaspectratio();
     var ww = window.innerWidth;
 
     if (!(ww > 992)) {
@@ -98,10 +96,6 @@ $(document).ready(function () {
         }
     });
 
-    // Filterizr Initialization
-
-    try {
-        $('.filtr-container').filterizr();
-    } catch (err) {
-    }
+    setNavigation();
+    setaspectratio();
 });

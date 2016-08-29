@@ -555,6 +555,7 @@
         * @private
         */
         _calcItemPositions: function() {
+            console.log();
             var self  = this,
                 array = self._activeArray,
             //Container data
