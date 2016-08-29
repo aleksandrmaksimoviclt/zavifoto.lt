@@ -93,242 +93,70 @@ def retouch(request):
             'pagesettings': pagesettings,
             'seo': seo,
         })
+
     return response
 
 
 def gallery(request, gallery_slug, category_slug):
-    if request.method == 'POST':
-        available_languages = Language.objects.all()
-        language = get_language_obj(request)
+    try:
+        CategoryByLanguage.obejcts.get(url=category_slug)
+        gallery = GalleryByLanguage.objects.get(
+            url=gallery_slug).gallery.photos_order
+    except CategoryByLanguage.DoesNotExist:
+        return HttpResponseRedirect('/')
 
-        pagesettings = PageSettings.objects.first()
+    except GalleryByLanguage.DoesNotExist:
+        return HttpResponseRedirect('/')
 
-        if pagesettings.layout == 1:
-            template = 'website/category/slider/slider.html'
+    available_languages = Language.objects.all()
+    language = get_language_obj(request)
 
-        elif pagesettings.layout == 2:
-            column_size = 'col-xs-6'
+    pagesettings = PageSettings.objects.first()
 
-        elif pagesettings.layout == 3:
-            column_size = 'col-xs-4'
-
-        elif pagesettings.layout == 4:
-            column_size = 'col-xs-3'
-
-        elif pagesettings.layout == 5:
-            column_size = 'col-xs-12_5'
-
-        elif pagesettings.layout == 6:
-            column_size = 'col-xs-2'
-
-        data = retrieve_sidemenu_galleries(request, language=language)
-
-        gallerybylanguage = GalleryByLanguage.objects.get(url=gallery_slug)
-        category_photos = []
-
-        try:
-            category_photos += (get_ordered_photos(gallerybylanguage.gallery.photos_order))
-            if pagesettings.layout == 1:
-                html = """
-                <div class="slider-wrapper">
-                    <div id="slider" class="flexslider">
-                        <ul class="slides">
-                """
-                for photo in category_photos:
-                    html += """
-                            <li class="slide-image-wrapper">
-                                <img class="imgcover" src="{}"/>
-                            </li>
-                            """.format(photo["src"])
-                html += """
-                            </ul>
-                        </div>
-                    <div id="carousel" class="flexslider">
-                        <ul class="slides">
-                        """
-                for photo in category_photos:
-                    html += """
-                        <li class="slide-image-wrapper">
-                            <img class="imgcover" src="{}"/>
-                        </li>
-                        """.format(photo["src"])
-                html += """
-                                </ul>
-                            </div>
-                        </div>
-                    """
-            else:
-                html = """
-                <div class='demo-gallery'>
-                    <ul id='lightgallery' class='list-unstyled marginbottom0'>
-                    """
-                for photo in category_photos:
-                    html += """<li class='{0} grid nopadding' data-src='{1}'>
-                        <a href=''>
-                            <img class='imgcover grid' src='{1}'>
-                        </a>
-                    </li>
-                    """.format(column_size, photo["src"])
-                html += """
-                        </ul>
-                    </div>
-                """
-
-        except:
-            gallery_photos = []
-
-
-        return HttpResponse(mark_safe(html))
+    if pagesettings.layout == 1:
+        template = 'website/category/slider/slider.html'
     else:
-        available_languages = Language.objects.all()
-        language = get_language_obj(request)
+        template = 'website/category/grid/grid_{}_x_*.html'.format(pagesettings.layout)
 
-        pagesettings = PageSettings.objects.first()
+    data = retrieve_sidemenu_galleries(request, language=language)
+    gallery_photos = get_ordered_photos(gallery.gallery.photos_order)
 
-        if pagesettings.layout == 1:
-            template = 'website/category/slider/slider.html'
+    response = render(
+        request,
+        template,
+        {
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'galleries': data,
+            'photos': gallery_photos,
+            'pagesettings': pagesettings,
 
-        elif pagesettings.layout == 2:
-            template = 'website/category/grid/grid_2_x_*.html'
-
-        elif pagesettings.layout == 3:
-            template = 'website/category/grid/grid_3_x_*.html'
-
-        elif pagesettings.layout == 4:
-            template = 'website/category/grid/grid_4_x_*.html'
-
-        elif pagesettings.layout == 5:
-            template = 'website/category/grid/grid_5_x_*.html'
-
-        elif pagesettings.layout == 6:
-            template = 'website/category/grid/grid_6_x_*.html'
-
-        data = retrieve_sidemenu_galleries(request, language=language)
-
-        try:
-            gallery = GalleryByLanguage.objects.filter(
-                language=language,
-                url=gallery_slug,).first().gallery.photos_order
-        except:
-            gallery = []
-
-        try:
-            gallery_photos = get_ordered_photos(photos_order=gallery)
-        except:
-            gallery_photos = []
-
-        response = render(
-            request,
-            template,
-            {
-                'current_language': language.language_code,
-                'available_languages': available_languages,
-                'galleries': data,
-                'photos': gallery_photos,
-                'pagesettings': pagesettings,
-
-            })
-
-        return response
+        })
+    return response
         
 
 
 def category(request, category_slug):
     if request.method == 'POST':
-
-        available_languages = Language.objects.all()
-        language = get_language_obj(request)
-
         pagesettings = PageSettings.objects.first()
-
-        if pagesettings.layout == 1:
-            template = 'website/category/slider/slider.html'
-
-        elif pagesettings.layout == 2:
-            column_size = 'col-xs-6'
-
-        elif pagesettings.layout == 3:
-            column_size = 'col-xs-4'
-
-        elif pagesettings.layout == 4:
-            column_size = 'col-xs-3'
-
-        elif pagesettings.layout == 5:
-            column_size = 'col-xs-12_5'
-
-        elif pagesettings.layout == 6:
-            column_size = 'col-xs-2'
-
-        data = retrieve_sidemenu_galleries(request, language=language)
-        try:
-            categorybylanguage = CategoryByLanguage.objects.get(language=language, url=category_slug)
-        except CategoryByLanguage.DoesNotExist:
-            HttpResponseRedirect('/')
-            
+        layout = pagesettings.layout
+        categorybylanguage = CategoryByLanguage.objects.get(url=category_slug)    
         category_photos = []
+        for _gallerybylanguage in categorybylanguage.category.gallery_set.all():
+            gallery_photo_order = _gallerybylanguage.photos_order
+            photos = get_ordered_photos(gallery_photo_order)
+            photos = [photo.update({'gallery': _gallerybylanguage.url}) for photo in photos]
+            category_photos += photos
 
-        try:
-            _galleriesbylanguage = categorybylanguage.category.gallery_set.all()
-            for _gallerybylanguage in _galleriesbylanguage:
-                gallery_photo_order = _gallerybylanguage.photos_order
-                category_photos += (get_ordered_photos(gallery_photo_order))
-
-            if pagesettings.layout == 1:
-                html = """
-                <div class="slider-wrapper">
-                    <div id="slider" class="flexslider">
-                        <ul class="slides">
-                """
-                for photo in category_photos:
-                    html += """
-                            <li class="slide-image-wrapper">
-                                <img class="imgcover" src="{}"/>
-                            </li>
-                            """.format(photo["src"])
-                html += """
-                            </ul>
-                        </div>
-                    <div id="carousel" class="flexslider">
-                        <ul class="slides">
-                        """
-                for photo in category_photos:
-                    html += """
-                        <li class="slide-image-wrapper">
-                            <img class="imgcover" src="{}"/>
-                        </li>
-                        """.format(photo["src"])
-                html += """
-                                </ul>
-                            </div>
-                        </div>
-                    """
-            else:
-                html = """
-                <div class='demo-gallery'>
-                    <ul id='lightgallery' class='list-unstyled marginbottom0'>
-                    """
-                for photo in category_photos:
-                    html += """<li class='{0} grid nopadding' data-src='{1}'>
-                        <a href=''>
-                            <img class='imgcover grid' src='{1}'>
-                        </a>
-                    </li>
-                    """.format(column_size, photo["src"])
-                html += """
-                        </ul>
-                    </div>
-                """
-
-            seo = CategorySeo.objects.filter(language=language, category=categorybylanguage.category).first()
-
-        except Exception as e:
-            category_photos = []
-            seo = []
-            html = ""
-
-        return HttpResponse(mark_safe(html))
+        data = {'photos': category_photos, 'layout': layout}
+        return JsonResponse(data)
 
     else:
+        try:
+            category = CategoryByLanguage.objects.get(url=category_slug)
+        except CategoryByLanguage.DoesNotExist:
+            return HttpResponseRedirect('/')
+
         available_languages = Language.objects.all()
         language = get_language_obj(request)
 
@@ -336,37 +164,16 @@ def category(request, category_slug):
 
         if pagesettings.layout == 1:
             template = 'website/category/slider/slider.html'
-
-        elif pagesettings.layout == 2:
-            template = 'website/category/grid/grid_2_x_*.html'
-
-        elif pagesettings.layout == 3:
-            template = 'website/category/grid/grid_3_x_*.html'
-
-        elif pagesettings.layout == 4:
-            template = 'website/category/grid/grid_4_x_*.html'
-
-        elif pagesettings.layout == 5:
-            template = 'website/category/grid/grid_5_x_*.html'
-
-        elif pagesettings.layout == 6:
-            template = 'website/category/grid/grid_6_x_*.html'
+        else:
+            template = 'website/category/grid/grid_{}_x_*.html'.format(pagesettings.layout)
 
         data = retrieve_sidemenu_galleries(request, language=language)
-
-        try:
-            category = CategoryByLanguage.objects.get(url=category_slug)
-        except:
-            category = []
-
-        try:
-            category_photos = []
-            _galleriesbylanguage = category.category.gallery_set.all()
-            for _gallerybylanguage in _galleriesbylanguage:
-                gallery_photo_order = _gallerybylanguage.photos_order
-                category_photos += (get_ordered_photos(gallery_photo_order))
-        except:
-            category_photos = []
+        
+        category_photos = []
+        _galleriesbylanguage = category.category.gallery_set.all()
+        for _gallerybylanguage in _galleriesbylanguage:
+            gallery_photo_order = _gallerybylanguage.photos_order
+            category_photos += (get_ordered_photos(gallery_photo_order))
 
         response = render(
             request,
@@ -440,15 +247,15 @@ def contact(request):
     data = retrieve_sidemenu_galleries(request, language=language)
 
     try:
-        seo = ContactsPageSeo.objects.get(language=language).first()
-    except:
+        seo = ContactsPageSeo.objects.get(language=language)
+    except ContactsPageSeo.DoesNotExist:
         seo = []
 
     try:
         contactspage = ContactsPageByLanguage.objects.filter(
             language=language).first()
 
-    except Exception:
+    except ContactsPageByLanguage.DoesNotExist:
         contactspage = []
 
     page = ContactsPage.objects.filter()
