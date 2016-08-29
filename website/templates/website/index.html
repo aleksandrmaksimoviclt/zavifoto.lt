@@ -102,7 +102,7 @@
                         <div id="{{gallery.name|slugify}}-gallery" class="collapse">
                             <ul class="sub-category">
                                 {% for category in  gallery.categories %}
-                                    <li data-filter="{{category.url}}"><a slug="/{{gallery.name|slugify}}/{{category.url}}/">{{category.name}}</a></li>
+                                    <li data-filter="{{category.id}}"><a slug="/{{gallery.name|slugify}}/{{category.url}}/">{{category.name}}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
