@@ -196,12 +196,14 @@ def category(request, category_slug):
         if layout != 1:
             categorybylanguage = CategoryByLanguage.objects.get(url=category_slug)    
             category_photos = []
+            _counter = 0
             for _gallery in categorybylanguage.category.gallery_set.all():
+                _counter += 1
                 gallery_photo_order = _gallery.photos_order
                 photos = get_ordered_photos(gallery_photo_order)
 
                 for photo in photos:
-                    photo.update({'gallery': _gallery.gallerybylanguage_set.first().url})
+                    photo.update({'gallery': _counter})
 
                 category_photos += photos
             
