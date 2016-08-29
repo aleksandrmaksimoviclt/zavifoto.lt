@@ -26,8 +26,8 @@ $(document).ready(function () {
 
         $("a").each(function () {
             var href = $(this).attr('href');
-            if (typeof href === "undefined") {
-            } else if (path.substring(0, href.length) === href)  {
+            if (typeof href === "undefined"){
+            } else if (path.substring(0, href.length) === href) {
                 $(this).addClass('active');
             }
         });
@@ -98,4 +98,10 @@ $(document).ready(function () {
         }
     });
 
+    // Filterizr Initialization
+
+    try {
+        $('.filtr-container').filterizr();
+    } catch (err) {
+    }
 });

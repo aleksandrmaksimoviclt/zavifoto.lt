@@ -92,6 +92,7 @@
 
                     <div style="overflow-y: scroll; max-height: 100%;">
 
+
                     {% for gallery in galleries %}
 
                         <li>
@@ -101,7 +102,7 @@
                         <div id="{{gallery.name|slugify}}-gallery" class="collapse">
                             <ul class="sub-category">
                                 {% for category in  gallery.categories %}
-                                    <li><a class="get-photos" slug="/{{gallery.name|slugify}}/{{category.url}}/">{{category.name}}</a></li>
+                                    <li data-filter="{{gallery.url}}"><a class="get-photos" slug="/{{gallery.name|slugify}}/{{category.url}}/">{{category.name}}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -199,13 +200,14 @@
         }
     });
 
-
-    $('.get-photos').click(function(){
-        var url = $(this).attr('slug');
-        $.ajax({
+    {% if pagesettings.layout == 1 %}
+        $('.get-photos').click(function(){
+            var url = $(this).attr('slug');
+            $.ajax({
                 url: url,
                 type: 'POST',
                 success: function(response) {
+                    console.log(response);
                     history.pushState(null, null, url);
                     $('#carousel').flexslider("destroy");
                     $('#slider').flexslider("destroy");
@@ -248,9 +250,10 @@
                 }).fadeIn('125');
                 }
             });
-
-    });
-    </script>
+        });
+    {% endif %}
+</script>
+    
 </body>
 
 </html>

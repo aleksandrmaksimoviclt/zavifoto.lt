@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
@@ -142,13 +142,17 @@ def category(request, category_slug):
         layout = pagesettings.layout
         categorybylanguage = CategoryByLanguage.objects.get(url=category_slug)    
         category_photos = []
-        for _gallerybylanguage in categorybylanguage.category.gallery_set.all():
-            gallery_photo_order = _gallerybylanguage.photos_order
+        for _gallery in categorybylanguage.category.gallery_set.all():
+            gallery_photo_order = _gallery.photos_order
             photos = get_ordered_photos(gallery_photo_order)
-            photos = [photo.update({'gallery': _gallerybylanguage.url}) for photo in photos]
+            print(photos)
+            for photo in photos:
+                photo.update({'gallery': _gallery.gallerybylanguage_set.first().url})
+                print(photo)
             category_photos += photos
 
         data = {'photos': category_photos, 'layout': layout}
+
         return JsonResponse(data)
 
     else:
