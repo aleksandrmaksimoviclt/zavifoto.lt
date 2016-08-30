@@ -140,9 +140,9 @@ def gallery(request, gallery_slug, category_slug):
                 """
     else:
         try:
-            CategoryByLanguage.obejcts.get(url=category_slug)
+            CategoryByLanguage.objects.get(url=category_slug)
             gallery = GalleryByLanguage.objects.get(
-                url=gallery_slug).gallery.photos_order
+                url=gallery_slug)
         except CategoryByLanguage.DoesNotExist:
             return HttpResponseRedirect('/')
 
