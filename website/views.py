@@ -198,7 +198,7 @@ def category(request, category_slug):
             category_photos = []
             for _gallery in categorybylanguage.category.gallery_set.all():
                 language = get_language_obj(request)
-                _gal_id = _gallery.gallerybylanguage.get(language=language).id
+                _gal_id = _gallery.gallerybylanguage_set.get(language=language).id
                 gallery_photo_order = _gallery.photos_order
                 photos = get_ordered_photos(gallery_photo_order)
 
@@ -273,9 +273,13 @@ def category(request, category_slug):
         
         category_photos = []
         _galleriesbylanguage = category.category.gallery_set.all()
-        for _gallerybylanguage in _galleriesbylanguage:
-            gallery_photo_order = _gallerybylanguage.photos_order
-            category_photos += (get_ordered_photos(gallery_photo_order))
+        for _gallery in _galleriesbylanguage:
+            gallery_photo_order = _gallery.photos_order
+            _gal_id = _gallery.gallerybylanguage_set.get(language=language).id
+            photos = get_ordered_photos(gallery_photo_order)
+            for photo in photos:
+                photo.update({'gallery': _gal_id})
+            category_photos += photos
 
         response = render(
             request,
@@ -609,7 +613,7 @@ def retrieve_sidemenu_galleries(request, language):
 
             _gal = _gal.first()
             
-            _gals.append({'name': _gal.name, 'url': _gal.url})
+            _gals.append({'name': _gal.name, 'url': _gal.url, 'id': _gal.id,})
         _cat.update({'categories': _gals})
         data.append(_cat)
     return data

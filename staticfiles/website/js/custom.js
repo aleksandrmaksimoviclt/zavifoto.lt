@@ -95,7 +95,8 @@ $(document).ready(function () {
             setTimeout(resizeend, delta);
         }
     });
-
     setNavigation();
     setaspectratio();
+    // $('.filtr-container').filterizr();
+    
 });

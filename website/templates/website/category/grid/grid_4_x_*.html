@@ -7,7 +7,7 @@
         <div class="row nomargin nopadding">
             <ul id="lightgallery" class="list-unstyled filtr-container marginbottom0">
                 {% for photo in photos %}
-                    <li class="col-xs-3 grid nopadding filtr-item" data-src="{{photo.src}}">
+                    <li class="col-xs-3 grid nopadding filtr-item" data-category="{{photo.gallery}}" data-src="{{photo.src}}">
                         <img href="" class="imgcover grid" src="{{photo.src}}">
                     </li>
                 {% endfor %}
