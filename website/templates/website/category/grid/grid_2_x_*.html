@@ -6,7 +6,7 @@
     <ul id="lightgallery" class="list-unstyled marginbottom0">
         {% for photo in photos %}
             <li class="col-xs-6 grid nopadding" data-src="{{photo.src}}">
-            <a href="">
+            <a href="{{photo.src}}" data-tweet-text='test'>
                 <img class="imgcover grid" src="{{photo.src}}">
             </a>
         </li>

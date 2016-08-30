@@ -1,8 +1,10 @@
 $(document).ready(function() {
-	$('#lightgallery').lightGallery({
-		'data-download-url': false,
-		download: false,
-		enableDrag: true,
-		enableTouch: true
-	});
+	console.log('test');
+	// $('#lightgallery').lightGallery({
+	// 	'data-download-url': false,
+	// 	download: false,
+	// 	enableDrag: true,
+	// 	enableTouch: true
+	// });
+	lightGallery(document.getElementById('lightgallery'));
 });
