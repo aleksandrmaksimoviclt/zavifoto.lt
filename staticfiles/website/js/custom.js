@@ -33,9 +33,9 @@ $(document).ready(function () {
         });
     }
 
-    $("img").on("contextmenu", function () {
-        return false;
-    });
+    // $("img").on("contextmenu", function () {
+    //     return false;
+    // });
 
     var ww = window.innerWidth;
 
@@ -97,6 +97,26 @@ $(document).ready(function () {
     });
     setNavigation();
     setaspectratio();
-    // $('.filtr-container').filterizr();
+
+    var options = {
+        animationDuration: 0.25,
+        filter: 'all',
+        delay: 50,
+        delayMode: 'progressive',
+        easing: 'ease-out',
+        filterOutCss: {
+            opacity: 0,
+            transform: 'scale(0.5)'
+        },
+        filterInCss: {
+            opacity: 1,
+            transform: 'scale(1)'
+        },
+        layout: 'sameSize',
+        selector: '.filtr-container',
+        setupControls: true
+    }
+    var filterizd = $('.filtr-container').filterizr(options);
+    filterizd.filterizr('setOptions', options);
     
 });

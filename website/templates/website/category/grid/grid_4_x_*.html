@@ -8,6 +8,7 @@
             <ul id="lightgallery" class="list-unstyled filtr-container marginbottom0">
                 {% for photo in photos %}
                     <li class="col-xs-3 grid nopadding filtr-item" data-category="{{photo.gallery}}" data-src="{{photo.src}}">
+                        {{photo.gallery}}
                         <img href="" class="imgcover grid" src="{{photo.src}}">
                     </li>
                 {% endfor %}

@@ -98,202 +98,89 @@ def retouch(request):
 
 
 def gallery(request, gallery_slug, category_slug):
-    if request.method == 'POST':
-        try:
-            CategoryByLanguage.obejcts.get(url=category_slug)
-            gallery = GalleryByLanguage.objects.get(
-                url=gallery_slug).gallery.photos_order
-        except CategoryByLanguage.DoesNotExist:
-            return HttpResponseRedirect('/')
 
-        except GalleryByLanguage.DoesNotExist:
-            return HttpResponseRedirect('/')
+    try:
+        CategoryByLanguage.objects.get(url=category_slug)
+        gallery = GalleryByLanguage.objects.get(
+            url=gallery_slug)
+    except CategoryByLanguage.DoesNotExist:
+        return HttpResponseRedirect('/')
 
-        gallery_photos = get_ordered_photos(gallery.gallery.photos_order)
-        html = """
-            <div class="slider-wrapper">
-                <div id="slider" class="flexslider">
-                    <ul class="slides">
-            """
-        for photo in gallery_photos:
-                html += """
-                        <li class="slide-image-wrapper">
-                            <img class="imgcover" src="{}"/>
-                        </li>
-                        """.format(photo["src"])
-        html += """
-                        </ul>
-                    </div>
-                <div id="carousel" class="flexslider">
-                    <ul class="slides">
-                    """
-        for photo in category_photos:
-            html += """
-                    <li class="slide-image-wrapper">
-                        <img class="imgcover" src="{}"/>
-                    </li>
-                    """.format(photo["src"])
-        html += """
-                            </ul>
-                        </div>
-                    </div>
-                """
+    except GalleryByLanguage.DoesNotExist:
+        return HttpResponseRedirect('/')
+
+    available_languages = Language.objects.all()
+    language = get_language_obj(request)
+
+    pagesettings = PageSettings.objects.first()
+
+    if pagesettings.layout == 1:
+        template = 'website/category/slider/slider.html'
     else:
-        try:
-            CategoryByLanguage.objects.get(url=category_slug)
-            gallery = GalleryByLanguage.objects.get(
-                url=gallery_slug)
-        except CategoryByLanguage.DoesNotExist:
-            return HttpResponseRedirect('/')
+        template = 'website/category/grid/grid_{}_x_*.html'.format(pagesettings.layout)
 
-        except GalleryByLanguage.DoesNotExist:
-            return HttpResponseRedirect('/')
+    data = retrieve_sidemenu_galleries(request, language=language)
+    gallery_photos = get_ordered_photos(gallery.gallery.photos_order)
 
-        available_languages = Language.objects.all()
-        language = get_language_obj(request)
+    response = render(
+        request,
+        template,
+        {
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'galleries': data,
+            'photos': gallery_photos,
+            'pagesettings': pagesettings,
 
-        pagesettings = PageSettings.objects.first()
-
-        if pagesettings.layout == 1:
-            template = 'website/category/slider/slider.html'
-        else:
-            template = 'website/category/grid/grid_{}_x_*.html'.format(pagesettings.layout)
-
-        data = retrieve_sidemenu_galleries(request, language=language)
-        gallery_photos = get_ordered_photos(gallery.gallery.photos_order)
-
-        response = render(
-            request,
-            template,
-            {
-                'current_language': language.language_code,
-                'available_languages': available_languages,
-                'galleries': data,
-                'photos': gallery_photos,
-                'pagesettings': pagesettings,
-
-            })
-        return response
+        })
+    return response
         
 
 
 def category(request, category_slug):
-    if request.method == 'POST':
-        pagesettings = PageSettings.objects.first()
-        layout = pagesettings.layout
 
-        if layout == 2:
-            layout = 'col-xs-6'
-        elif layout == 3:
-            layout = 'col-xs-4'
-        elif layout == 4:
-            layout = 'col-xs-3'
-        elif layout == 5:
-            layout = 'col-xs-12_5'
-        elif layout == 6:
-            layout = 'col-xs-2'
+    try:
+        category = CategoryByLanguage.objects.get(url=category_slug)
+    except CategoryByLanguage.DoesNotExist:
+        return HttpResponseRedirect('/')
 
-        if layout != 1:
-            categorybylanguage = CategoryByLanguage.objects.get(url=category_slug)    
-            category_photos = []
-            for _gallery in categorybylanguage.category.gallery_set.all():
-                language = get_language_obj(request)
-                _gal_id = _gallery.gallerybylanguage_set.get(language=language).id
-                gallery_photo_order = _gallery.photos_order
-                photos = get_ordered_photos(gallery_photo_order)
+    available_languages = Language.objects.all()
+    language = get_language_obj(request)
 
-                for photo in photos:
-                    photo.update({'gallery': _gal_id})
+    pagesettings = PageSettings.objects.first()
 
-                category_photos += photos
-            
-            html ='''
-            <div class="demo-gallery">
-                <ul id="lightgallery" class="filtr-container list-unstyled marginbottom0">
-            '''
-            for photo in category_photos:
-                html += '''
-                <li class="{0} grid nopadding filtr-item" data-category="{2}" data-src="{1}">
-                    <img href="" class="imgcover grid" src="{1}">
-                </li>
-                '''.format(layout, photo['src'], photo['gallery'],)
-
-            html += '''
-                </ul>
-            </div>
-            '''
-        else:
-            html = """
-            <div class="slider-wrapper">
-                <div id="slider" class="flexslider">
-                    <ul class="slides">
-            """
-            for photo in category_photos:
-                html += """
-                        <li class="slide-image-wrapper">
-                            <img class="imgcover" src="{}"/>
-                        </li>
-                        """.format(photo["src"])
-            html += """
-                        </ul>
-                    </div>
-                <div id="carousel" class="flexslider">
-                    <ul class="slides">
-                    """
-            for photo in category_photos:
-                html += """
-                    <li class="slide-image-wrapper">
-                        <img class="imgcover" src="{}"/>
-                    </li>
-                    """.format(photo["src"])
-            html += """
-                            </ul>
-                        </div>
-                    </div>
-                """
-        return HttpResponse(html)
-
+    if pagesettings.layout == 1:
+        template = 'website/category/slider/slider.html'
     else:
-        try:
-            category = CategoryByLanguage.objects.get(url=category_slug)
-        except CategoryByLanguage.DoesNotExist:
-            return HttpResponseRedirect('/')
+        template = 'website/category/grid/grid_{}_x_*.html'.format(pagesettings.layout)
 
-        available_languages = Language.objects.all()
-        language = get_language_obj(request)
+    data = retrieve_sidemenu_galleries(request, language=language)
+    
+    category_photos = []
+    _galleries = category.category.gallery_set.all()
+    for _gallery in _galleries:
+        gallery_photo_order = _gallery.photos_order
+        _gal_id = _gallery.gallerybylanguage_set.get(language=language).id
+        photos = get_ordered_photos(gallery_photo_order)
+        for photo in photos:
+            photo.update({'gallery': _gal_id})
+        category_photos += photos
 
-        pagesettings = PageSettings.objects.first()
+    category_slug2 = '/' + category_slug + '/'
+    response = render(
+        request,
+        template,
+        {
+            'current_language': language.language_code,
+            'available_languages': available_languages,
+            'galleries': data,
+            'photos': category_photos,
+            'pagesettings': pagesettings,
+            'category_slug': category_slug2
 
-        if pagesettings.layout == 1:
-            template = 'website/category/slider/slider.html'
-        else:
-            template = 'website/category/grid/grid_{}_x_*.html'.format(pagesettings.layout)
+        })
 
-        data = retrieve_sidemenu_galleries(request, language=language)
-        
-        category_photos = []
-        _galleriesbylanguage = category.category.gallery_set.all()
-        for _gallery in _galleriesbylanguage:
-            gallery_photo_order = _gallery.photos_order
-            _gal_id = _gallery.gallerybylanguage_set.get(language=language).id
-            photos = get_ordered_photos(gallery_photo_order)
-            for photo in photos:
-                photo.update({'gallery': _gal_id})
-            category_photos += photos
-
-        response = render(
-            request,
-            template,
-            {
-                'current_language': language.language_code,
-                'available_languages': available_languages,
-                'galleries': data,
-                'photos': category_photos,
-                'pagesettings': pagesettings,
-
-            })
-
-        return response
+    return response
 
 
 class UploadView(TemplateView):

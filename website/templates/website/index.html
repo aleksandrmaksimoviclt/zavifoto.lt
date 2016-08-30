@@ -95,13 +95,14 @@
 
                     {% for gallery in galleries %}
 
-                        <li data-filter="all">
-                            <a class="main-category get-photos" data-toggle="collapse" data-target="#{{gallery.name|slugify}}-gallery" slug="/{{gallery.name|slugify}}/">{{gallery.name}}</a>
+                        <li>
+                            <a class="main-category get-photos" data-toggle="collapse" data-target="#{{gallery.name|slugify}}-gallery" href="/{{gallery.name|slugify}}/">{{gallery.name}}</a>
                         </li>
 
-                        <div id="{{gallery.name|slugify}}-gallery" class="collapse">
+                        <div id="{{gallery.name|slugify}}-gallery" class="collapse{% if request.path|slugify == gallery.name|slugify %}.in{% endif %}">
                             <ul class="sub-category">
-                                {% for category in  gallery.categories %}
+                                <li data-filter="all"><a>All</a></li>
+                                {% for category in gallery.categories %}
                                     <li data-filter="{{category.id}}"><a slug="/{{gallery.name|slugify}}/{{category.url}}/">{{category.name}}</a></li>
                                 {% endfor %}
                             </ul>
@@ -170,94 +171,6 @@
     <script src="{% static "website/js/custom.js" %}" type="text/javascript"></script>
     {% block extra_javascript %}
     {% endblock %}
-    <script type="text/javascript">
-
-    // using jQuery
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
-
-    function csrfSafeMethod(method) {
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
-
-    {% if pagesettings.layout != 1 %}
-        $('.get-photos').click(function(){
-            var url = $(this).attr('slug');
-            $.ajax({
-                url: url,
-                type: 'POST',
-                success: function(response) {
-                    history.pushState(null, null, url);
-                    $('#carousel').flexslider("destroy");
-                    $('#slider').flexslider("destroy");
-                    $(this).html('');
-                    $('#content').fadeOut('125', function () {
-                        $(this).html(response);
-                        console.log("prescript");
-                        $('.filtr-container').filterizr();
-                        console.log("postscript");
-                        // try{
-                        //     $('#carousel').flexslider({
-                        //         animation: "slide",
-                        //         touch: true,
-                        //         keyboard: true,
-                        //         multipleKeyboard: true,
-                        //         controlNav: false,
-                        //         directionNav: false,
-                        //         animationLoop: false,
-                        //         slideshow: false,
-                        //         itemWidth: 210,
-                        //         minItems: 6,
-                        //         maxItems: 6,
-                        //         asNavFor: '#slider'
-                        //     });
-                         
-                        //     $('#slider').flexslider({
-                        //         animation: "slide",
-                        //         touch: true,
-                        //         keyboard: true,
-                        //         multipleKeyboard: true,
-                        //         controlNav: false,
-                        //         directionNav: false,
-                        //         animationLoop: false,
-                        //         slideshow: false,
-                        //         sync: "#carousel"
-                        //     });
-
-                        //     $('#carousel').data('flexslider');
-                        //     $('#slider').data('flexslider');
-                        // }
-                        // catch (err){
-                        //     console.log("prescript");
-                        //     $('.filtr-container').filterizr();
-                        //     console.log("postscript");
-                        // }
-                }).fadeIn('125');
-                }
-            });
-        });
-    {% endif %}
-</script>
     
 </body>
 
