@@ -157,6 +157,8 @@ def category(request, category_slug):
     data = retrieve_sidemenu_galleries(request, language=language)
     
     category_photos = []
+    gallery_number = 0
+    d = {}
     _galleries = category.category.gallery_set.all()
     for _gallery in _galleries:
         gallery_photo_order = _gallery.photos_order
@@ -164,9 +166,11 @@ def category(request, category_slug):
         photos = get_ordered_photos(gallery_photo_order)
         for photo in photos:
             photo.update({'gallery': _gal_id})
-        category_photos += photos
+        gallery_number += 1
+        d[str(gallery_number)] = photos
 
     category_slug2 = '/' + category_slug + '/'
+
     response = render(
         request,
         template,
@@ -174,7 +178,7 @@ def category(request, category_slug):
             'current_language': language.language_code,
             'available_languages': available_languages,
             'galleries': data,
-            'photos': category_photos,
+            'photos': d,
             'pagesettings': pagesettings,
             'category_slug': category_slug2
 

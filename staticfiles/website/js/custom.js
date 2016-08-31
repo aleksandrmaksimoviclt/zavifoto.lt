@@ -1,5 +1,5 @@
 /*global
-    $, window
+    $, window, lightGallery
 */
 
 $(document).ready(function () {
@@ -9,6 +9,7 @@ $(document).ready(function () {
     var aspectratio = 1.77;
     var gridWidth = $('.grid:first').width();
     var gridHeight = Math.round(gridWidth / aspectratio);
+    var galleryId = 0;
 
     function setaspectratio() {
         gridWidth = $('.grid:first').width();
@@ -18,6 +19,23 @@ $(document).ready(function () {
             $(this).css('height', gridHeight);
         });
     }
+
+    // Dynamic gallery initialization
+    var el;
+    $('.lightgallery').each(function () {
+        galleryId += 1;
+        console.log(galleryId);
+        $(this).attr('id', 'galleryid' + galleryId);
+        lightGallery(document.getElementById('galleryid' + galleryId), {
+            galleryId: galleryId
+        });
+
+        el = document.getElementById('galleryid' + galleryId);
+
+        window.lgData[el.getAttribute('lg-uid')].destroy(true);
+
+
+    });
 
     function setNavigation() {
         var path = window.location.pathname;
@@ -115,7 +133,7 @@ $(document).ready(function () {
         layout: 'sameSize',
         selector: '.filtr-container',
         setupControls: true
-    }
+    };
     var filterizd = $('.filtr-container').filterizr(options);
     filterizd.filterizr('setOptions', options);
     
