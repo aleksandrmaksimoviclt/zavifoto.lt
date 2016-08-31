@@ -19,22 +19,50 @@ $(document).ready(function () {
             $(this).css('height', gridHeight);
         });
     }
+    $('.sort-gallery').hide(function () {
+                
+        lightGallery(document.getElementById('lightgallery-all'));
+    });
 
-    // Dynamic gallery initialization
-    var el;
+    $('ul.sub-category>li').on('click', function () {
+        var check = $(this).attr('data-filter');
+        $('.all-gallery').hide(function () {
+            $('.sort-gallery').show(function () {
+                var options = {
+                    animationDuration: 0.25,
+                    filter: 'all',
+                    delay: 50,
+                    delayMode: 'progressive',
+                    easing: 'ease-out',
+                    filterOutCss: {
+                        opacity: 0,
+                        transform: 'scale(0)'
+                    },
+                    filterInCss: {
+                        opacity: 1,
+                        transform: 'scale(1)'
+                    },
+                    layout: 'sameSize',
+                    selector: '.filtr-container',
+                    setupControls: true
+                };
+                var filterizd = $('.filtr-container').filterizr(options);
+                filterizd.filterizr('setOptions', options);
+            });
+        });
+
+    });
+
+    // var el;
     $('.lightgallery').each(function () {
         galleryId += 1;
-        console.log(galleryId);
         $(this).attr('id', 'galleryid' + galleryId);
         lightGallery(document.getElementById('galleryid' + galleryId), {
             galleryId: galleryId
         });
 
-        el = document.getElementById('galleryid' + galleryId);
-
-        window.lgData[el.getAttribute('lg-uid')].destroy(true);
-
-
+        // el = document.getElementById('galleryid' + galleryId);
+        // window.lgData[el.getAttribute('lg-uid')].destroy(true);
     });
 
     function setNavigation() {
@@ -115,26 +143,4 @@ $(document).ready(function () {
     });
     setNavigation();
     setaspectratio();
-
-    var options = {
-        animationDuration: 0.25,
-        filter: 'all',
-        delay: 50,
-        delayMode: 'progressive',
-        easing: 'ease-out',
-        filterOutCss: {
-            opacity: 0,
-            transform: 'scale(0.5)'
-        },
-        filterInCss: {
-            opacity: 1,
-            transform: 'scale(1)'
-        },
-        layout: 'sameSize',
-        selector: '.filtr-container',
-        setupControls: true
-    };
-    var filterizd = $('.filtr-container').filterizr(options);
-    filterizd.filterizr('setOptions', options);
-    
 });
