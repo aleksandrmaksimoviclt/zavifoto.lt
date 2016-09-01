@@ -19,38 +19,34 @@ $(document).ready(function () {
             $(this).css('height', gridHeight);
         });
     }
-    $('.sort-gallery').hide(function () {
-                
-        lightGallery(document.getElementById('lightgallery-all'));
-    });
+
+    $('.sort-gallery').css('opacity', '0');
+    lightGallery(document.getElementById('lightgallery-all'));
+    var options = {
+        animationDuration: 0.25,
+        filter: 'all',
+        delay: 50,
+        delayMode: 'progressive',
+        easing: 'ease-out',
+        filterOutCss: {
+            opacity: 0,
+            transform: 'scale(0)'
+        },
+        filterInCss: {
+            opacity: 1,
+            transform: 'scale(1)'
+        },
+        layout: 'sameSize',
+        selector: '.filtr-container',
+        setupControls: true
+    };
+    var filterizd = $('.filtr-container').filterizr(options);
+    filterizd.filterizr('setOptions', options);
 
     $('ul.sub-category>li').on('click', function () {
         var check = $(this).attr('data-filter');
-        $('.all-gallery').hide(function () {
-            $('.sort-gallery').show(function () {
-                var options = {
-                    animationDuration: 0.25,
-                    filter: 'all',
-                    delay: 50,
-                    delayMode: 'progressive',
-                    easing: 'ease-out',
-                    filterOutCss: {
-                        opacity: 0,
-                        transform: 'scale(0)'
-                    },
-                    filterInCss: {
-                        opacity: 1,
-                        transform: 'scale(1)'
-                    },
-                    layout: 'sameSize',
-                    selector: '.filtr-container',
-                    setupControls: true
-                };
-                var filterizd = $('.filtr-container').filterizr(options);
-                filterizd.filterizr('setOptions', options);
-            });
-        });
-
+        $('.all-gallery').css('display', 'none');
+        $('.sort-gallery').css('opacity', '1');
     });
 
     // var el;

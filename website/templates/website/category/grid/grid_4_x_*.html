@@ -3,19 +3,6 @@
 
 
 {% block content %}
-    <div class="sort-gallery">
-        <div class="row nomargin nopadding filtr-container">
-            {% for key, value in photos.items %}
-                <ul class="list-unstyled marginbottom0 lightgallery">
-                    {% for photo in value %}
-                        <li class="col-xs-3 grid nopadding filtr-item" data-category="{{photo.gallery}}" data-src="{{photo.src}}">
-                            <img href="" class="imgcover grid" src="{{photo.src}}">
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endfor %}
-        </div>
-    </div>
     <div class="all-gallery">
         <div class="row nomargin nopadding">
             <ul id="lightgallery-all" class="list-unstyled marginbottom0">
@@ -27,6 +14,19 @@
                     {% endfor %}
                 {% endfor %}
             </ul>
+        </div>
+    </div>
+    <div class="sort-gallery">
+        <div class="row nomargin nopadding filtr-container">
+            {% for key, value in photos.items %}
+                <ul class="list-unstyled marginbottom0 lightgallery">
+                    {% for photo in value %}
+                        <li class="col-xs-3 grid nopadding filtr-item" data-category="{{photo.gallery}}" data-src="{{photo.src}}">
+                            <img href="" class="imgcover grid" src="{{photo.src}}">
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
