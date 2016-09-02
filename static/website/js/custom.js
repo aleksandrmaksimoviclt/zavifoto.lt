@@ -1,11 +1,10 @@
 /*global
-    $, window
+    $, window, lightGallery
 */
 
 $(document).ready(function () {
     "use strict";
 
-    // aspect ration 16/9
     var aspectratio = 1.77;
     var gridWidth = $('.grid:first').width();
     var gridHeight = Math.round(gridWidth / aspectratio);
@@ -26,8 +25,8 @@ $(document).ready(function () {
 
         $("a").each(function () {
             var href = $(this).attr('href');
-            if (typeof href === "undefined") {
-            } else if (path.substring(0, href.length) === href)  {
+            if (typeof href === "undefined"){
+            } else if (path.substring(0, href.length) === href) {
                 $(this).addClass('active');
             }
         });
@@ -37,8 +36,6 @@ $(document).ready(function () {
         return false;
     });
 
-    setNavigation();
-    setaspectratio();
     var ww = window.innerWidth;
 
     if (!(ww > 992)) {
@@ -97,5 +94,6 @@ $(document).ready(function () {
             setTimeout(resizeend, delta);
         }
     });
-
+    setNavigation();
+    setaspectratio();
 });
