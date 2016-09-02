@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var galleryId = 0;    
     $('.sort-gallery').css('opacity', '0');
+    $('.sort-gallery').css('position', 'fixed');
     lightGallery(document.getElementById('lightgallery-all'));
     var options = {
         animationDuration: 0.25,
@@ -27,6 +28,7 @@ $(document).ready(function () {
         var check = $(this).attr('data-filter');
         $('.all-gallery').css('display', 'none');
         $('.sort-gallery').css('opacity', '1');
+        
     });
 
     $('.lightgallery').each(function () {
