@@ -3,7 +3,7 @@ $(document).ready(function () {
     $('.sort-gallery').css('opacity', '0');
     lightGallery(document.getElementById('lightgallery-all'));
     var options = {
-        animationDuration: 0.25,
+        animationDuration: 0.5,
         filter: 'all',
         delay: 50,
         delayMode: 'progressive',
@@ -21,9 +21,8 @@ $(document).ready(function () {
         setupControls: true
     };
     var filterizd = $('.filtr-container').filterizr(options);
-    filterizd.filterizr('setOptions', options, function() {
-        $('.sort-gallery').css('position', 'fixed');
-    });
+    filterizd.filterizr('setOptions', options);
+    // $('.sort-gallery').css('position', 'absolute');
 
     $('ul.sub-category>li').on('click', function () {
         var check = $(this).attr('data-filter');
