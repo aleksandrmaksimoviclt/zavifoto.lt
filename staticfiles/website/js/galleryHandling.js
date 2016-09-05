@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var galleryId = 0;    
     $('.sort-gallery').css('opacity', '0');
-    $('.sort-gallery').css('position', 'fixed');
     lightGallery(document.getElementById('lightgallery-all'));
     var options = {
         animationDuration: 0.25,
@@ -22,12 +21,15 @@ $(document).ready(function () {
         setupControls: true
     };
     var filterizd = $('.filtr-container').filterizr(options);
-    filterizd.filterizr('setOptions', options);
+    filterizd.filterizr('setOptions', options, function() {
+        $('.sort-gallery').css('position', 'fixed');
+    });
 
     $('ul.sub-category>li').on('click', function () {
         var check = $(this).attr('data-filter');
         $('.all-gallery').css('display', 'none');
         $('.sort-gallery').css('opacity', '1');
+        $('.sort-gallery').css('position', 'unset');
         
     });
 
