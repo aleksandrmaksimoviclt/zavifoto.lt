@@ -420,3 +420,14 @@ div.faq-post:last-child {
     width: 20%;
     float: left;
 }
+
+.b-lazy {
+    -webkit-transition: opacity 500ms ease-in-out;
+       -moz-transition: opacity 500ms ease-in-out;
+         -o-transition: opacity 500ms ease-in-out;
+            transition: opacity 500ms ease-in-out;
+    background: #1E1E1E url(../img/loader.gif) center center no-repeat;
+}
+.b-lazy.b-loaded {
+   opacity: 1;
+}
